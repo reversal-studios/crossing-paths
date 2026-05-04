@@ -36,10 +36,9 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
     protected GameScene<H> activeScene;
     protected boolean      debugMode;
 
-    public LGLGameHandler(GameMeta.Builder meta) {
+    public LGLGameHandler() {
         if (!isRegistered) {
             LGLContext.register(this);
-            meta.register();
             LOG.info("LGLContext canonical game handler bound to {}", this);
             isRegistered = true;
         } else {
@@ -75,7 +74,11 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         stage.show();
     }
 
-    protected static void launchGame(Class<? extends LGLGameHandler<?>> handler, Runnable bootstrap) {
+    protected static void launchGame(
+            Class<? extends LGLGameHandler<?>> handler, GameMeta.Builder meta, Runnable bootstrap
+    ) {
+        meta.register();
+
         try {
             handler.getDeclaredConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
