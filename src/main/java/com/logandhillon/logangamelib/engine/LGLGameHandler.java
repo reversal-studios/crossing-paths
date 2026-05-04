@@ -1,8 +1,7 @@
 package com.logandhillon.logangamelib.engine;
 
-import com.logandhillon.fptgame.GameHandler;
-import com.logandhillon.logangamelib.resource.base.Colors;
 import com.logandhillon.logangamelib.engine.disk.PathManager;
+import com.logandhillon.logangamelib.resource.base.Colors;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -50,6 +49,8 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
             LOG.info("Canonical game handler bound to {}", this);
             instance = this;
         }
+
+        LGLContext.register(this);
     }
 
     @Override
@@ -69,7 +70,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         this.debugMode = flag != null && flag.equalsIgnoreCase("true");
 
         // register shutdown hook (handles SIGTERM/crashes)
-        Runtime.getRuntime().addShutdownHook(new Thread(GameHandler.getInstance()::onShutdown, "LGL-ShutdownHook"));
+        Runtime.getRuntime().addShutdownHook(new Thread(LGLContext.getInstance()::onShutdown, "LGL-ShutdownHook"));
 
         setScene(onStart(stage));
 
