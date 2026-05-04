@@ -29,18 +29,16 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
     private static LGLGameHandler<?> instance;
 
     private final PathManager pathMgr;
-    private final String      gameId;
 
     protected Stage        stage;
     protected GameScene<H> activeScene;
 
     protected boolean debugMode;
 
-    /**
-     * @param gameId all lowercase, snake_case game id
-     */
-    public LGLGameHandler(String gameId) {
-        this.gameId = gameId;
+    public LGLGameHandler(GameMeta.Builder meta) {
+        LGLContext.register(this);
+        meta.register();
+
         this.pathMgr = new PathManager(this);
 
         if (getInstance() != null) {
@@ -49,8 +47,6 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
             LOG.info("Canonical game handler bound to {}", this);
             instance = this;
         }
-
-        LGLContext.register(this);
     }
 
     @Override
@@ -60,6 +56,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         // rename thread to shorten logs
         Thread.currentThread().setName("LGL-FX");
 
+        stage.setTitle(GameMeta.get().gameName);
         stage.setOnCloseRequest(e -> {
             LOG.info("Received window close request");
             onShutdown();
@@ -95,7 +92,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
      * @return the name of the game in snake_case.
      */
     public String getGameId() {
-        return gameId;
+        return GameMeta.get().gameName;
     }
 
     public static LGLGameHandler<?> getInstance() {

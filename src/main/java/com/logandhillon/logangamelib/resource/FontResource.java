@@ -13,8 +13,7 @@ public class FontResource implements IResource<String> {
     // root path of all font resources
     private static final String ROOT = "/font/";
 
-    private final String   parent;
-    private final String[] files;
+    private final String fontFamily;
 
     /**
      * Creates a font loader that returns the family name when calling {@link FontResource#load()}
@@ -23,21 +22,10 @@ public class FontResource implements IResource<String> {
      * @param files  the file names of the fonts to load. these fonts should be of the same family.
      */
     public FontResource(String parent, String... files) {
-        this.parent = parent;
-        this.files = files;
-    }
 
-    /**
-     * Loads a font into the runtime and returns the name of the font family.
-     *
-     * @return the name of the <b>FIRST-LOADED</b> font family.
-     *
-     * @throws FontNotFoundException if the font cannot be found
-     * @apiNote while this function will load ALL font files passed in, only the first one to load will return its font
-     * family name.
-     */
-    public String load() throws FontNotFoundException {
-        String folder = ROOT + parent + "/"; String family = null;
+        // LOAD FONT
+        String folder = ROOT + parent + "/";
+        String family = null;
 
         for (String file: files) {
             String path = folder + file;
@@ -50,7 +38,21 @@ public class FontResource implements IResource<String> {
             }
         }
 
-        if (family == null) throw new FontNotFoundException(files); return family;
+        if (family == null) throw new FontNotFoundException(files);
+        fontFamily = family;
+    }
+
+    /**
+     * Loads a font into the runtime and returns the name of the font family.
+     *
+     * @return the name of the <b>FIRST-LOADED</b> font family.
+     *
+     * @throws FontNotFoundException if the font cannot be found
+     * @apiNote while this function will load ALL font files passed in, only the first one to load will return its font
+     * family name.
+     */
+    public String load() throws FontNotFoundException {
+        return fontFamily;
     }
 
     public static class FontNotFoundException extends RuntimeException {

@@ -5,7 +5,7 @@ import com.logandhillon.fptgame.entity.ui.InputBox;
 import com.logandhillon.fptgame.entity.ui.component.MenuButton;
 import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.fptgame.resource.Fonts;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
@@ -20,7 +20,7 @@ import javafx.scene.text.FontWeight;
 public class HostGameContent implements MenuContent {
     private static final String   DEFAULT_ROOM_NAME = "My new room";
     private static final String   HEADER            = "Host a New Game";
-    private static final Font     HEADER_FONT       = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 32);
+    private static final Font     HEADER_FONT       = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 32);
     private final        Entity[] entities;
 
     private final InputBox nameInput;

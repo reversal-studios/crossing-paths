@@ -1,8 +1,8 @@
 package com.logandhillon.fptgame.entity.ui;
 
 import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.fptgame.resource.Fonts;
 import com.logandhillon.fptgame.scene.menu.JoinGameContent;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.ui.ButtonEntity;
 import com.logandhillon.logangamelib.entity.ui.DynamicButtonEntity;
 import javafx.geometry.VPos;
@@ -13,16 +13,16 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 public class ServerEntryEntity extends DynamicButtonEntity {
-    private static final Font   ADDRESS_FONT    = Font.font(Fonts.TREMOLO, 16);
+    private static final Font   ADDRESS_FONT    = Font.font(GameMeta.get().defaultFont.load(), 16);
     private static final double ROUNDING_RADIUS = 38;
 
     private static final ButtonEntity.Style DEFAULT_STYLE = new ButtonEntity.Style(
             Colors.FOREGROUND, Colors.ACTIVE, ButtonEntity.Variant.SOLID, true,
-            Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 16));
+            Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 16));
 
     private static final ButtonEntity.Style ACTIVE_STYLE = new ButtonEntity.Style(
             Colors.FOREGROUND, Colors.BUTTON_HOVER, ButtonEntity.Variant.SOLID, true,
-            Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 16));
+            Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 16));
 
     private String   serverName;
     private String   serverAddress;

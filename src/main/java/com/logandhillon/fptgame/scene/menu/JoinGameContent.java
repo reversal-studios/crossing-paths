@@ -6,7 +6,7 @@ import com.logandhillon.fptgame.entity.ui.ServerEntryEntity;
 import com.logandhillon.fptgame.entity.ui.component.MenuButton;
 import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.fptgame.resource.Fonts;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.Renderable;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
@@ -31,9 +31,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class JoinGameContent implements MenuContent {
     private static final Logger LOG             = LoggerContext.getContext().getLogger(JoinGameContent.class);
-    private static final Font   HEADER_FONT     = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 32);
+    private static final Font   HEADER_FONT     = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 32);
     private static final String HEADER          = "Join a Game";
-    private static final Font   LABEL_FONT      = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 18);
+    private static final Font   LABEL_FONT      = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 18);
     private static final int    ENTITY_GAP      = 16;
     private static final int    CORNER_DIAMETER = 53;
 

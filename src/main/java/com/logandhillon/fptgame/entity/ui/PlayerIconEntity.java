@@ -1,9 +1,9 @@
 package com.logandhillon.fptgame.entity.ui;
 
 import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.fptgame.resource.Fonts;
 import com.logandhillon.fptgame.resource.Textures;
 import com.logandhillon.fptgame.scene.menu.LobbyGameContent;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
@@ -16,7 +16,7 @@ import javafx.scene.text.Font;
  * @author Jack Ross
  */
 public class PlayerIconEntity extends Entity {
-    private static final Font FONT     = Font.font(Fonts.TREMOLO, 18);
+    private static final Font FONT     = Font.font(GameMeta.get().defaultFont.load(), 18);
     private static final int  RADIUS   = 49;
     private static final int  DIAMETER = RADIUS * 2;
 

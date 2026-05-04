@@ -6,8 +6,8 @@ import com.logandhillon.fptgame.entity.ui.component.MenuButton;
 import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.networking.proto.ConfigProto;
 import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.fptgame.resource.Fonts;
 import com.logandhillon.fptgame.resource.Textures;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.engine.MenuController;
 import com.logandhillon.logangamelib.entity.Clickable;
 import com.logandhillon.logangamelib.entity.Entity;
@@ -21,7 +21,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 import static com.logandhillon.fptgame.GameHandler.CANVAS_HEIGHT;
-import static com.logandhillon.fptgame.GameHandler.GAME_NAME;
 
 /**
  * The main menu allows the user to navigate to other submenus, play or quit the game, and view game branding.
@@ -30,8 +29,8 @@ import static com.logandhillon.fptgame.GameHandler.GAME_NAME;
  */
 public class MainMenuContent implements MenuContent {
     private final        Entity[] entities;
-    private static final Font     HEADER_FONT  = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 40);
-    private static final Font     CREDITS_FONT = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 14);
+    private static final Font     HEADER_FONT  = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 40);
+    private static final Font     CREDITS_FONT = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 14);
 
     private final InputBox userInput;
 
@@ -77,7 +76,7 @@ public class MainMenuContent implements MenuContent {
 
                 new TextEntity.Builder(32, 32)
                         .setColor(Colors.ACTIVE)
-                        .setText(GAME_NAME.toUpperCase())
+                        .setText(GameMeta.get().gameName.toUpperCase())
                         .setFont(HEADER_FONT)
                         .setBaseline(VPos.TOP).build(),
 
