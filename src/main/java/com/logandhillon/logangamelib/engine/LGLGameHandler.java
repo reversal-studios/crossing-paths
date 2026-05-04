@@ -1,8 +1,7 @@
 package com.logandhillon.logangamelib.engine;
 
-import com.logandhillon.fptgame.GameHandler;
-import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.logangamelib.engine.disk.PathManager;
+import com.logandhillon.logangamelib.resource.base.Colors;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -14,6 +13,7 @@ import javafx.util.Duration;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 /**
@@ -28,28 +28,25 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
     private static final int FADE_TIME = 200;
 
     private static LGLGameHandler<?> instance;
+    private static boolean           isRegistered = false;
 
     private final PathManager pathMgr;
-    private final String      gameId;
 
     protected Stage        stage;
     protected GameScene<H> activeScene;
+    protected boolean      debugMode;
 
-    protected boolean debugMode;
-
-    /**
-     * @param gameId all lowercase, snake_case game id
-     */
-    public LGLGameHandler(String gameId) {
-        this.gameId = gameId;
-        this.pathMgr = new PathManager(this);
-
-        if (getInstance() != null) {
-            LOG.warn("Created non-canonical LGL game handler instance");
+    public LGLGameHandler() {
+        if (!isRegistered) {
+            LGLContext.register(this);
+            LOG.info("LGLContext canonical game handler bound to {}", this);
+            isRegistered = true;
         } else {
-            LOG.info("Canonical game handler bound to {}", this);
-            instance = this;
+            LOG.debug("Non-canonical registration attempt ignored");
         }
+
+        this.pathMgr = new PathManager(this);
+        if (getInstance() == null) instance = this;
     }
 
     @Override
@@ -59,6 +56,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         // rename thread to shorten logs
         Thread.currentThread().setName("LGL-FX");
 
+        stage.setTitle(GameMeta.get().gameName);
         stage.setOnCloseRequest(e -> {
             LOG.info("Received window close request");
             onShutdown();
@@ -69,11 +67,30 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         this.debugMode = flag != null && flag.equalsIgnoreCase("true");
 
         // register shutdown hook (handles SIGTERM/crashes)
-        Runtime.getRuntime().addShutdownHook(new Thread(GameHandler.getInstance()::onShutdown, "LGL-ShutdownHook"));
+        Runtime.getRuntime().addShutdownHook(new Thread(LGLContext.getInstance()::onShutdown, "LGL-ShutdownHook"));
 
         setScene(onStart(stage));
 
         stage.show();
+    }
+
+    protected static void launchGame(
+            Class<? extends LGLGameHandler<?>> handler, GameMeta.Builder meta, Runnable bootstrap
+    ) {
+        meta.register();
+
+        try {
+            handler.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new LGLInitializationException("Failed to instantiate game handler class");
+        } catch (NoSuchMethodException e) {
+            throw new LGLInitializationException(
+                    "Specified game handler class does not have a no-argument constructor");
+        }
+
+        LOG.info("Bootstrapping logangamelib...");
+        bootstrap.run();
+        Application.launch(handler);
     }
 
     /**
@@ -94,7 +111,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
      * @return the name of the game in snake_case.
      */
     public String getGameId() {
-        return gameId;
+        return GameMeta.get().gameName;
     }
 
     public static LGLGameHandler<?> getInstance() {

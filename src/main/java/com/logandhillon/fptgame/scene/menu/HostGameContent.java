@@ -1,12 +1,12 @@
 package com.logandhillon.fptgame.scene.menu;
 
 import com.logandhillon.fptgame.GameHandler;
+import com.logandhillon.fptgame.entity.ui.InputBox;
 import com.logandhillon.fptgame.entity.ui.component.MenuButton;
 import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.fptgame.resource.Fonts;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
-import com.logandhillon.logangamelib.entity.ui.InputBoxEntity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
 import javafx.scene.text.Font;
@@ -20,10 +20,10 @@ import javafx.scene.text.FontWeight;
 public class HostGameContent implements MenuContent {
     private static final String   DEFAULT_ROOM_NAME = "My new room";
     private static final String   HEADER            = "Host a New Game";
-    private static final Font     HEADER_FONT       = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 32);
+    private static final Font     HEADER_FONT       = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 32);
     private final        Entity[] entities;
 
-    private final InputBoxEntity nameInput;
+    private final InputBox nameInput;
 
     /**
      * Creates a new main menu
@@ -31,7 +31,7 @@ public class HostGameContent implements MenuContent {
      * @param menu the {@link MenuHandler} responsible for switching active scenes.
      */
     public HostGameContent(MenuHandler menu) {
-        nameInput = new InputBoxEntity(32, 189, 327, DEFAULT_ROOM_NAME, "ROOM NAME", 16);
+        nameInput = new InputBox(32, 189, 327, DEFAULT_ROOM_NAME, "ROOM NAME", 16);
 
         MenuButton startButton = new MenuButton(
                 "START GAME", 32, 640, 304, 48, () -> menu.getGameHandler().createLobby(getRoomName()));

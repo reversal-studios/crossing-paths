@@ -1,6 +1,5 @@
 package com.logandhillon.logangamelib.engine;
 
-import com.logandhillon.fptgame.scene.menu.MenuHandler;
 import com.logandhillon.logangamelib.entity.Clickable;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.ui.Draggable;
@@ -24,7 +23,6 @@ import java.util.function.Predicate;
  *
  * @author Logan Dhillon
  * @see Clickable
- * @see MenuHandler
  */
 public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> {
     private static final Logger LOG = LoggerContext.getContext().getLogger(UIScene.class);

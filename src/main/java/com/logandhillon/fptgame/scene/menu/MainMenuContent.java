@@ -1,16 +1,16 @@
 package com.logandhillon.fptgame.scene.menu;
 
 import com.logandhillon.fptgame.GameHandler;
+import com.logandhillon.fptgame.entity.ui.InputBox;
 import com.logandhillon.fptgame.entity.ui.component.MenuButton;
 import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.networking.proto.ConfigProto;
 import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.fptgame.resource.Fonts;
 import com.logandhillon.fptgame.resource.Textures;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.engine.MenuController;
 import com.logandhillon.logangamelib.entity.Clickable;
 import com.logandhillon.logangamelib.entity.Entity;
-import com.logandhillon.logangamelib.entity.ui.InputBoxEntity;
 import com.logandhillon.logangamelib.entity.ui.ModalEntity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
@@ -21,7 +21,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 import static com.logandhillon.fptgame.GameHandler.CANVAS_HEIGHT;
-import static com.logandhillon.fptgame.GameHandler.GAME_NAME;
 
 /**
  * The main menu allows the user to navigate to other submenus, play or quit the game, and view game branding.
@@ -30,10 +29,10 @@ import static com.logandhillon.fptgame.GameHandler.GAME_NAME;
  */
 public class MainMenuContent implements MenuContent {
     private final        Entity[] entities;
-    private static final Font     HEADER_FONT  = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 40);
-    private static final Font     CREDITS_FONT = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 14);
+    private static final Font     HEADER_FONT  = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 40);
+    private static final Font     CREDITS_FONT = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 14);
 
-    private final InputBoxEntity userInput;
+    private final InputBox userInput;
 
     /**
      * Creates a new main menu
@@ -45,7 +44,7 @@ public class MainMenuContent implements MenuContent {
         int dy = 48 + 16; // ∆y per button height
         int y = 448;
 
-        userInput = new InputBoxEntity(20, 57, 336, "Player1", "YOUR NAME", 9);
+        userInput = new InputBox(20, 57, 336, "Player1", "YOUR NAME", 9);
         userInput.setInput(GameHandler.getUserConfig().getName());
         userInput.setOnBlur(() -> GameHandler.updateUserConfig(
                 ConfigProto.UserConfig.newBuilder().setName(userInput.getInput()).buildPartial()));
@@ -60,11 +59,13 @@ public class MainMenuContent implements MenuContent {
 //                    throw new IllegalStateException("Level creator does not exist");
 //                }),
 
-                new MenuButton(Textures.SETTINGS_ICON, x, y + 3 * dy, 120, 48, 75.84f, 651.17f, 28, 28,
-                               () -> menu.setContent(new SettingsMenuContent(menu))),
+                new MenuButton(
+                        Textures.SETTINGS_ICON, x, y + 3 * dy, 120, 48, 75.84f, 651.17f, 28, 28,
+                        () -> menu.setContent(new SettingsMenuContent(menu))),
 
-                new MenuButton(Textures.X_ICON, x + 136, y + 3 * dy, 120, 48, 218, 654, 20, 20,
-                               () -> System.exit(0))
+                new MenuButton(
+                        Textures.X_ICON, x + 136, y + 3 * dy, 120, 48, 218, 654, 20, 20,
+                        () -> System.exit(0))
         );
 
         // creates list of entities to be used by menu handler
@@ -75,7 +76,7 @@ public class MainMenuContent implements MenuContent {
 
                 new TextEntity.Builder(32, 32)
                         .setColor(Colors.ACTIVE)
-                        .setText(GAME_NAME.toUpperCase())
+                        .setText(GameMeta.get().gameName.toUpperCase())
                         .setFont(HEADER_FONT)
                         .setBaseline(VPos.TOP).build(),
 

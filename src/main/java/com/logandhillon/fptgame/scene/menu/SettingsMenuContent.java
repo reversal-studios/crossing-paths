@@ -3,13 +3,13 @@ package com.logandhillon.fptgame.scene.menu;
 import com.logandhillon.fptgame.GameHandler;
 import com.logandhillon.fptgame.entity.ui.component.MenuButton;
 import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
-import com.logandhillon.fptgame.entity.ui.component.SliderEntity;
 import com.logandhillon.fptgame.networking.proto.ConfigProto;
 import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.fptgame.resource.Fonts;
 import com.logandhillon.fptgame.resource.Sounds;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.Renderable;
+import com.logandhillon.logangamelib.entity.ui.SliderEntity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
@@ -30,10 +30,10 @@ import java.util.HashMap;
 public class SettingsMenuContent implements MenuContent {
     private static final Logger LOG = LoggerContext.getContext().getLogger(SettingsMenuContent.class);
 
-    private static final Font HEADER_FONT      = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 32);
-    private static final Font SUBHEADER_FONT   = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 24);
-    private static final Font CONTROLS_FONT    = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 19);
-    private static final Font INSTRUCTION_FONT = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 20);
+    private static final Font HEADER_FONT      = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 32);
+    private static final Font SUBHEADER_FONT   = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 24);
+    private static final Font CONTROLS_FONT    = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 19);
+    private static final Font INSTRUCTION_FONT = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 20);
 
     private final MenuHandler                  menu;
     private final Entity[]                     entities;

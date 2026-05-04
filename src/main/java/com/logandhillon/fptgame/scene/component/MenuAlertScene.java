@@ -2,9 +2,9 @@ package com.logandhillon.fptgame.scene.component;
 
 import com.logandhillon.fptgame.entity.ui.component.MenuButton;
 import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.fptgame.resource.Fonts;
 import com.logandhillon.fptgame.scene.menu.MenuContent;
 import com.logandhillon.fptgame.scene.menu.MenuHandler;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.ui.ModalEntity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
@@ -19,8 +19,8 @@ import javafx.scene.text.TextAlignment;
  * @author Logan Dhillon, Jack Ross
  */
 public class MenuAlertScene implements MenuContent {
-    private static final Font TITLE_FONT = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 20);
-    private static final Font BODY_FONT  = Font.font(Fonts.TREMOLO, 16);
+    private static final Font TITLE_FONT = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 20);
+    private static final Font BODY_FONT  = Font.font(GameMeta.get().defaultFont.load(), 16);
     private final Entity[] entities;
     public MenuAlertScene(String title, String msg, MenuHandler menu) {
         String t = title.toUpperCase();

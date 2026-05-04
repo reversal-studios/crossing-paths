@@ -5,7 +5,7 @@ import com.logandhillon.fptgame.entity.ui.PlayerIconEntity;
 import com.logandhillon.fptgame.entity.ui.component.MenuButton;
 import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.fptgame.resource.Fonts;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
@@ -22,7 +22,7 @@ import org.apache.logging.log4j.core.LoggerContext;
  */
 public class LobbyGameContent implements MenuContent {
     private static final Logger LOG         = LoggerContext.getContext().getLogger(LobbyGameContent.class);
-    private static final Font   HEADER_FONT = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 40);
+    private static final Font   HEADER_FONT = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 40);
 
     private static final int[][] PLAYER_ICON_ARGS = new int[][]{
             // iconX, iconY, colorIdx, textX, textY

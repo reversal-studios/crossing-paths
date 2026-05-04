@@ -10,7 +10,7 @@ import javafx.scene.text.Font;
  * @author Logan Dhillon
  */
 public class Fonts {
-    public static final String TREMOLO = new FontResource("tremolo", "tremolo-mono.ttf").load();
+    public static final FontResource TREMOLO = new FontResource("tremolo", "tremolo-mono.ttf");
 
     /**
      * no-op to force the class to load

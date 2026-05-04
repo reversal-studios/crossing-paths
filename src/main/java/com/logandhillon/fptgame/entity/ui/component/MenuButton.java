@@ -1,8 +1,8 @@
 package com.logandhillon.fptgame.entity.ui.component;
 
 import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.fptgame.resource.Fonts;
 import com.logandhillon.fptgame.resource.Sounds;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.ui.DynamicButtonEntity;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -18,10 +18,10 @@ import javafx.scene.text.TextAlignment;
 public class MenuButton extends DynamicButtonEntity {
     private static final Style DEFAULT_STYLE = new Style(
             Colors.FOREGROUND, Colors.BUTTON_NORMAL, Variant.SOLID, true,
-            Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 20));
+            Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 20));
     private static final Style ACTIVE_STYLE  = new Style(
             Colors.FOREGROUND, Colors.BUTTON_HOVER, Variant.SOLID, true,
-            Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 21));
+            Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 21));
 
     private final Runnable pressHandler;
 

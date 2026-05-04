@@ -1,6 +1,5 @@
 package com.logandhillon.logangamelib.resource;
 
-import com.logandhillon.fptgame.resource.Fonts;
 import javafx.scene.text.Font;
 
 import java.io.IOException;
@@ -14,8 +13,7 @@ public class FontResource implements IResource<String> {
     // root path of all font resources
     private static final String ROOT = "/font/";
 
-    private final String   parent;
-    private final String[] files;
+    private final String fontFamily;
 
     /**
      * Creates a font loader that returns the family name when calling {@link FontResource#load()}
@@ -24,8 +22,24 @@ public class FontResource implements IResource<String> {
      * @param files  the file names of the fonts to load. these fonts should be of the same family.
      */
     public FontResource(String parent, String... files) {
-        this.parent = parent;
-        this.files = files;
+
+        // LOAD FONT
+        String folder = ROOT + parent + "/";
+        String family = null;
+
+        for (String file: files) {
+            String path = folder + file;
+
+            try (InputStream font = FontResource.class.getResourceAsStream(path)) {
+                if (font == null) throw new FontNotFoundException(path); // font didn't load? throw error
+                if (family == null) family = Font.loadFont(font, 0).getFamily(); // no family yet? define it
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (family == null) throw new FontNotFoundException(files);
+        fontFamily = family;
     }
 
     /**
@@ -38,20 +52,7 @@ public class FontResource implements IResource<String> {
      * family name.
      */
     public String load() throws FontNotFoundException {
-        String folder = ROOT + parent + "/"; String family = null;
-
-        for (String file: files) {
-            String path = folder + file;
-
-            try (InputStream font = Fonts.class.getResourceAsStream(path)) {
-                if (font == null) throw new FontNotFoundException(path); // font didn't load? throw error
-                if (family == null) family = Font.loadFont(font, 0).getFamily(); // no family yet? define it
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        if (family == null) throw new FontNotFoundException(files); return family;
+        return fontFamily;
     }
 
     public static class FontNotFoundException extends RuntimeException {

@@ -11,6 +11,7 @@ import com.logandhillon.fptgame.scene.menu.JoinGameContent;
 import com.logandhillon.fptgame.scene.menu.LobbyGameContent;
 import com.logandhillon.fptgame.scene.menu.MainMenuContent;
 import com.logandhillon.fptgame.scene.menu.MenuHandler;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.engine.LGLGameHandler;
 import javafx.stage.Stage;
@@ -23,7 +24,6 @@ import java.util.Optional;
 
 public class GameHandler extends LGLGameHandler<GameHandler> {
     private static final Logger LOG               = LoggerContext.getContext().getLogger(GameHandler.class);
-    public static final  String GAME_NAME         = "CROSSING PATHS";
     public static final  int    CANVAS_WIDTH      = 1280; // the width of the rendered canvas
     public static final  int    CANVAS_HEIGHT     = 720; // the height of the rendered canvas
     public static final  float  ASPECT_RATIO      = (float)CANVAS_WIDTH / CANVAS_HEIGHT;
@@ -40,10 +40,6 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
     private static UserConfigManager      ucm;
     private static ConfigProto.UserConfig userConfig;
 
-    public GameHandler() {
-        super("crossing-paths");
-    }
-
     /**
      * Handles communication with JavaFX when this program is signaled to start.
      *
@@ -53,7 +49,6 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
     protected GameScene<GameHandler> onStart(Stage stage) {
         isInMenu = true;
 
-        stage.setTitle(GAME_NAME);
         stage.setWidth(CANVAS_WIDTH);
         stage.setHeight(CANVAS_HEIGHT);
         stage.setMinWidth(CANVAS_WIDTH / 2f);
@@ -77,17 +72,21 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
      */
     @SuppressWarnings("unused") // for some reason, intellij thinks main isn't used
     public static void main(String[] args) {
-        String lglSaveFile = System.getenv("LGL_SAVE_FILE");
-        new GameHandler();    // set the singleton instance of the handler
-        ucm = lglSaveFile == null
-              ? new UserConfigManager()
-              : new UserConfigManager(lglSaveFile);
+        LGLGameHandler.launchGame(
+                GameHandler.class,
+                GameMeta.of()
+                        .gameName("Crossing Paths")
+                        .defaultFont(Fonts.TREMOLO),
+                () -> {
+                    String lglSaveFile = System.getenv("LGL_SAVE_FILE");
 
-        // load user config first
-        userConfig = ucm.load();
+                    ucm = lglSaveFile == null || lglSaveFile.isBlank()
+                          ? new UserConfigManager()
+                          : new UserConfigManager(lglSaveFile);
 
-        // then start the javafx program
-        launch();
+                    // load user config first
+                    userConfig = ucm.load();
+                });
     }
 
     @Override

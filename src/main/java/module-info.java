@@ -1,4 +1,4 @@
-module com.logandhillon.fptgame {
+module com.logandhillon {
     requires javafx.base;
     requires javafx.media;
     requires javafx.graphics;

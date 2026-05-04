@@ -1,7 +1,6 @@
-package com.logandhillon.fptgame.entity.ui.component;
+package com.logandhillon.logangamelib.entity.ui;
 
-import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.logangamelib.entity.ui.Draggable;
+import com.logandhillon.logangamelib.resource.base.Colors;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.ArcType;

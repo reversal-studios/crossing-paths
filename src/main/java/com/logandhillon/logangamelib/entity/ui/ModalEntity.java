@@ -1,8 +1,8 @@
 package com.logandhillon.logangamelib.entity.ui;
 
-import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.entity.Entity;
+import com.logandhillon.logangamelib.resource.base.Colors;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -15,7 +15,7 @@ import javafx.scene.canvas.GraphicsContext;
 public class ModalEntity extends Entity {
     protected final float w, h;
     private final Entity[] entities;
-    private final int cornerDiameter;
+    private final int      cornerDiameter;
 
     private GameScene<?> parent;
 

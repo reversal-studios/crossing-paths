@@ -1,8 +1,8 @@
 package com.logandhillon.logangamelib.entity.ui;
 
-import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.fptgame.resource.Fonts;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
+import com.logandhillon.logangamelib.resource.base.Colors;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -117,7 +117,7 @@ public class TextEntity extends Entity {
         }
 
         public Builder setFontSize(int fontSize) {
-            this.font = Font.font(Fonts.TREMOLO, fontSize);
+            this.font = Font.font(GameMeta.get().defaultFont.load(), fontSize);
             return this;
         }
 

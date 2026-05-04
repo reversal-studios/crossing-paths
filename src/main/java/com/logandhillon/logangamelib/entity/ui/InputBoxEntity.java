@@ -1,10 +1,9 @@
 package com.logandhillon.logangamelib.entity.ui;
 
-import com.logandhillon.fptgame.resource.Colors;
-import com.logandhillon.fptgame.resource.Fonts;
-import com.logandhillon.fptgame.resource.Sounds;
+import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.entity.Clickable;
+import com.logandhillon.logangamelib.resource.base.Colors;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -29,8 +28,8 @@ public class InputBoxEntity extends Clickable {
     private static final int   CORNER_DIAMETER  = 50;
     private static final int   MARGIN_X         = 16;
     private static final int   MARGIN_Y         = 12;
-    private static final Font  INPUT_FONT       = Font.font(Fonts.TREMOLO, INPUT_FONT_SIZE);
-    private static final Font  LABEL_FONT       = Font.font(Fonts.TREMOLO, FontWeight.MEDIUM, 20);
+    private static final Font  INPUT_FONT       = Font.font(GameMeta.get().defaultFont.load(), INPUT_FONT_SIZE);
+    private static final Font  LABEL_FONT       = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 20);
 
     private final   float  maxWidth;
     private final   String placeholder;
@@ -168,7 +167,6 @@ public class InputBoxEntity extends Clickable {
     @Override
     public void onClick(MouseEvent e) {
         this.isActive = true;
-        Sounds.playSfx(Sounds.UI_CLICK);
     }
 
     public boolean getIsActive() {

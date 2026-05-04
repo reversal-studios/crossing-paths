@@ -26,7 +26,7 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainModule = 'com.logandhillon.fptgame'
+    mainModule = 'com.logandhillon'
     mainClass = 'com.logandhillon.fptgame.GameHandler'
 }
 
