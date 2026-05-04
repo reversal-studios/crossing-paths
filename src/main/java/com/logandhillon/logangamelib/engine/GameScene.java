@@ -248,6 +248,14 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
     }
 
     /**
+     * Removes the given entity from the scene
+     */
+    public void killEntity(Entity entity) {
+        entities.remove(entity);
+        if (entity instanceof CollisionEntity) collisionEntities.remove(entity);
+    }
+
+    /**
      * Checks for a collision between an entity and a hitbox
      *
      * @param x x pos of hitbox

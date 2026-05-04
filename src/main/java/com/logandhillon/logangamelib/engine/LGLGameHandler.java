@@ -1,6 +1,7 @@
 package com.logandhillon.logangamelib.engine;
 
 import com.logandhillon.logangamelib.engine.disk.PathManager;
+import com.logandhillon.logangamelib.entity.ui.SplashScreenEntity;
 import com.logandhillon.logangamelib.resource.base.Colors;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -70,6 +71,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         Runtime.getRuntime().addShutdownHook(new Thread(LGLContext.getInstance()::onShutdown, "LGL-ShutdownHook"));
 
         setScene(onStart(stage));
+        activeScene.addEntity(new SplashScreenEntity(192));
 
         stage.show();
     }

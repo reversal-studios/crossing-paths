@@ -78,6 +78,15 @@ public abstract class Entity implements GameObject {
     }
 
     /**
+     * Helper function to remove this entity from it's parent scene.
+     *
+     * @see GameScene#killEntity(Entity)
+     */
+    public void kill() {
+        parent.killEntity(this);
+    }
+
+    /**
      * Immediately sets the absolute position of this entity to the new position. To move an entity by a relative
      * amount, use {@link Entity#translate(float, float)}
      *
