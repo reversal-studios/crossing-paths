@@ -80,7 +80,7 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
                 () -> {
                     String lglSaveFile = System.getenv("LGL_SAVE_FILE");
 
-                    ucm = lglSaveFile == null
+                    ucm = lglSaveFile == null || lglSaveFile.isBlank()
                           ? new UserConfigManager()
                           : new UserConfigManager(lglSaveFile);
 
