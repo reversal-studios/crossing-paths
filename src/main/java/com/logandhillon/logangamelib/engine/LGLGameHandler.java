@@ -13,6 +13,7 @@ import javafx.util.Duration;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 /**
@@ -27,26 +28,26 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
     private static final int FADE_TIME = 200;
 
     private static LGLGameHandler<?> instance;
+    private static boolean           isRegistered = false;
 
     private final PathManager pathMgr;
 
     protected Stage        stage;
     protected GameScene<H> activeScene;
-
-    protected boolean debugMode;
+    protected boolean      debugMode;
 
     public LGLGameHandler(GameMeta.Builder meta) {
-        LGLContext.register(this);
-        meta.register();
+        if (!isRegistered) {
+            LGLContext.register(this);
+            meta.register();
+            LOG.info("LGLContext canonical game handler bound to {}", this);
+            isRegistered = true;
+        } else {
+            LOG.debug("Non-canonical registration attempt ignored");
+        }
 
         this.pathMgr = new PathManager(this);
-
-        if (getInstance() != null) {
-            LOG.warn("Created non-canonical LGL game handler instance");
-        } else {
-            LOG.info("Canonical game handler bound to {}", this);
-            instance = this;
-        }
+        if (getInstance() == null) instance = this;
     }
 
     @Override
@@ -72,6 +73,21 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         setScene(onStart(stage));
 
         stage.show();
+    }
+
+    protected static void launchGame(Class<? extends LGLGameHandler<?>> handler, Runnable bootstrap) {
+        try {
+            handler.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new LGLInitializationException("Failed to instantiate game handler class");
+        } catch (NoSuchMethodException e) {
+            throw new LGLInitializationException(
+                    "Specified game handler class does not have a no-argument constructor");
+        }
+
+        LOG.info("Bootstrapping logangamelib...");
+        bootstrap.run();
+        Application.launch(handler);
     }
 
     /**
