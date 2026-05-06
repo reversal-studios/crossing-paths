@@ -7,6 +7,7 @@ module com.logandhillon {
     requires com.google.protobuf;
     requires javafx.controls;
     requires java.desktop;
+    requires static lombok;
 
     opens com.logandhillon.fptgame to javafx.fxml;
 

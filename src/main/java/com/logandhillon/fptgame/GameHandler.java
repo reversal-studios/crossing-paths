@@ -74,9 +74,10 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
     public static void main(String[] args) {
         LGLGameHandler.launchGame(
                 GameHandler.class,
-                GameMeta.of()
+                GameMeta.builder()
                         .gameName("Crossing Paths")
-                        .defaultFont(Fonts.TREMOLO),
+                        .defaultFont(Fonts.TREMOLO)
+                        .build(),
                 () -> {
                     String lglSaveFile = System.getenv("LGL_SAVE_FILE");
 

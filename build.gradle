@@ -5,6 +5,7 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'org.beryx.jlink' version '3.0.1'
     id "com.google.protobuf" version "0.9.5"
+    id "io.freefair.lombok" version "9.5.0"
 }
 
 group 'com.logandhillon'

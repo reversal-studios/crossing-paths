@@ -1,9 +1,11 @@
 package com.logandhillon.logangamelib.engine;
 
 import com.logandhillon.logangamelib.resource.FontResource;
+import lombok.Builder;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
+@Builder
 public class GameMeta {
     private static final Logger LOG = LoggerContext.getContext().getLogger(GameMeta.class);
 
@@ -14,43 +16,21 @@ public class GameMeta {
     public final String       gameName;
     public final FontResource defaultFont;
 
-    private GameMeta(Builder b) {
-        this.gameName = b.gameName;
-        this.defaultFont = b.defaultFont;
-    }
-
     public static GameMeta get() {
         if (instance == null) throw new IllegalStateException("GameMeta not registered");
         return instance;
     }
 
-    public static Builder of() {
-        return new Builder();
-    }
+    public void register() {
+        // validate metadata
+        if (this.gameName.equalsIgnoreCase(DEFAULT_GAME_NAME))
+            LOG.warn("GameMeta game name not set! You probably want to change this to your game's name.");
+        if (this.defaultFont == null) throw new IllegalStateException("defaultFont not registered");
 
-    public static class Builder {
-        private String       gameName    = DEFAULT_GAME_NAME;
-        private FontResource defaultFont = null;
+        // ensure no instance is already setup
+        if (GameMeta.instance != null) throw new IllegalStateException("GameMeta already registered");
 
-        public Builder gameName(String name) {
-            this.gameName = name; return this;
-        }
-
-        public Builder defaultFont(FontResource font) {
-            this.defaultFont = font; return this;
-        }
-
-        public void register() {
-            // validate metadata
-            if (this.gameName.equalsIgnoreCase(DEFAULT_GAME_NAME))
-                LOG.warn("GameMeta game name not set! You probably want to change this to your game's name.");
-            if (this.defaultFont == null) throw new IllegalStateException("defaultFont not registered");
-
-            // ensure no instance is already setup
-            if (GameMeta.instance != null) throw new IllegalStateException("GameMeta already registered");
-
-            // bind instance
-            GameMeta.instance = new GameMeta(this);
-        }
+        // bind instance
+        GameMeta.instance = this;
     }
 }

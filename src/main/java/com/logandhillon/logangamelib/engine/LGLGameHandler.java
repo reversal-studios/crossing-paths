@@ -77,7 +77,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
     }
 
     protected static void launchGame(
-            Class<? extends LGLGameHandler<?>> handler, GameMeta.Builder meta, Runnable bootstrap
+            Class<? extends LGLGameHandler<?>> handler, GameMeta meta, Runnable bootstrap
     ) {
         meta.register();
 
