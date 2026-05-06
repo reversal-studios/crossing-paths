@@ -3,6 +3,7 @@ package com.logandhillon.logangamelib.entity.ui;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.resource.base.LGLAssets;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
@@ -11,14 +12,21 @@ import javafx.scene.paint.Color;
 public class SplashScreenEntity extends Entity {
     private static final float ANIMATION_TIME = 2f; // seconds
 
+    private final Image logo;
+
     private float logoSize;
     private float animationTimer = 0;
     private float logoAlpha      = 0f;
     private float bgAlpha        = 1f;
 
-    public SplashScreenEntity(float logoSize) {
+    public SplashScreenEntity(Image logo, float size) {
         super(0, 0); // doesn't use position interally, just do whatever here
-        this.logoSize = logoSize;
+        this.logoSize = size;
+        this.logo = logo;
+    }
+
+    public SplashScreenEntity(float logoSize) {
+        this(LGLAssets.LGL_ICON, logoSize);
     }
 
     @Override
@@ -27,7 +35,7 @@ public class SplashScreenEntity extends Entity {
         g.fillRect(0, 0, 1280, 720);
 
         g.setGlobalAlpha(logoAlpha);
-        g.drawImage(LGLAssets.LGL_ICON, (1280f - logoSize) / 2, (720f - logoSize) / 2, logoSize, logoSize);
+        g.drawImage(logo, (1280f - logoSize) / 2, (720f - logoSize) / 2, logoSize, logoSize);
         g.setGlobalAlpha(1.0);
     }
 
