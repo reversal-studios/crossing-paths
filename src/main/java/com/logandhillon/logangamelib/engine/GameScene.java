@@ -106,6 +106,7 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
                     entities.remove(e);
                     if (e instanceof CollisionEntity) collisionEntities.remove(e);
                     e.onDestroy();
+                    deathrow.remove(e);
                 });
             }
         };

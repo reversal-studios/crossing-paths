@@ -83,6 +83,7 @@ public abstract class Entity implements GameObject {
      * @see GameScene#killEntity(Entity)
      */
     public void kill() {
+        if (parent == null) throw new IllegalStateException("Entity is not attached to a GameScene");
         parent.killEntity(this);
     }
 

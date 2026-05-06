@@ -14,7 +14,8 @@ public class GameMeta {
 
     private static GameMeta instance;
 
-    public final String       gameName;
+    @Builder.Default
+    public final String       gameName = DEFAULT_GAME_NAME;
     public final FontResource defaultFont;
     public final Image        splashIcon;
 

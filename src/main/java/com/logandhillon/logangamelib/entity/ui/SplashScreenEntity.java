@@ -10,7 +10,9 @@ import javafx.scene.paint.Color;
  * @author Logan Dhillon
  */
 public class SplashScreenEntity extends Entity {
-    private static final float ANIMATION_TIME = 2.5f; // seconds
+    private static final float  ANIMATION_TIME = 2.5f; // seconds
+    private static final double CANVAS_W       = 1280;
+    private static final double CANVAS_H       = 720;
 
     private final Image logo;
 
@@ -32,12 +34,28 @@ public class SplashScreenEntity extends Entity {
     }
 
     @Override
+//    protected void onRender(GraphicsContext g, float x, float y) {
+//        g.setFill(Color.rgb(0, 0, 0, bgAlpha));
+//        g.fillRect(0, 0, 1280, 720);
+//
+//        g.setGlobalAlpha(logoAlpha);
+//        g.drawImage(logo, (1280f - logoSize) / 2, (720f - logoSize) / 2, logoSize, logoSize);
+//        g.setGlobalAlpha(1.0);
+//    }
     protected void onRender(GraphicsContext g, float x, float y) {
         g.setFill(Color.rgb(0, 0, 0, bgAlpha));
-        g.fillRect(0, 0, 1280, 720);
+        g.fillRect(0, 0, CANVAS_W, CANVAS_H);
 
         g.setGlobalAlpha(logoAlpha);
-        g.drawImage(logo, (1280f - logoSize) / 2, (720f - logoSize) / 2, logoSize, logoSize);
+        double aspect = logo.getWidth() / logo.getHeight();
+        double w = logoSize;
+        double h = logoSize;
+        if (aspect >= 1.0) {
+            h = logoSize / aspect;
+        } else {
+            w = logoSize * aspect;
+        }
+        g.drawImage(logo, (CANVAS_W - w) / 2, (CANVAS_H - h) / 2, w, h);
         g.setGlobalAlpha(1.0);
     }
 
