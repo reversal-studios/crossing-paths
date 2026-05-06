@@ -37,6 +37,7 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
     private static final Logger LOG = LoggerContext.getContext().getLogger(GameScene.class);
 
     private final List<Entity>          entities          = new ArrayList<>();
+    private final List<Entity>          deathrow          = new ArrayList<>();
     private final List<CollisionEntity> collisionEntities = new ArrayList<>();
     private final List<HandlerRef<?>>   handlers          = new ArrayList<>();
 
@@ -99,6 +100,13 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
 
                 onUpdate(dt);
                 render(g);
+
+                // kill entities on deathrow AFTER all updates have finished
+                deathrow.forEach(e -> {
+                    entities.remove(e);
+                    if (e instanceof CollisionEntity) collisionEntities.remove(e);
+                    e.onDestroy();
+                });
             }
         };
         lifecycle.start();
@@ -251,8 +259,7 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
      * Removes the given entity from the scene
      */
     public void killEntity(Entity entity) {
-        entities.remove(entity);
-        if (entity instanceof CollisionEntity) collisionEntities.remove(entity);
+        deathrow.add(entity);
     }
 
     /**
