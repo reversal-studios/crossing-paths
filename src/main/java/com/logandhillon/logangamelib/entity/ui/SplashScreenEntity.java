@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
  * @author Logan Dhillon
  */
 public class SplashScreenEntity extends Entity {
-    private static final float ANIMATION_TIME = 2f; // seconds
+    private static final float ANIMATION_TIME = 2.5f; // seconds
 
     private final Image logo;
 
@@ -19,14 +19,16 @@ public class SplashScreenEntity extends Entity {
     private float logoAlpha      = 0f;
     private float bgAlpha        = 1f;
 
+    /**
+     * Creates a new splash screen
+     *
+     * @param logo your custom splash logo, if null, uses the logangamelib logo
+     * @param size size of logo on splash screen
+     */
     public SplashScreenEntity(Image logo, float size) {
         super(0, 0); // doesn't use position interally, just do whatever here
         this.logoSize = size;
-        this.logo = logo;
-    }
-
-    public SplashScreenEntity(float logoSize) {
-        this(LGLAssets.LGL_ICON, logoSize);
+        this.logo = logo == null ? LGLAssets.LGL_ICON : logo;
     }
 
     @Override

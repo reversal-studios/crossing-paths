@@ -71,7 +71,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         Runtime.getRuntime().addShutdownHook(new Thread(LGLContext.getInstance()::onShutdown, "LGL-ShutdownHook"));
 
         setScene(onStart(stage));
-        activeScene.addEntity(new SplashScreenEntity(192));
+        activeScene.addEntity(new SplashScreenEntity(GameMeta.get().splashIcon, 256));
 
         stage.show();
     }
