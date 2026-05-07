@@ -78,9 +78,9 @@ public class Textures {
     }
 
     public static final Image LEVEL_BUTTON;
-
     public static final Image SETTINGS_ICON;
     public static final Image X_ICON;
+    public static final Image REVERSAL_STUDIOS_LOGO;
 
     static {
         try (var res = new ImageResource("menuicons/cog.png")) {
@@ -97,6 +97,12 @@ public class Textures {
 
         try (var res = new ImageResource("button.png")) {
             LEVEL_BUTTON = res.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (var res = new ImageResource("reversalstudios.png")) {
+            REVERSAL_STUDIOS_LOGO = res.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

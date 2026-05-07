@@ -16,9 +16,7 @@ import javafx.scene.paint.Color;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static com.logandhillon.fptgame.GameHandler.*;
@@ -37,6 +35,7 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
     private static final Logger LOG = LoggerContext.getContext().getLogger(GameScene.class);
 
     private final List<Entity>          entities          = new ArrayList<>();
+    private final Queue<Entity>         deathrow          = new LinkedList<>();
     private final List<CollisionEntity> collisionEntities = new ArrayList<>();
     private final List<HandlerRef<?>>   handlers          = new ArrayList<>();
 
@@ -99,6 +98,14 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
 
                 onUpdate(dt);
                 render(g);
+
+                // kill entities on deathrow AFTER all updates have finished
+                while (!deathrow.isEmpty()) {
+                    Entity e = deathrow.poll();
+                    if (!entities.remove(e)) continue;
+                    if (e instanceof CollisionEntity ce) collisionEntities.remove(ce);
+                    e.onDestroy();
+                }
             }
         };
         lifecycle.start();
@@ -245,6 +252,19 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
             }
         }
         LOG.debug("Successfully removed all matching collision entities from this scene");
+    }
+
+    /**
+     * Removes the given entity from the scene
+     */
+    public void killEntity(Entity entity) {
+        if (entity == null) throw new NullPointerException("Cannot kill null entity");
+        if (deathrow.contains(entity)) {
+            LOG.warn("{} already on deathrow", entity);
+            return;
+        }
+
+        deathrow.add(entity);
     }
 
     /**
