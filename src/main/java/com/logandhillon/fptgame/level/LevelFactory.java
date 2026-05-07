@@ -15,14 +15,14 @@ import static com.logandhillon.fptgame.resource.Textures.OBJ_SCALE;
 
 /**
  * The level factory is responsible for building protobuf types (i.e.
- * {@link com.logandhillon.fptgame.networking.proto.LevelProto.LevelObject} into valid entities (i.e.
+ * {@link com.logandhillon.fptgame.networking.proto.LevelProto.LevelObject}) into valid entities (i.e.
  * {@link LevelObject}).
  *
  * @author Logan Dhillon
  */
 public class LevelFactory {
     /**
-     * Loads level object data into an level object entity
+     * Loads level object data into a level object entity
      *
      * @param msg message data
      *
@@ -60,7 +60,8 @@ public class LevelFactory {
     public static Renderable buildBgOrNull(LevelProto.LevelData data) {
         if (!data.hasBackground()) return null;
         AtlasTile tile = AtlasTile.load(data.getBackground());
-        return new Renderable(0, 0, (g, x, y) -> {
+        return new Renderable(
+                0, 0, (g, x, y) -> {
             for (int i = 0; i < GameHandler.CANVAS_WIDTH / OBJ_SCALE; i++) {
                 for (int j = 0; j < GameHandler.CANVAS_HEIGHT / OBJ_SCALE; j++) {
                     tile.draw(g, i * OBJ_SCALE, j * OBJ_SCALE, OBJ_SCALE, OBJ_SCALE);

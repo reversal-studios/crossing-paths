@@ -2,6 +2,7 @@ package com.logandhillon.logangamelib.entity;
 
 import com.logandhillon.logangamelib.engine.GameScene;
 import javafx.scene.canvas.GraphicsContext;
+import lombok.Getter;
 
 /**
  * An entity is the most basic paradigm that can be handled by the game engine. It provides methods for
@@ -13,8 +14,10 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public abstract class Entity implements GameObject {
     protected GameScene<?> parent;
-    protected float        x;
-    protected float        y;
+    @Getter
+    protected float x;
+    @Getter
+    protected float y;
 
     /**
      * Creates an entity at the specified position.
@@ -78,7 +81,7 @@ public abstract class Entity implements GameObject {
     }
 
     /**
-     * Helper function to remove this entity from it's parent scene.
+     * Helper function to remove this entity from its parent scene.
      *
      * @see GameScene#killEntity(Entity)
      */
@@ -109,13 +112,5 @@ public abstract class Entity implements GameObject {
     public void translate(float x, float y) {
         this.x += x;
         this.y += y;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public float getX() {
-        return x;
     }
 }

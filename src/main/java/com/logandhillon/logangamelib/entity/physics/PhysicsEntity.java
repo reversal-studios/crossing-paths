@@ -1,6 +1,7 @@
 package com.logandhillon.logangamelib.entity.physics;
 
 import com.logandhillon.logangamelib.entity.Entity;
+import lombok.Getter;
 
 /**
  * A physics entity is an {@link Entity} that (a) is affected by gravity, (b) has collisions, and (c) has internal
@@ -29,7 +30,10 @@ public abstract class PhysicsEntity extends CollisionEntity {
         super(x, y, w, h);
     }
 
-    // Track if entity is on the ground for jumping logic
+    /**
+     * Track if entity is on the ground for jumping logic
+     */
+    @Getter
     private boolean grounded;
 
     /**
@@ -86,12 +90,5 @@ public abstract class PhysicsEntity extends CollisionEntity {
         var e = getCollisionAt(x, y + PROBE_EPSILON, w, h, this);
         grounded = e != null;
         if (grounded) vy = 0;
-    }
-
-    /**
-     * @return if this object is grounded
-     */
-    public boolean isGrounded() {
-        return grounded;
     }
 }

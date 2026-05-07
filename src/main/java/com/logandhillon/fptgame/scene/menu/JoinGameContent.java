@@ -16,6 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -37,6 +38,7 @@ public class JoinGameContent implements MenuContent {
     private static final int    ENTITY_GAP      = 16;
     private static final int    CORNER_DIAMETER = 53;
 
+    @Getter
     private final Entity[]            entities;
     private final MenuModalEntity     joinModal;
     private final ServerEntryEntity[] serverButtons = new ServerEntryEntity[4];
@@ -175,16 +177,6 @@ public class JoinGameContent implements MenuContent {
     public void setDiscoveredServers(List<ServerEntry> newList) {
         serverList = newList;
         updateServerList();
-    }
-
-    /**
-     * Allows {@link MenuHandler} to access content for this menu
-     *
-     * @return entity list
-     */
-    @Override
-    public Entity[] getEntities() {
-        return entities;
     }
 
     /**

@@ -6,6 +6,7 @@ import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.logangamelib.gfx.AtlasTile;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 
 import static com.logandhillon.fptgame.resource.Textures.OBJ_SCALE;
 
@@ -17,6 +18,7 @@ import static com.logandhillon.fptgame.resource.Textures.OBJ_SCALE;
  */
 public class PlatformEntity extends LevelObject {
     protected final AtlasTile        texture;
+    @Getter
     protected       LevelProto.Color color;
     private         Color            tint;
 
@@ -66,10 +68,6 @@ public class PlatformEntity extends LevelObject {
     @Override
     public void onDestroy() {
 
-    }
-
-    public LevelProto.Color getColor() {
-        return color;
     }
 
     /**

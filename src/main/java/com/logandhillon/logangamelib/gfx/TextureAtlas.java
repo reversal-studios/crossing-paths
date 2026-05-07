@@ -5,6 +5,7 @@ import com.logandhillon.logangamelib.resource.TextResource;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -32,6 +33,10 @@ public class TextureAtlas {
 
     protected final Image    image;
     protected final Metadata meta;
+    /**
+     * Gets the pathname for this, which can be used to serialize & retrieve atlases from data.
+     */
+    @Getter
     protected final String   path;
 
     /**
@@ -151,14 +156,5 @@ public class TextureAtlas {
                         " be parsed as integers");
             }
         }
-    }
-
-    /**
-     * Gets the pathname for this {@link TextureAtlas}, which can be used to serialize & retrieve atlases from data.
-     *
-     * @return pathname, string
-     */
-    public String getPath() {
-        return path;
     }
 }

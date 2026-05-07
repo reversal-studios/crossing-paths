@@ -8,6 +8,7 @@ import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.gfx.ParallaxBackground;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -24,6 +25,10 @@ public class MenuHandler extends UIScene<GameHandler> {
 
     private final ParallaxBackground background = Textures.ocean8();
 
+    /**
+     * menu content that will be set or disposed of
+     */
+    @Getter
     private MenuContent content;
 
     /**
@@ -100,12 +105,5 @@ public class MenuHandler extends UIScene<GameHandler> {
     public GameHandler getGameHandler() {
         if (getParent() == null) LOG.warn("Current GameHandler is null");
         return getParent();
-    }
-
-    /**
-     * @return menu content that will be set or disposed of
-     */
-    public MenuContent getContent() {
-        return content;
     }
 }

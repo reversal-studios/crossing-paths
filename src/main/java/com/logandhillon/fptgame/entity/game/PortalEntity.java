@@ -6,6 +6,7 @@ import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.logangamelib.gfx.AnimationSequence;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 
 import static com.logandhillon.fptgame.resource.Textures.PORTAL_ANIM;
 
@@ -14,8 +15,9 @@ import static com.logandhillon.fptgame.resource.Textures.PORTAL_ANIM;
  */
 public class PortalEntity extends LevelObject {
     private final AnimationSequence anim;
-    private final Color             color;
-    private final boolean           isRed;
+    private final Color   color;
+    @Getter
+    private final boolean isRed;
 
     /**
      * Creates a collidable entity at the specified position with the specified hitbox
@@ -44,10 +46,6 @@ public class PortalEntity extends LevelObject {
     @Override
     public void onDestroy() {
 
-    }
-
-    public boolean isRed() {
-        return isRed;
     }
 
     @Override

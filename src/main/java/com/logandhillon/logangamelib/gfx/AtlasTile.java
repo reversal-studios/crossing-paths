@@ -45,14 +45,14 @@ public class AtlasTile implements ProtoSerializable<LevelProto.AtlasTile> {
     }
 
     /**
-     * Recolors this image then draws it to the screen
+     * Recolours this image then draws it to the screen
      *
      * @param g     javafx graphics context from the engine's canvas
      * @param x     x-pos to draw at
      * @param y     y-pos to draw at
      * @param w     width of image that will be drawn
      * @param h     height of image that will be drawn
-     * @param color color to recolor the image with
+     * @param color colour to recolour the image with
      *
      * @see ImageResource#recolor(Image, Color)
      */

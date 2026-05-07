@@ -11,6 +11,7 @@ import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -29,8 +30,10 @@ public class LobbyGameContent implements MenuContent {
             { 48, 143, 0 },
             { 215, 143, 1 } };
 
+    @Getter
     private final Entity[]        entities;
     private final MenuModalEntity lobbyModal;
+    @Getter
     private final String          roomName;
     private final MenuHandler     menu;
     private final boolean         isHosting;
@@ -50,8 +53,9 @@ public class LobbyGameContent implements MenuContent {
         this.isHosting = isHosting;
 
         // shows different buttons at bottom depending on if the user is hosting
-        startButton = new MenuButton(isHosting ? "WAITING FOR PARTNER..." : "WAITING FOR HOST...",
-                                     32, 640, 304, 48, () -> {
+        startButton = new MenuButton(
+                isHosting ? "WAITING FOR PARTNER..." : "WAITING FOR HOST...",
+                32, 640, 304, 48, () -> {
             if (isHosting && isStartingAllowed) GameHandler.getServer().startGame();
         });
 
@@ -114,19 +118,5 @@ public class LobbyGameContent implements MenuContent {
         } else {
             startButton.setText("WAITING FOR HOST...");
         }
-    }
-
-    /**
-     * Allows {@link MenuHandler} to access content for this menu
-     *
-     * @return entity list
-     */
-    @Override
-    public Entity[] getEntities() {
-        return entities;
-    }
-
-    public String getRoomName() {
-        return roomName;
     }
 }

@@ -19,7 +19,7 @@ public class ImageResource extends Resource<Image> {
     private static final Logger LOG = LoggerContext.getContext().getLogger(ImageResource.class);
 
     /**
-     * A hash-based cache of all recolored images, mapped to their {@link Object#hashCode()} (from the image + the
+     * A hash-based cache of all recoloured images, mapped to their {@link Object#hashCode()} (from the image + the
      * tint)
      */
     private static final HashMap<Integer, Image> CACHED_RECOLORS = new HashMap<>();
@@ -36,7 +36,7 @@ public class ImageResource extends Resource<Image> {
     }
 
     /**
-     * Utility method for efficiently recoloring (and caching) an {@link Image}
+     * Utility method for efficiently recolouring (and caching) an {@link Image}
      * <p>
      * If the image was previously recolored, it will be immediately pulled from cache; otherwise it will calculate on
      * the spot.

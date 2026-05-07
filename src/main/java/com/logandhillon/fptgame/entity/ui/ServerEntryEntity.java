@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import lombok.Setter;
 
 public class ServerEntryEntity extends DynamicButtonEntity {
     private static final Font   ADDRESS_FONT    = Font.font(GameMeta.get().defaultFont.load(), 16);
@@ -26,6 +27,7 @@ public class ServerEntryEntity extends DynamicButtonEntity {
 
     private String   serverName;
     private String   serverAddress;
+    @Setter
     private Runnable onClick;
 
     public volatile boolean hidden = false;
@@ -51,10 +53,6 @@ public class ServerEntryEntity extends DynamicButtonEntity {
     @Override
     public void onClick(MouseEvent e) {
         this.onClick.run();
-    }
-
-    public void setOnClick(Runnable onClick) {
-        this.onClick = onClick;
     }
 
     /**

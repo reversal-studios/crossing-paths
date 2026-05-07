@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 import java.util.List;
 
 /**
- * Contains constants for all {@link javafx.scene.paint.Paint} items (colors, gradients, etc.) that are to be used
+ * Contains constants for all {@link javafx.scene.paint.Paint} items (colours, gradients, etc.) that are to be used
  * throughout the game but require continuity.
  *
  * @author Logan Dhillon
@@ -25,7 +25,7 @@ public final class Colors {
     public static final Color PLAYER_BLUE = Color.web("#4184E8");
 
     /**
-     * The color of the player skin, indexed by the order they appear on the main menu.
+     * The colour of the player skin, indexed by the order they appear on the main menu.
      */
     public static final List<Color> PLAYER_SKINS = List.of(PLAYER_RED, PLAYER_BLUE);
 

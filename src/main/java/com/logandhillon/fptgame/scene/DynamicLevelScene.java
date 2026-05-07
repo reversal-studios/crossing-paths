@@ -44,7 +44,7 @@ public class DynamicLevelScene extends LevelScene {
                                     : new float[][]{ { level.getPlayer2SpawnX(), level.getPlayer2SpawnY() },
                                                      { level.getPlayer1SpawnX(), level.getPlayer1SpawnY() } };
 
-        // other player has inverted colors compared to us
+        // other player has inverted colours compared to us
         other = new PlayerEntity(spawns[0][0], spawns[0][1], isServer ? 1 : 0, null);
         addEntity(other);
 

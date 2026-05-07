@@ -3,7 +3,7 @@ package com.logandhillon.logangamelib.resource.base;
 import javafx.scene.paint.Color;
 
 /**
- * Constants for built-in colors used by the engine.
+ * Constants for built-in colours used by the engine.
  *
  * @author Logan Dhillon
  */

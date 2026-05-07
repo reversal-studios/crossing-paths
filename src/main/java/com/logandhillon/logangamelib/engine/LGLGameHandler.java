@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -28,6 +29,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
 
     private static final int FADE_TIME = 200;
 
+    @Getter
     private static LGLGameHandler<?> instance;
     private static boolean           isRegistered = false;
 
@@ -35,6 +37,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
 
     protected Stage        stage;
     protected GameScene<H> activeScene;
+    @Getter
     protected boolean      debugMode;
 
     public LGLGameHandler() {
@@ -116,16 +119,8 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         return GameMeta.get().gameName;
     }
 
-    public static LGLGameHandler<?> getInstance() {
-        return instance;
-    }
-
     public PathManager getPathManager() {
         return pathMgr;
-    }
-
-    public boolean isDebugMode() {
-        return debugMode;
     }
 
     /**

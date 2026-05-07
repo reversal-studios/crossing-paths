@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import lombok.Getter;
 
 import static com.logandhillon.fptgame.GameHandler.CANVAS_HEIGHT;
 
@@ -28,6 +29,7 @@ import static com.logandhillon.fptgame.GameHandler.CANVAS_HEIGHT;
  * @author Logan Dhillon, Jack Ross
  */
 public class MainMenuContent implements MenuContent {
+    @Getter
     private final        Entity[] entities;
     private static final Font     HEADER_FONT  = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 40);
     private static final Font     CREDITS_FONT = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 14);
@@ -108,15 +110,5 @@ public class MainMenuContent implements MenuContent {
 
                     }
                 }, controller };
-    }
-
-    /**
-     * Allows {@link MenuHandler} to access content for this menu
-     *
-     * @return entity list
-     */
-    @Override
-    public Entity[] getEntities() {
-        return entities;
     }
 }
