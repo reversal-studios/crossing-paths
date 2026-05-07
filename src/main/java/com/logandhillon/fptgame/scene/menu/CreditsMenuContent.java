@@ -8,6 +8,7 @@ import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import com.logandhillon.logangamelib.resource.TextResource;
 import javafx.geometry.VPos;
 import javafx.scene.text.TextAlignment;
+import lombok.Getter;
 
 import java.io.IOException;
 
@@ -16,23 +17,27 @@ import static com.logandhillon.fptgame.GameHandler.CANVAS_WIDTH;
 /**
  * @author Logan Dhillon, Jack Ross
  */
+@SuppressWarnings("ClassCanBeRecord")
 public class CreditsMenuContent implements MenuContent {
+    @Getter
     private final Entity[] entities;
 
     private static final String CREDITS;
 
     public CreditsMenuContent(MenuHandler menu) {
         var text = new TextEntity.Builder(CANVAS_WIDTH / 2f, 229)
-                          .setText(CREDITS)
-                          .setColor(Colors.ACTIVE)
-                          .setFontSize(18)
-                          .setAlign(TextAlignment.CENTER)
-                          .setBaseline(VPos.TOP)
-                          .build();
+                .setText(CREDITS)
+                .setColor(Colors.ACTIVE)
+                .setFontSize(18)
+                .setAlign(TextAlignment.CENTER)
+                .setBaseline(VPos.TOP)
+                .build();
 
-        entities = new Entity[]{ new ModalEntity(349, 213, 583, 294,
-                                 new MenuButton("BACK TO MENU", 16, 230, 551, 48, () -> menu.getGameHandler().goToMainMenu())),
-                                 text};
+        entities = new Entity[]{
+                new ModalEntity(
+                        349, 213, 583, 294,
+                        new MenuButton("BACK TO MENU", 16, 230, 551, 48, () -> menu.getGameHandler().goToMainMenu())),
+                text };
     }
 
     static {
@@ -42,15 +47,5 @@ public class CreditsMenuContent implements MenuContent {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load credits.txt", e);
         }
-    }
-
-    /**
-     * Allows {@link MenuHandler} to access content for this menu
-     *
-     * @return entity list
-     */
-    @Override
-    public Entity[] getEntities() {
-        return entities;
     }
 }

@@ -11,6 +11,7 @@ import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import lombok.Getter;
 
 /**
  * The host game menu allows the user to input parameters needed for hosting a live server
@@ -18,10 +19,12 @@ import javafx.scene.text.FontWeight;
  * @author Jack Ross, Logan Dhillon
  */
 public class HostGameContent implements MenuContent {
-    private static final String   DEFAULT_ROOM_NAME = "My new room";
-    private static final String   HEADER            = "Host a New Game";
-    private static final Font     HEADER_FONT       = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 32);
-    private final        Entity[] entities;
+    private static final String DEFAULT_ROOM_NAME = "My new room";
+    private static final String HEADER            = "Host a New Game";
+    private static final Font   HEADER_FONT       = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 32);
+
+    @Getter
+    private final Entity[] entities;
 
     private final InputBox nameInput;
 
@@ -46,16 +49,6 @@ public class HostGameContent implements MenuContent {
                         .setBaseline(VPos.TOP)
                         .build()
         };
-    }
-
-    /**
-     * Allows {@link MenuHandler} to access content for this menu
-     *
-     * @return entity list
-     */
-    @Override
-    public Entity[] getEntities() {
-        return entities;
     }
 
     /**
