@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import java.io.IOException;
 
 /**
+ * Contains engine-level assets for logangamelib.
+ *
  * @author Logan Dhillon
  */
 public class LGLAssets {

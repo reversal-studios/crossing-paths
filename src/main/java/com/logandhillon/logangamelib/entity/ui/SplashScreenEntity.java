@@ -7,7 +7,13 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 /**
+ * The splash screen entity displays a logo with a specified size for a certain amount of time, animating the logo to
+ * zoom in, then fades out after the time passes.
+ * <p>
+ * This entity kills itself after expiring.
+ *
  * @author Logan Dhillon
+ * @apiNote This entity should only be appended by the game handler's post-init system.
  */
 public class SplashScreenEntity extends Entity {
     private static final float  ANIMATION_TIME = 2.5f; // seconds
