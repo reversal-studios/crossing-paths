@@ -81,7 +81,7 @@ public abstract class Entity implements GameObject {
     }
 
     /**
-     * Helper function to remove this entity from it's parent scene.
+     * Helper function to remove this entity from its parent scene.
      *
      * @see GameScene#killEntity(Entity)
      */

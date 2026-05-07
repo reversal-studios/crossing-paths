@@ -46,7 +46,7 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
     private static ConfigProto.UserConfig userConfig;
 
     /**
-     * Handles communication with JavaFX when this program is signaled to start.
+     * Handles communication with JavaFX when this program is signalled to start.
      *
      * @param stage the primary stage for this application, provided by the JavaFX framework.
      */

@@ -142,8 +142,8 @@ public class ButtonEntity extends Clickable {
     /**
      * An immutable style object that represents the look of a {@link ButtonEntity}.
      *
-     * @param labelColor  the color of the button text.
-     * @param buttonColor the color of the button background.
+     * @param labelColor  the colour of the button text.
+     * @param buttonColor the colour of the button background.
      * @param variant     the {@link Variant} that the button looks like
      * @param isRounded   if the button has rounded corners
      * @param font        the font of the button's text.

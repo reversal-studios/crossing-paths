@@ -185,7 +185,7 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
         parent.setScaleX(scale);
         parent.setScaleY(scale);
 
-        // center the canvas (cropped edges are hidden)
+        // centre the canvas (cropped edges are hidden)
         parent.setLayoutX((windowWidth - CANVAS_WIDTH * scale) / 2);
         parent.setLayoutY((windowHeight - CANVAS_HEIGHT * scale) / 2);
     }
