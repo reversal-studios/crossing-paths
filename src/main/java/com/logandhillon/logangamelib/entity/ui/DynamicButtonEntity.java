@@ -1,6 +1,7 @@
 package com.logandhillon.logangamelib.entity.ui;
 
 import javafx.scene.input.MouseEvent;
+import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -16,7 +17,12 @@ public class DynamicButtonEntity extends ButtonEntity {
     private final Style defaultStyle;
     private final Style activeStyle;
 
+    /**
+     * if the mouse is currently in this button (if the button is active)
+     */
+    @Getter
     private boolean active;
+    @Getter
     private boolean locked;
 
     /**
@@ -70,16 +76,5 @@ public class DynamicButtonEntity extends ButtonEntity {
     public void onMouseLeave(MouseEvent e) {
         if (!this.locked) this.setActive(false);
         super.onMouseLeave(e); // call event handler after changing style
-    }
-
-    /**
-     * @return if the mouse is currently in this button (if the button is active)
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    public boolean isLocked() {
-        return locked;
     }
 }

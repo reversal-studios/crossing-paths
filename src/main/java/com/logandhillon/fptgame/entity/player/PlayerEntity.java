@@ -13,6 +13,7 @@ import com.logandhillon.logangamelib.entity.physics.PhysicsEntity;
 import com.logandhillon.logangamelib.gfx.AnimationSequence;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 
 import java.util.function.Predicate;
 
@@ -37,6 +38,12 @@ public class PlayerEntity extends PhysicsEntity {
     private AnimationSequence texture = Textures.ANIM_PLAYER_IDLE.instance();
     private AnimationState    state   = AnimationState.IDLE;
 
+    /**
+     * move direction of the player, whereof the player will move towards indefinitely.
+     * <p>
+     * -1=left, 0=none, 1=right
+     */
+    @Getter
     private int     moveDirection = 0; // left=-1, 0=none, 1=right
     private boolean didJump;
     private float   lastFootstepX = -100;
@@ -135,15 +142,6 @@ public class PlayerEntity extends PhysicsEntity {
     public void setMoveDirection(int dir) {
         moveDirection = dir;
         if (listener != null) listener.onMove(dir, x, y, vx, vy);
-    }
-
-    /**
-     * Gets the move direction of the player, whereof the player will move towards indefinitely.
-     *
-     * @return -1=left, 0=none, 1=right
-     */
-    public int getMoveDirection() {
-        return moveDirection;
     }
 
     /**

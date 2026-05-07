@@ -15,6 +15,8 @@ import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.engine.LGLGameHandler;
 import javafx.stage.Stage;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -22,6 +24,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.util.Optional;
 
+@Setter
 public class GameHandler extends LGLGameHandler<GameHandler> {
     private static final Logger LOG               = LoggerContext.getContext().getLogger(GameHandler.class);
     public static final  int    CANVAS_WIDTH      = 1280; // the width of the rendered canvas
@@ -33,8 +36,10 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
     private volatile boolean isInMenu;
 
     // networking
-    private static GameServer       server;
-    private static GameClient       client;
+    @Getter
+    private static GameServer server;
+    @Getter
+    private static GameClient client;
     private static ServerDiscoverer discoverer;
 
     private static UserConfigManager      ucm;
@@ -285,10 +290,6 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
         return !isInMenu;
     }
 
-    public void setInMenu(boolean inMenu) {
-        isInMenu = inMenu;
-    }
-
     /**
      * Gets the user config that is actively loaded in memory, NOT from disk.
      *
@@ -308,13 +309,5 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
      */
     public static void updateUserConfig(ConfigProto.UserConfig partial) {
         userConfig = ucm.update(userConfig, partial);
-    }
-
-    public static GameServer getServer() {
-        return server;
-    }
-
-    public static GameClient getClient() {
-        return client;
     }
 }

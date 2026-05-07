@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import lombok.Setter;
 
 /**
  * A button is a stylized {@link Clickable} entity that can have a label and action that runs when it's clicked.
@@ -25,9 +26,21 @@ public class ButtonEntity extends Clickable {
 
     private final MouseEventHandler clickHandler;
 
+    /**
+     * the action that will be run when the mouse cursor ENTERS this button.
+     */
+    @Setter
     private MouseEventHandler mouseEnterHandler;
+    /**
+     * the action that will be run when the mouse cursor LEAVES this button.
+     */
+    @Setter
     private MouseEventHandler mouseLeaveHandler;
 
+    /**
+     * the currently visible style.
+     */
+    @Setter
     protected Style style;
 
     /**
@@ -44,15 +57,6 @@ public class ButtonEntity extends Clickable {
         super(x, y, w, h);
         this.label = label;
         this.clickHandler = onClick;
-        this.style = style;
-    }
-
-    /**
-     * Sets the currently visible style.
-     *
-     * @param style the new style to show
-     */
-    public void setStyle(Style style) {
         this.style = style;
     }
 
@@ -113,20 +117,6 @@ public class ButtonEntity extends Clickable {
     @Override
     public void onDestroy() {
 
-    }
-
-    /**
-     * Sets the action that will be run when the mouse cursor ENTERS this button.
-     */
-    public void setMouseEnterHandler(MouseEventHandler mouseEnterHandler) {
-        this.mouseEnterHandler = mouseEnterHandler;
-    }
-
-    /**
-     * Sets the action that will be run when the mouse cursor LEAVES this button.
-     */
-    public void setMouseLeaveHandler(MouseEventHandler mouseLeaveHandler) {
-        this.mouseLeaveHandler = mouseLeaveHandler;
     }
 
     /**

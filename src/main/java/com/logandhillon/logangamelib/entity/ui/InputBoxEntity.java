@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import lombok.Setter;
 
 /**
  * This is an input field, which handles user input in a box and can be retrieved as a string.
@@ -39,6 +40,10 @@ public class InputBoxEntity extends Clickable {
     protected StringBuilder input;
     protected boolean       isActive;
 
+    /**
+     * the event that will run when the enter key is pressed.
+     */
+    @Setter
     private Runnable onBlur;
 
     /**
@@ -177,12 +182,5 @@ public class InputBoxEntity extends Clickable {
     public void onBlur() {
         this.isActive = false;
         if (onBlur != null) onBlur.run();
-    }
-
-    /**
-     * Sets the event that will run when the enter key is pressed.
-     */
-    public void setOnBlur(Runnable onBlur) {
-        this.onBlur = onBlur;
     }
 }

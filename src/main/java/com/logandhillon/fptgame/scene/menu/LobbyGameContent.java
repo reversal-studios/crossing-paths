@@ -11,6 +11,7 @@ import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -31,6 +32,7 @@ public class LobbyGameContent implements MenuContent {
 
     private final Entity[]        entities;
     private final MenuModalEntity lobbyModal;
+    @Getter
     private final String          roomName;
     private final MenuHandler     menu;
     private final boolean         isHosting;
@@ -124,9 +126,5 @@ public class LobbyGameContent implements MenuContent {
     @Override
     public Entity[] getEntities() {
         return entities;
-    }
-
-    public String getRoomName() {
-        return roomName;
     }
 }
