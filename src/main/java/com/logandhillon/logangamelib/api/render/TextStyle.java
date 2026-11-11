@@ -2,11 +2,11 @@ package com.logandhillon.logangamelib.api.render;
 
 public record TextStyle(
         Color color,
-        HorizontalAlign horizontalAlign,
-        VerticalAlign verticalAlign,
+        Justification justification,
+        VAlign vAlign,
         float maxWidth
 ) {
-    public enum HorizontalAlign { LEFT, CENTER, RIGHT }
+    public enum Justification { LEFT, CENTER, RIGHT }
 
-    public enum VerticalAlign { TOP, CENTER, BASELINE, BOTTOM }
+    public enum VAlign { TOP, CENTER, BASELINE, BOTTOM }
 }

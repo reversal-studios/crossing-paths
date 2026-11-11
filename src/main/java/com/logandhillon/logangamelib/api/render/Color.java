@@ -10,5 +10,9 @@ public record Color(float red, float green, float blue, float alpha) {
     public static Color rgb(int red, int green, int blue) {
         return new Color(red / 255f, green / 255f, blue / 255f, 1);
     }
+
+    public static Color rgb(int red, int green, int blue, float alpha) {
+        return new Color(red / 255f, green / 255f, blue / 255f, alpha);
+    }
 }
 

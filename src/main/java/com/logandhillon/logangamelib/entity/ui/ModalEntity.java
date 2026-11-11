@@ -1,9 +1,9 @@
 package com.logandhillon.logangamelib.entity.ui;
 
+import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.resource.base.Colors;
-import javafx.scene.canvas.GraphicsContext;
 
 /**
  * A modal is a group of other entities that is rendered inside it. This modal is made for generic menus, without any
@@ -52,9 +52,8 @@ public class ModalEntity extends Entity {
     }
 
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
-        g.setFill(Colors.FOREGROUND_TRANS_40);
-        g.fillRoundRect(x, y, w, h, cornerDiameter, cornerDiameter);
+    protected void onRender(Renderer g, float x, float y) {
+        g.roundRect(x, y, w, h, Colors.FOREGROUND_TRANS_40, cornerDiameter);
     }
 
     @Override
@@ -90,9 +89,7 @@ public class ModalEntity extends Entity {
      */
     public void addEntity(Entity e) {
         if (parent == null)
-            throw new NullPointerException(
-                    "This ModalEntity has not been attached to a GameScene yet, and thus you cannot add entities to " +
-                    "it yet.");
+            throw new NullPointerException("Cannot add child to ModalEntity: not attached to a GameScene (yet)");
         e.translate(x, y); // translate to relative 0,0
         parent.addEntity(e);
     }

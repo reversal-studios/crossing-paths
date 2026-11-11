@@ -1,6 +1,6 @@
 package com.logandhillon.logangamelib.gfx;
 
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -49,17 +49,17 @@ public class AnimationSequence {
         if (animTimer >= frameTime) nextFrame();
     }
 
-    public void draw(GraphicsContext g, float x, float y, float w, float h) {
+    public void draw(Renderer g, float x, float y, float w, float h) {
         if (!isInstance) LOG.warn("Drawing from STATIC AnimationSequence, this is likely a mistake");
         atlas.draw(g, frames[frame * 2], frames[frame * 2 + 1], x, y, w, h);
     }
 
-    public void draw(GraphicsContext g, float x, float y, float w, float h, Color color) {
+    public void draw(Renderer g, float x, float y, float w, float h, Color color) {
         if (!isInstance) LOG.warn("Drawing recolored from STATIC AnimationSequence, this is likely a mistake");
         drawFrame(g, this.frame, x, y, w, h, color);
     }
 
-    public void drawFrame(GraphicsContext g, int frame, float x, float y, float w, float h, Color color) {
+    public void drawFrame(Renderer g, int frame, float x, float y, float w, float h, Color color) {
         atlas.draw(g, frames[frame * 2], frames[frame * 2 + 1], x, y, w, h, color);
     }
 

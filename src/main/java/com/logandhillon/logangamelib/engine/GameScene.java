@@ -9,7 +9,7 @@ import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -66,7 +66,7 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
      *
      * @param g the graphical context to render to.
      */
-    protected void render(GraphicsContext g) {
+    protected void render(Renderer g) {
         for (Entity e: entities) {
             g.save();
             e.render(g);
@@ -84,7 +84,7 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
         LOG.debug("Building game scene {} to stage", this);
 
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-        GraphicsContext g = canvas.getGraphicsContext2D();
+        Renderer g = canvas.getRenderer2D();
 
         // use one-element array as address cannot change once anonymously passed to lifecycle
         final long[] lastTime = { 0 };

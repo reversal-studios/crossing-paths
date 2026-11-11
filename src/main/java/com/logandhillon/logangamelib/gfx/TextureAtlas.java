@@ -2,7 +2,7 @@ package com.logandhillon.logangamelib.gfx;
 
 import com.logandhillon.logangamelib.resource.ImageResource;
 import com.logandhillon.logangamelib.resource.TextResource;
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import lombok.Getter;
@@ -81,7 +81,7 @@ public class TextureAtlas {
      * @param w     width of image that will be drawn
      * @param h     height of image that will be drawn
      */
-    private void draw(GraphicsContext g, Image image, int row, int col, float x, float y, float w, float h) {
+    private void draw(Renderer g, Image image, int row, int col, float x, float y, float w, float h) {
         if (row < 0 || row > meta.rows || col < 0 || col > meta.cols)
             throw new IllegalArgumentException("row/col must be within 0 and the number of rows/cols in this atlas");
 
@@ -100,7 +100,7 @@ public class TextureAtlas {
      * @param w   width of image that will be drawn
      * @param h   height of image that will be drawn
      */
-    public void draw(GraphicsContext g, int row, int col, float x, float y, float w, float h) {
+    public void draw(Renderer g, int row, int col, float x, float y, float w, float h) {
         draw(g, image, row, col, x, y, w, h);
     }
 
@@ -118,7 +118,7 @@ public class TextureAtlas {
      *
      * @see ImageResource#recolor(Image, Color)
      */
-    public void draw(GraphicsContext g, int row, int col, float x, float y, float w, float h, Color color) {
+    public void draw(Renderer g, int row, int col, float x, float y, float w, float h, Color color) {
         draw(g, ImageResource.recolor(image, color), row, col, x, y, w, h);
     }
 

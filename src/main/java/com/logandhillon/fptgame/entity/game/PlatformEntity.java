@@ -4,7 +4,7 @@ import com.logandhillon.fptgame.level.LevelObject;
 import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.logangamelib.gfx.AtlasTile;
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 
@@ -47,7 +47,7 @@ public class PlatformEntity extends LevelObject {
     }
 
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
+    protected void onRender(Renderer g, float x, float y) {
         g.setFill(Colors.FOREGROUND_TRANS_40);
         if (w > h) { // render right
             for (int i = 0; i < w / OBJ_SCALE; i++) {

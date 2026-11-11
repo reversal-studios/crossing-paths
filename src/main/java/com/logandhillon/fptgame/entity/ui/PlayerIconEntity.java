@@ -3,12 +3,12 @@ package com.logandhillon.fptgame.entity.ui;
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.fptgame.resource.Textures;
 import com.logandhillon.fptgame.scene.menu.LobbyGameContent;
+import com.logandhillon.logangamelib.api.render.Font;
+import com.logandhillon.logangamelib.api.render.Renderer;
+import com.logandhillon.logangamelib.api.render.Shape;
+import com.logandhillon.logangamelib.api.render.TextStyle;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
-import javafx.geometry.VPos;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.shape.ArcType;
-import javafx.scene.text.Font;
 
 /**
  * An entity used in {@link LobbyGameContent} to show a graphical representation of a user and their icon
@@ -16,9 +16,10 @@ import javafx.scene.text.Font;
  * @author Jack Ross
  */
 public class PlayerIconEntity extends Entity {
-    private static final Font FONT     = Font.font(GameMeta.get().defaultFont.load(), 18);
-    private static final int  RADIUS   = 49;
-    private static final int  DIAMETER = RADIUS * 2;
+    private static final Font      FONT       = new Font(GameMeta.get().defaultFont.load(), 18);
+    private static final int       RADIUS     = 49;
+    private static final TextStyle NAME_STYLE = new TextStyle(
+            Colors.ACTIVE, TextStyle.Justification.LEFT, TextStyle.VAlign.TOP, 100);
 
     private final String name;
     private final int    color;
@@ -37,24 +38,16 @@ public class PlayerIconEntity extends Entity {
     }
 
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
-        g.save(); // saves space around crop
-        g.beginPath();
-
-        g.arc(x + 33, y + 58, RADIUS, RADIUS, 0, 360);
-        g.clip(); // crops in circle shape
-
-        g.setFill(Colors.ACTIVE_TRANS_015);
-        g.fillArc(x - 16, 153, DIAMETER, DIAMETER, 0, 360, ArcType.ROUND); // bg of icon
-        Textures.PLAYER_IDLE.draw(g, 0, 0, x, y, 66, 132, Colors.PLAYER_SKINS.get(color)); // draw icon
-
-        g.restore(); // restores space around crop
+    protected void onRender(Renderer g, float x, float y) {
+        // crops in circle shape
+        g.clip(
+                new Shape.Circle(x + 33, y + 58, RADIUS), () -> {
+                    g.fill(new Shape.Circle(x - 16, 153, RADIUS), Colors.ACTIVE_TRANS_015); // bg of icon
+                    g.draw(Textures.PLAYER_IDLE, x, y, 66, 132, Colors.PLAYER_SKINS.get(color));
+                });
 
         // player name
-        g.setFill(Colors.ACTIVE);
-        g.setFont(FONT);
-        g.setTextBaseline(VPos.TOP);
-        g.fillText(name, x - 16, y + 119);
+        g.text(FONT, name, x - 16, y + 119, NAME_STYLE);
     }
 
     @Override

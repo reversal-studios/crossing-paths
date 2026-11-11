@@ -11,7 +11,7 @@ import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.entity.physics.CollisionEntity;
 import com.logandhillon.logangamelib.entity.physics.PhysicsEntity;
 import com.logandhillon.logangamelib.gfx.AnimationSequence;
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import javafx.scene.paint.Color;
 import lombok.Getter;
 
@@ -60,7 +60,7 @@ public class PlayerEntity extends PhysicsEntity {
     }
 
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
+    protected void onRender(Renderer g, float x, float y) {
         // render the active texture
         if (state == AnimationState.JUMP) texture.drawFrame(g, 0, x, y - Y_OFFSET, w, h + Y_OFFSET, tint);
         else texture.draw(g, x, y - Y_OFFSET, w, h + Y_OFFSET, tint);

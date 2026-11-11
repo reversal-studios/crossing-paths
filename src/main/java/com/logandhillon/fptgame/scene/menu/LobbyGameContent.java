@@ -71,7 +71,7 @@ public class LobbyGameContent implements MenuContent {
                 new TextEntity.Builder(32, 66).setColor(Colors.ACTIVE)
                                               .setText(roomName.toUpperCase())
                                               .setFont(HEADER_FONT)
-                                              .setBaseline(VPos.TOP)
+                                              .setVerticalAlignment(VPos.TOP)
                                               .build());
 
         // creates list of entities to be used by menu handler

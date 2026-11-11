@@ -1,41 +1,45 @@
 package com.logandhillon.fptgame.entity.ui.component;
 
 import com.logandhillon.fptgame.scene.menu.MenuHandler;
+import com.logandhillon.logangamelib.api.render.Color;
+import com.logandhillon.logangamelib.api.render.Renderer;
+import com.logandhillon.logangamelib.api.render.Shape;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.ui.ModalEntity;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 /**
  * The modal displayed on the left side in every menu screen.
  *
- * @apiNote This cannot be moved as the x-y points are fixed
  * @author Jack Ross
+ * @apiNote This cannot be moved as the x-y points are fixed
  */
 public class MenuModalEntity extends ModalEntity {
     private static final float MARGIN = 32;
-    private final boolean back;
+    private static final Color COLOR  = new Color(0, 0, 0, 0.4f);
+
+    private final boolean     back;
     private final MenuHandler menu;
-    private final double[] xPoints;
-    private final double[] yPoints;
+    private final Shape       shape;
 
     /**
-     * Creates an entity at the specified position. All entities passed to this modal will be translated such that (0, 0) is
-     * the top-left corner of this modal.
+     * Creates an entity at the specified position. All entities passed to this modal will be translated such that (0,
+     * 0) is the top-left corner of this modal.
      *
-     * @param x x-position (from left)
-     * @param y y-position (from top)
-     * @param w width of modal
-     * @param h height of modal
+     * @param x    x-position (from left)
+     * @param y    y-position (from top)
+     * @param w    width of modal
+     * @param h    height of modal
      * @param back determines if a back button is needed
      */
     public MenuModalEntity(float x, float y, float w, float h, boolean back, MenuHandler menu, Entity... entities) {
         super(x, y, w, h, entities);
         this.back = back;
         this.menu = menu;
-        xPoints = new double[]{x, x + w, x + w - 75, x}; // offset polygon by 75 pixels
-        yPoints = new double[]{y, y, y + h, y + h};
+        this.shape = new Shape.Polygon(
+                new float[]{ x, x + w, x + w - 75, x },
+                new float[]{ y, y, y + h, y + h },
+                4);
     }
 
     /**
@@ -47,9 +51,8 @@ public class MenuModalEntity extends ModalEntity {
      *
      */
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
-        g.setFill(Color.rgb(0, 0, 0, 0.4));
-        g.fillPolygon(xPoints, yPoints, 4);
+    protected void onRender(Renderer g, float x, float y) {
+        g.fill(shape, COLOR);
     }
 
     @Override

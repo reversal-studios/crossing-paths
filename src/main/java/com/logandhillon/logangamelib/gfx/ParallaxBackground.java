@@ -3,7 +3,7 @@ package com.logandhillon.logangamelib.gfx;
 import com.logandhillon.fptgame.GameHandler;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.resource.ImageResource;
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class ParallaxBackground extends Entity {
     }
 
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
+    protected void onRender(Renderer g, float x, float y) {
         for (Layer layer: layers) {
             g.drawImage(layer.image, layer.x, y, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
             g.drawImage(

@@ -46,7 +46,7 @@ public abstract class LevelScene extends GameScene<GameHandler> {
         if (bg != null) addEntity(bg);
         else addEntity(new Renderable(0, 0, (g, x, y) -> {
             g.setFill(Color.BLACK);
-            g.fillRect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
+            g.rect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
         }));
 
         for (LevelObject obj: LevelFactory.load(level)) {

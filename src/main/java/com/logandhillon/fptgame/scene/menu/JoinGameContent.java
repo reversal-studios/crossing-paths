@@ -63,8 +63,8 @@ public class JoinGameContent implements MenuContent {
         // label for server list
         TextEntity serverListLabel = new TextEntity.Builder(32, 295)
                 .setText("OR, JOIN A DISCOVERED SERVER")
-                .setAlign(TextAlignment.LEFT)
-                .setBaseline(VPos.TOP)
+                .setJustification(TextAlignment.LEFT)
+                .setVerticalAlignment(VPos.TOP)
                 .setFont(LABEL_FONT)
                 .setColor(Colors.ACTIVE)
                 .build();
@@ -104,7 +104,7 @@ public class JoinGameContent implements MenuContent {
                         .setColor(Colors.ACTIVE)
                         .setText(HEADER.toUpperCase())
                         .setFont(HEADER_FONT)
-                        .setBaseline(VPos.TOP).build()
+                        .setVerticalAlignment(VPos.TOP).build()
         };
 
         // create event handler that uses the event and the array of buttons

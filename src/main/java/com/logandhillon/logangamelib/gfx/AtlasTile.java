@@ -3,7 +3,7 @@ package com.logandhillon.logangamelib.gfx;
 import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.logangamelib.networking.ProtoSerializable;
 import com.logandhillon.logangamelib.resource.ImageResource;
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
@@ -40,7 +40,7 @@ public class AtlasTile implements ProtoSerializable<LevelProto.AtlasTile> {
      * @param w width of image that will be drawn
      * @param h height of image that will be drawn
      */
-    public void draw(GraphicsContext g, float x, float y, float w, float h) {
+    public void draw(Renderer g, float x, float y, float w, float h) {
         atlas.draw(g, row, col, x, y, w, h);
     }
 
@@ -56,7 +56,7 @@ public class AtlasTile implements ProtoSerializable<LevelProto.AtlasTile> {
      *
      * @see ImageResource#recolor(Image, Color)
      */
-    public void draw(GraphicsContext g, float x, float y, float w, float h, Color color) {
+    public void draw(Renderer g, float x, float y, float w, float h, Color color) {
         if (color == null) this.draw(g, x, y, w, h);
         else atlas.draw(g, row, col, x, y, w, h, color);
     }

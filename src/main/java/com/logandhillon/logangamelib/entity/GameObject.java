@@ -1,7 +1,8 @@
 package com.logandhillon.logangamelib.entity;
 
+import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.engine.GameScene;
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 
 /**
  * A GameObject is very the layer below {@link Entity}, which is an independent game object that can be added to scenes.
@@ -24,12 +25,12 @@ public interface GameObject {
     /**
      * Called every tick to render the entity.
      *
-     * @param g the graphical context to render to.
+     * @param r the graphical context to render to.
      *
      * @implNote do not implement this method to change how an {@link Entity} is rendered (unless you're making a
      * {@link GameObject}).
      */
-    void render(GraphicsContext g, float x, float y);
+    void render(Renderer r, float x, float y);
 
     /**
      * Called when this entity is scheduled to be destroyed.

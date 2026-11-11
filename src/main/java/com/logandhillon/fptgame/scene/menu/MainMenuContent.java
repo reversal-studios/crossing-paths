@@ -14,7 +14,7 @@ import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.ui.ModalEntity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -80,7 +80,7 @@ public class MainMenuContent implements MenuContent {
                         .setColor(Colors.ACTIVE)
                         .setText(GameMeta.get().gameName.toUpperCase())
                         .setFont(HEADER_FONT)
-                        .setBaseline(VPos.TOP).build(),
+                        .setVerticalAlignment(VPos.TOP).build(),
 
                 new Clickable(1209, 672, 59, 22) {
 
@@ -90,7 +90,7 @@ public class MainMenuContent implements MenuContent {
                     }
 
                     @Override
-                    protected void onRender(GraphicsContext g, float x, float y) {
+                    protected void onRender(Renderer g, float x, float y) {
                         g.setFont(CREDITS_FONT);
                         g.setFill(Colors.ACTIVE_TRANS_50);
                         g.setStroke(Colors.ACTIVE_TRANS_50);

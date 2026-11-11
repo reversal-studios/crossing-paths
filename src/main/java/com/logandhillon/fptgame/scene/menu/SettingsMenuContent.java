@@ -12,7 +12,7 @@ import com.logandhillon.logangamelib.entity.Renderable;
 import com.logandhillon.logangamelib.entity.ui.SliderEntity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -123,70 +123,70 @@ public class SettingsMenuContent implements MenuContent {
                         .setColor(Colors.ACTIVE)
                         .setText("SETTINGS")
                         .setFont(HEADER_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 140)
                         .setColor(Colors.ACTIVE)
                         .setText("AUDIO")
                         .setFont(SUBHEADER_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 410)
                         .setColor(Colors.ACTIVE)
                         .setText("CONTROLS")
                         .setFont(SUBHEADER_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 187)
                         .setColor(Colors.ACTIVE)
                         .setText("MASTER VOLUME")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 256)
                         .setColor(Colors.ACTIVE)
                         .setText("MUSIC VOLUME")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 325)
                         .setColor(Colors.ACTIVE)
                         .setText("SFX VOLUME")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 464.5f)
                         .setColor(Colors.ACTIVE)
                         .setText("MOVE LEFT")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 520.5f)
                         .setColor(Colors.ACTIVE)
                         .setText("MOVE RIGHT")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 576.5f)
                         .setColor(Colors.ACTIVE)
                         .setText("JUMP")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 632.5f)
                         .setColor(Colors.ACTIVE)
                         .setText("INTERACT")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 // underlines
@@ -219,10 +219,10 @@ public class SettingsMenuContent implements MenuContent {
     }
 
     @Override
-    public void onRender(GraphicsContext g) {
+    public void onRender(Renderer g) {
         if (currentKeyBind != null) {
             g.setFill(Colors.FOREGROUND_TRANS_40);
-            g.fillRect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
+            g.rect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
 
             g.setFill(Colors.ACTIVE);
             g.setFont(INSTRUCTION_FONT);
