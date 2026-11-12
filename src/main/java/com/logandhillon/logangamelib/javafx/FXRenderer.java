@@ -65,7 +65,7 @@ public final class FXRenderer implements Renderer {
             case Shape.Circle s -> graphics.fillOval(
                     s.x() - s.radius(), s.y() - s.radius(), s.radius() * 2, s.radius() * 2);
             case Shape.Arc s -> graphics.fillArc(
-                    s.x(), s.y(), s.width(), s.height(), 0, 360, ArcType.ROUND);
+                    s.x(), s.y(), s.width(), s.height(), s.azimuth(), s.bearing(), ArcType.ROUND);
             case Shape.Polygon s -> graphics.fillPolygon(
                     toDouble(s.xPoints()), toDouble(s.yPoints()), s.nPoints());
             case null, default -> throw new IllegalArgumentException("Cannot fill shape: " + shape);
@@ -84,7 +84,7 @@ public final class FXRenderer implements Renderer {
             case Shape.Line s -> graphics.strokeLine(s.x1(), s.y1(), s.x2(), s.y2());
             case Shape.Circle s -> graphics.strokeOval(
                     s.x() - s.radius(), s.y() - s.radius(), s.radius() * 2, s.radius() * 2);
-            case Shape.Arc s -> graphics.strokeArc(s.x(), s.y(), s.width(), s.height(), 0, 360, ArcType.ROUND);
+            case Shape.Arc s -> graphics.strokeArc(s.x(), s.y(), s.width(), s.height(), s.azimuth(), s.bearing(), ArcType.ROUND);
             case Shape.Polygon s -> graphics.strokePolygon(toDouble(s.xPoints()), toDouble(s.yPoints()), s.nPoints());
             case null, default -> throw new IllegalArgumentException("Cannot stroke shape: " + shape);
         }
