@@ -10,10 +10,9 @@ import javafx.scene.text.TextAlignment;
 /**
  * Implementation of the LGL {@link Renderer} API for JavaFX.
  *
+ * @author Logan Dhillon
  * @see Renderer LGL Renderer API
  * @see GraphicsContext JavaFX Graphics Context
- *
- * @author Logan Dhillon
  */
 public final class FXRenderer implements Renderer {
     private final GraphicsContext graphics;
@@ -64,7 +63,7 @@ public final class FXRenderer implements Renderer {
             case Shape.RoundRect s -> graphics.fillRoundRect(
                     s.x(), s.y(), s.width(), s.height(), s.radius() * 2, s.radius() * 2);
             case Shape.Circle s -> graphics.fillOval(
-                    s.centerX() - s.radius(), s.centerY() - s.radius(), s.radius() * 2, s.radius() * 2);
+                    s.x() - s.radius(), s.y() - s.radius(), s.radius() * 2, s.radius() * 2);
             case Shape.Arc s -> graphics.fillArc(
                     s.x(), s.y(), s.width(), s.height(), 0, 360, ArcType.ROUND);
             case Shape.Polygon s -> graphics.fillPolygon(
@@ -84,7 +83,7 @@ public final class FXRenderer implements Renderer {
                     s.x(), s.y(), s.width(), s.height(), s.radius() * 2, s.radius() * 2);
             case Shape.Line s -> graphics.strokeLine(s.x1(), s.y1(), s.x2(), s.y2());
             case Shape.Circle s -> graphics.strokeOval(
-                    s.centerX() - s.radius(), s.centerY() - s.radius(), s.radius() * 2, s.radius() * 2);
+                    s.x() - s.radius(), s.y() - s.radius(), s.radius() * 2, s.radius() * 2);
             case Shape.Arc s -> graphics.strokeArc(s.x(), s.y(), s.width(), s.height(), 0, 360, ArcType.ROUND);
             case Shape.Polygon s -> graphics.strokePolygon(toDouble(s.xPoints()), toDouble(s.yPoints()), s.nPoints());
             case null, default -> throw new IllegalArgumentException("Cannot stroke shape: " + shape);
@@ -113,8 +112,12 @@ public final class FXRenderer implements Renderer {
     @Override
     public void clip(Shape clip, Runnable content) {
         graphics.save();
-        if (clip instanceof Shape.Rect s) graphics.rect(s.x(), s.y(), s.width(), s.height());
-        else throw new IllegalArgumentException("JavaFX clipping supports rectangular shapes only");
+        switch (clip) {
+            case Shape.Rect s -> graphics.rect(s.x(), s.y(), s.width(), s.height());
+            case Shape.Arc s -> graphics.arc(s.x(), s.y(), s.width(), s.height(), s.azimuth(), s.bearing());
+            case Shape.Circle s -> graphics.arc(s.x(), s.y(), s.radius(), s.radius(), 0, 360);
+            case null, default -> throw new IllegalArgumentException("unsupported clipping shape: " + clip);
+        }
         graphics.clip();
         try {
             content.run();

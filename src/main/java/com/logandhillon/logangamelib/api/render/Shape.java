@@ -54,11 +54,11 @@ public sealed interface Shape
     /**
      * A circle, defined by a centre point and radius.
      *
-     * @param centerX x-coordinate of centre
-     * @param centerY y-coordinate of centre
+     * @param x x-coordinate of centre
+     * @param y y-coordinate of centre
      * @param radius  radius of circle (distance between centre point and outer edge)
      */
-    record Circle(float centerX, float centerY, float radius) implements Shape {}
+    record Circle(float x, float y, float radius) implements Shape {}
 
     /**
      * A polygon, used to define a custom shape with a set of xy points.
