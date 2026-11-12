@@ -1,9 +1,7 @@
 package com.logandhillon.logangamelib.resource.base;
 
-import com.logandhillon.logangamelib.resource.ImageResource;
-import javafx.scene.image.Image;
-
-import java.io.IOException;
+import com.logandhillon.logangamelib.api.render.Texture;
+import com.logandhillon.logangamelib.api.render.TextureAssets;
 
 /**
  * Contains engine-level assets for logangamelib.
@@ -11,13 +9,5 @@ import java.io.IOException;
  * @author Logan Dhillon
  */
 public class LGLAssets {
-    public static final Image LGL_ICON;
-
-    static {
-        try (var res = new ImageResource("lgl.png")) {
-            LGL_ICON = res.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static final Texture LGL_ICON = TextureAssets.load("lgl.png");
 }

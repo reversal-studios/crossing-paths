@@ -1,10 +1,10 @@
 package com.logandhillon.logangamelib.gfx;
 
-import com.logandhillon.logangamelib.resource.ImageResource;
+import com.logandhillon.logangamelib.api.render.Color;
 import com.logandhillon.logangamelib.resource.TextResource;
 import com.logandhillon.logangamelib.api.render.Renderer;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
+import com.logandhillon.logangamelib.api.render.Texture;
+import com.logandhillon.logangamelib.api.render.TextureAssets;
 import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -31,7 +31,7 @@ public class TextureAtlas {
      */
     private static final Map<String, TextureAtlas> LOADED_TEXTURES = new HashMap<>();
 
-    protected final Image    image;
+    protected final Texture  texture;
     protected final Metadata meta;
     /**
      * Gets the pathname for this, which can be used to serialize & retrieve atlases from data.
@@ -46,10 +46,8 @@ public class TextureAtlas {
      */
     private TextureAtlas(String path) {
         LOG.debug("Computing new texture atlas for '{}'", path);
-        try (var img = new ImageResource(path);
-             var meta = new TextResource("gfx/" + path + ".atlas")
-        ) {
-            this.image = img.load();
+        try (var meta = new TextResource("gfx/" + path + ".atlas")) {
+            this.texture = TextureAssets.load(path);
             this.meta = Metadata.fromString(meta.load());
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -81,12 +79,11 @@ public class TextureAtlas {
      * @param w     width of image that will be drawn
      * @param h     height of image that will be drawn
      */
-    private void draw(Renderer g, Image image, int row, int col, float x, float y, float w, float h) {
-        if (row < 0 || row > meta.rows || col < 0 || col > meta.cols)
+    private void append(Renderer g, int row, int col, float x, float y, float w, float h, Color color) {
+        if (row < 0 || row >= meta.rows || col < 0 || col >= meta.cols)
             throw new IllegalArgumentException("row/col must be within 0 and the number of rows/cols in this atlas");
-
-        g.setImageSmoothing(false);
-        g.drawImage(image, row * meta.cellWidth, col * meta.cellHeight, meta.cellWidth, meta.cellHeight, x, y, w, h);
+        g.draw(texture, new Texture.Region(row * meta.cellWidth, col * meta.cellHeight, meta.cellWidth, meta.cellHeight),
+               x, y, w, h, color == null ? Color.WHITE : color);
     }
 
     /**
@@ -101,7 +98,7 @@ public class TextureAtlas {
      * @param h   height of image that will be drawn
      */
     public void draw(Renderer g, int row, int col, float x, float y, float w, float h) {
-        draw(g, image, row, col, x, y, w, h);
+        append(g, row, col, x, y, w, h, Color.WHITE);
     }
 
     /**
@@ -116,10 +113,9 @@ public class TextureAtlas {
      * @param h     height of image that will be drawn
      * @param color color to recolor the image with
      *
-     * @see ImageResource#recolor(Image, Color)
      */
     public void draw(Renderer g, int row, int col, float x, float y, float w, float h, Color color) {
-        draw(g, ImageResource.recolor(image, color), row, col, x, y, w, h);
+        append(g, row, col, x, y, w, h, color);
     }
 
     /**

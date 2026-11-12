@@ -1,7 +1,7 @@
 package com.logandhillon.logangamelib.gfx;
 
 import com.logandhillon.logangamelib.api.render.Renderer;
-import javafx.scene.paint.Color;
+import com.logandhillon.logangamelib.api.render.Color;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 

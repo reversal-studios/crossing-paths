@@ -5,7 +5,7 @@ import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.logangamelib.gfx.AnimationSequence;
 import com.logandhillon.logangamelib.api.render.Renderer;
-import javafx.scene.paint.Color;
+import com.logandhillon.logangamelib.api.render.Color;
 import lombok.Getter;
 
 import static com.logandhillon.fptgame.resource.Textures.PORTAL_ANIM;

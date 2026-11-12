@@ -117,6 +117,31 @@ public class TextEntity extends Entity {
             return this;
         }
 
+        /** Temporary JavaFX bridge while game UI declarations are migrated to engine fonts. */
+        @Deprecated
+        public Builder setFont(javafx.scene.text.Font font) {
+            this.font = new Font(font.getFamily(), (float)font.getSize());
+            return this;
+        }
+
+        @Deprecated
+        public Builder setJustification(javafx.scene.text.TextAlignment alignment) {
+            this.justification = switch (alignment) {
+                case LEFT -> TextStyle.Justification.LEFT; case CENTER -> TextStyle.Justification.CENTER;
+                case RIGHT, JUSTIFY -> TextStyle.Justification.RIGHT;
+            };
+            return this;
+        }
+
+        @Deprecated
+        public Builder setVerticalAlignment(javafx.geometry.VPos alignment) {
+            this.valign = switch (alignment) {
+                case TOP -> TextStyle.VAlign.TOP; case CENTER -> TextStyle.VAlign.CENTER;
+                case BASELINE -> TextStyle.VAlign.BASELINE; case BOTTOM -> TextStyle.VAlign.BOTTOM;
+            };
+            return this;
+        }
+
         public Builder setFontSize(int fontSize) {
             this.font = new Font(GameMeta.get().defaultFont.load(), fontSize);
             return this;

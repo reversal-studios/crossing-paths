@@ -91,13 +91,12 @@ public class MainMenuContent implements MenuContent {
 
                     @Override
                     protected void onRender(Renderer g, float x, float y) {
-                        g.setFont(CREDITS_FONT);
-                        g.setFill(Colors.ACTIVE_TRANS_50);
-                        g.setStroke(Colors.ACTIVE_TRANS_50);
-                        g.setLineWidth(1);
-                        g.strokeLine(x, y + 21, x + 58, y + 21);
-                        g.setTextAlign(TextAlignment.LEFT);
-                        g.fillText("LICENSE", x, y + 18);
+                        g.line(x, y + 21, x + 58, y + 21, Colors.ACTIVE_TRANS_50, 1);
+                        g.text(new com.logandhillon.logangamelib.api.render.Font(CREDITS_FONT.getFamily(), (float) CREDITS_FONT.getSize()),
+                               "LICENSE", x, y + 18,
+                               new com.logandhillon.logangamelib.api.render.TextStyle(Colors.ACTIVE_TRANS_50,
+                                       com.logandhillon.logangamelib.api.render.TextStyle.Justification.LEFT,
+                                       com.logandhillon.logangamelib.api.render.TextStyle.VAlign.BASELINE, Float.MAX_VALUE));
                     }
 
                     @Override

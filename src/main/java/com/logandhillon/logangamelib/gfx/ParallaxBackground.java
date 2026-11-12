@@ -2,11 +2,9 @@ package com.logandhillon.logangamelib.gfx;
 
 import com.logandhillon.fptgame.GameHandler;
 import com.logandhillon.logangamelib.entity.Entity;
-import com.logandhillon.logangamelib.resource.ImageResource;
 import com.logandhillon.logangamelib.api.render.Renderer;
-import javafx.scene.image.Image;
-
-import java.io.IOException;
+import com.logandhillon.logangamelib.api.render.Texture;
+import com.logandhillon.logangamelib.api.render.TextureAssets;
 
 /**
  * A parallax background is an infinite scrolling background where layers move at different speed creating the illusion
@@ -32,10 +30,8 @@ public class ParallaxBackground extends Entity {
     @Override
     protected void onRender(Renderer g, float x, float y) {
         for (Layer layer: layers) {
-            g.drawImage(layer.image, layer.x, y, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
-            g.drawImage(
-                    layer.image, layer.x + GameHandler.CANVAS_WIDTH, y, GameHandler.CANVAS_WIDTH,
-                    GameHandler.CANVAS_HEIGHT);
+            g.draw(layer.texture, layer.x, y, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
+            g.draw(layer.texture, layer.x + GameHandler.CANVAS_WIDTH, y, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
         }
     }
 
@@ -57,7 +53,7 @@ public class ParallaxBackground extends Entity {
      * variable speed.
      */
     public static final class Layer {
-        private final Image image;
+        private final Texture texture;
         private final float speed;
 
         private float x = 0;
@@ -69,11 +65,7 @@ public class ParallaxBackground extends Entity {
          * @param speed speed of the layer (px/s)
          */
         public Layer(String name, float speed) {
-            try (var res = new ImageResource(name)) {
-                this.image = res.load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            this.texture = TextureAssets.load(name);
             this.speed = speed;
         }
     }

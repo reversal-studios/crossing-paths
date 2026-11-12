@@ -24,7 +24,7 @@ public class LevelButtonEntity extends LevelObject {
 
     @Override
     protected void onRender(Renderer g, float x, float y) {
-        g.drawImage(Textures.LEVEL_BUTTON, x, y, w, h);
+        g.draw(Textures.LEVEL_BUTTON, x, y, w, h);
     }
 
     @Override

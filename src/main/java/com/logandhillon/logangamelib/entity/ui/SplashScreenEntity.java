@@ -5,7 +5,6 @@ import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.api.render.Texture;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.resource.base.LGLAssets;
-import javafx.scene.image.Image;
 
 /**
  * The splash screen entity displays a logo with a specified size for a certain amount of time, animating the logo to
@@ -34,7 +33,7 @@ public class SplashScreenEntity extends Entity {
      * @param logo your custom splash logo, if null, uses the logangamelib logo
      * @param size size of logo on splash screen
      */
-    public SplashScreenEntity(Image logo, float size) {
+    public SplashScreenEntity(Texture logo, float size) {
         super(0, 0); // doesn't use position interally, just do whatever here
         this.logoSize = size;
         this.logo = logo == null ? LGLAssets.LGL_ICON : logo;

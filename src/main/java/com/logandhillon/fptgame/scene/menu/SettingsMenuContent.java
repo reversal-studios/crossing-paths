@@ -192,16 +192,12 @@ public class SettingsMenuContent implements MenuContent {
                 // underlines
                 new Renderable(
                         32, 168, (g, x, y) -> {
-                    g.setStroke(Colors.ACTIVE);
-                    g.setLineWidth(2);
-                    g.strokeLine(x, y, x + 70, y);
+                    g.line(x, y, x + 70, y, Colors.ACTIVE, 2);
                 }),
 
                 new Renderable(
                         32, 439, (g, x, y) -> {
-                    g.setStroke(Colors.ACTIVE);
-                    g.setLineWidth(2);
-                    g.strokeLine(x, y, x + 113, y);
+                    g.line(x, y, x + 113, y, Colors.ACTIVE, 2);
                 }),
 
                 // control buttons
@@ -221,17 +217,15 @@ public class SettingsMenuContent implements MenuContent {
     @Override
     public void onRender(Renderer g) {
         if (currentKeyBind != null) {
-            g.setFill(Colors.FOREGROUND_TRANS_40);
-            g.rect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
-
-            g.setFill(Colors.ACTIVE);
-            g.setFont(INSTRUCTION_FONT);
-            g.setTextAlign(TextAlignment.CENTER);
-            g.setTextBaseline(VPos.CENTER);
-            g.fillText("PRESS ANY BUTTON", GameHandler.CANVAS_WIDTH / 2f, GameHandler.CANVAS_HEIGHT / 2f);
+            g.rect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT, Colors.FOREGROUND_TRANS_40);
+            var style = new com.logandhillon.logangamelib.api.render.TextStyle(Colors.ACTIVE,
+                    com.logandhillon.logangamelib.api.render.TextStyle.Justification.CENTER,
+                    com.logandhillon.logangamelib.api.render.TextStyle.VAlign.CENTER, Float.MAX_VALUE);
+            var font = new com.logandhillon.logangamelib.api.render.Font(INSTRUCTION_FONT.getFamily(), (float) INSTRUCTION_FONT.getSize());
+            g.text(font, "PRESS ANY BUTTON", GameHandler.CANVAS_WIDTH / 2f, GameHandler.CANVAS_HEIGHT / 2f, style);
 
             if (!updateKeyBindStatus.isEmpty())
-                g.fillText(updateKeyBindStatus, GameHandler.CANVAS_WIDTH / 2f, GameHandler.CANVAS_HEIGHT / 2f + 30);
+                g.text(font, updateKeyBindStatus, GameHandler.CANVAS_WIDTH / 2f, GameHandler.CANVAS_HEIGHT / 2f + 30, style);
         }
     }
 

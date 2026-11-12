@@ -5,7 +5,7 @@ import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.logangamelib.gfx.AtlasTile;
 import com.logandhillon.logangamelib.api.render.Renderer;
-import javafx.scene.paint.Color;
+import com.logandhillon.logangamelib.api.render.Color;
 import lombok.Getter;
 
 import static com.logandhillon.fptgame.resource.Textures.OBJ_SCALE;
@@ -48,7 +48,6 @@ public class PlatformEntity extends LevelObject {
 
     @Override
     protected void onRender(Renderer g, float x, float y) {
-        g.setFill(Colors.FOREGROUND_TRANS_40);
         if (w > h) { // render right
             for (int i = 0; i < w / OBJ_SCALE; i++) {
                 texture.draw(g, x + (i * OBJ_SCALE), y, OBJ_SCALE, OBJ_SCALE, tint);

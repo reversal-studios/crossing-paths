@@ -4,8 +4,7 @@ import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.logangamelib.networking.ProtoSerializable;
 import com.logandhillon.logangamelib.resource.ImageResource;
 import com.logandhillon.logangamelib.api.render.Renderer;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
+import com.logandhillon.logangamelib.api.render.Color;
 
 /**
  * A {@link ProtoSerializable} representation of a tile in a {@link TextureAtlas}. Should be used to represent
@@ -54,7 +53,6 @@ public class AtlasTile implements ProtoSerializable<LevelProto.AtlasTile> {
      * @param h     height of image that will be drawn
      * @param color colour to recolour the image with
      *
-     * @see ImageResource#recolor(Image, Color)
      */
     public void draw(Renderer g, float x, float y, float w, float h, Color color) {
         if (color == null) this.draw(g, x, y, w, h);

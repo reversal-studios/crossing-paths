@@ -12,7 +12,7 @@ import com.logandhillon.logangamelib.entity.physics.CollisionEntity;
 import com.logandhillon.logangamelib.entity.physics.PhysicsEntity;
 import com.logandhillon.logangamelib.gfx.AnimationSequence;
 import com.logandhillon.logangamelib.api.render.Renderer;
-import javafx.scene.paint.Color;
+import com.logandhillon.logangamelib.api.render.Color;
 import lombok.Getter;
 
 import java.util.function.Predicate;

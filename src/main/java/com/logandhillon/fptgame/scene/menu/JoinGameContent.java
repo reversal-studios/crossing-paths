@@ -56,8 +56,7 @@ public class JoinGameContent implements MenuContent {
         // rect in background for server list
         Renderable serverListRect = new Renderable(
                 32, 326, (g, x, y) -> {
-            g.setFill(Colors.BUTTON_NORMAL);
-            g.fillRoundRect(x, y, 459, 228, CORNER_DIAMETER, CORNER_DIAMETER);
+            g.roundRect(x, y, 459, 228, Colors.BUTTON_NORMAL, CORNER_DIAMETER / 2);
         });
 
         // label for server list
