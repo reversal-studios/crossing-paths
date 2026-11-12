@@ -3,7 +3,13 @@ package com.logandhillon.logangamelib.api.render;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/** Backend-neutral texture cache used by engine and game asset declarations. */
+/**
+ * Backend-neutral texture cache used by engine and game asset declarations.
+ *
+ * @author Logan Dhillon
+ * @see TextureLoader#load(String)
+ * @see Texture
+ */
 public final class TextureAssets {
     private static final Map<String, Texture> CACHE = new ConcurrentHashMap<>();
     private static       TextureLoader        loader;
