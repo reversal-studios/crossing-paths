@@ -18,8 +18,8 @@ import lombok.Setter;
  * @see Style
  */
 public class ButtonEntity extends Clickable {
-    private static final int STROKE = 2;
-    private static final int ROUNDING_DIAMETER = 50;
+    private static final int STROKE          = 2;
+    private static final int ROUNDING_RADIUS = 25;
 
     private String label;
 
@@ -93,10 +93,10 @@ public class ButtonEntity extends Clickable {
         float cy = (y + h / 2);
         // render button background
         if (style.variant == Variant.OUTLINE) {
-            if (style.isRounded) r.strokeRoundRect(x, y, w, h, STROKE, style.buttonColor, ROUNDING_DIAMETER);
+            if (style.isRounded) r.strokeRoundRect(x, y, w, h, STROKE, style.buttonColor, ROUNDING_RADIUS);
             else r.strokeRect(x, y, w, h, STROKE, style.buttonColor);
         } else {
-            if (style.isRounded) r.roundRect(x, y, w, h, style.buttonColor, ROUNDING_DIAMETER);
+            if (style.isRounded) r.roundRect(x, y, w, h, style.buttonColor, ROUNDING_RADIUS);
             else r.rect(x, y, w, h, style.buttonColor);
         }
 

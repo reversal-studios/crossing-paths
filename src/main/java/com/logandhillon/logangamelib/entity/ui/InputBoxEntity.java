@@ -24,9 +24,9 @@ import lombok.Setter;
  */
 public class InputBoxEntity extends Clickable {
     private static final float INPUT_FONT_SIZE  = 18.5f;
-    private static final int   INPUT_CHAR_WIDTH = 11;
-    private static final int   CORNER_DIAMETER  = 50;
-    private static final int   MARGIN_X         = 16;
+    private static final int INPUT_CHAR_WIDTH = 11;
+    private static final int CORNER_RADIUS    = 25;
+    private static final int MARGIN_X         = 16;
     private static final int   MARGIN_Y         = 12;
     private static final Font  INPUT_FONT       = new Font(GameMeta.get().defaultFont.load(), INPUT_FONT_SIZE);
     private static final Font  LABEL_FONT       = new Font(GameMeta.get().defaultFont.load(), 20, Font.FontWeight.MEDIUM);
@@ -70,7 +70,7 @@ public class InputBoxEntity extends Clickable {
 
     @Override
     protected void onRender(Renderer g, float x, float y) {
-        g.roundRect(x, y, w, h, Colors.ACTIVE_TRANS_50, CORNER_DIAMETER);
+        g.roundRect(x, y, w, h, Colors.ACTIVE_TRANS_50, CORNER_RADIUS);
 
         g.text(
                 LABEL_FONT, label, x, y - 31,

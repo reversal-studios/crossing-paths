@@ -7,8 +7,8 @@ import javafx.scene.input.MouseEvent;
 import java.util.function.Consumer;
 
 public class SliderEntity extends Draggable {
-    private static final int BACKBONE_DIAMETER = 6;
-    private static final int CIRCLE_DIAMETER   = 20;
+    private static final int BACKBONE_RADIUS = 3;
+    private static final int CIRCLE_RADIUS   = 10;
 
     private final Consumer<Float> updater;
 
@@ -32,16 +32,16 @@ public class SliderEntity extends Draggable {
     @Override
     protected void onRender(Renderer g, float x, float y) {
         // backbone
-        g.roundRect(x, y, w, h, Colors.ACTIVE_TRANS_50, BACKBONE_DIAMETER);
+        g.roundRect(x, y, w, h, Colors.ACTIVE_TRANS_50, BACKBONE_RADIUS);
 
         // backbone filled part
-        g.roundRect(x, y, value + 5, h, Colors.BUTTON_HOVER, BACKBONE_DIAMETER);
+        g.roundRect(x, y, value + 5, h, Colors.BUTTON_HOVER, BACKBONE_RADIUS);
 
         // slider knob
         g.roundRect(
-                value + x, y - BACKBONE_DIAMETER, CIRCLE_DIAMETER, CIRCLE_DIAMETER,
+                value + x, y - BACKBONE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS,
                 active ? Colors.SLIDER_HEAD_ACTIVE : Colors.SLIDER_HEAD,
-                CIRCLE_DIAMETER); // TODO: idk if this "rounded rectangle" will appear as a circle or not (it should)
+                CIRCLE_RADIUS); // TODO: idk if this "rounded rectangle" will appear as a circle or not (it should)
     }
 
     @Override

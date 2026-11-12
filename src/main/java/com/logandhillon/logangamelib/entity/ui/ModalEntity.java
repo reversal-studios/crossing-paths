@@ -15,7 +15,7 @@ import com.logandhillon.logangamelib.resource.base.Colors;
 public class ModalEntity extends Entity {
     protected final float w, h;
     private final Entity[] entities;
-    private final int      cornerDiameter;
+    private final int      cornerRadius;
 
     private GameScene<?> parent;
 
@@ -32,7 +32,7 @@ public class ModalEntity extends Entity {
         super(x, y);
         this.w = w;
         this.h = h;
-        this.cornerDiameter = cornerRadius * 2;
+        this.cornerRadius = cornerRadius;
         this.entities = entities;
     }
 
@@ -53,7 +53,7 @@ public class ModalEntity extends Entity {
 
     @Override
     protected void onRender(Renderer g, float x, float y) {
-        g.roundRect(x, y, w, h, Colors.FOREGROUND_TRANS_40, cornerDiameter);
+        g.roundRect(x, y, w, h, Colors.FOREGROUND_TRANS_40, cornerRadius);
     }
 
     @Override

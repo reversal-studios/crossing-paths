@@ -35,8 +35,8 @@ public class JoinGameContent implements MenuContent {
     private static final Font   HEADER_FONT     = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 32);
     private static final String HEADER          = "Join a Game";
     private static final Font   LABEL_FONT      = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 18);
-    private static final int    ENTITY_GAP      = 16;
-    private static final int    CORNER_DIAMETER = 53;
+    private static final int ENTITY_GAP    = 16;
+    private static final int CORNER_RADIUS = 27;
 
     @Getter
     private final Entity[]            entities;
@@ -56,7 +56,7 @@ public class JoinGameContent implements MenuContent {
         // rect in background for server list
         Renderable serverListRect = new Renderable(
                 32, 326, (g, x, y) -> {
-            g.roundRect(x, y, 459, 228, Colors.BUTTON_NORMAL, CORNER_DIAMETER / 2);
+            g.roundRect(x, y, 459, 228, Colors.BUTTON_NORMAL, CORNER_RADIUS);
         });
 
         // label for server list
