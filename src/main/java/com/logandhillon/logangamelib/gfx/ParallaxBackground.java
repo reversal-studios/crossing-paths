@@ -1,10 +1,10 @@
 package com.logandhillon.logangamelib.gfx;
 
 import com.logandhillon.fptgame.GameHandler;
-import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.api.render.Texture;
 import com.logandhillon.logangamelib.api.render.TextureAssets;
+import com.logandhillon.logangamelib.entity.Entity;
 
 /**
  * A parallax background is an infinite scrolling background where layers move at different speed creating the illusion
@@ -31,7 +31,9 @@ public class ParallaxBackground extends Entity {
     protected void onRender(Renderer g, float x, float y) {
         for (Layer layer: layers) {
             g.draw(layer.texture, layer.x, y, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
-            g.draw(layer.texture, layer.x + GameHandler.CANVAS_WIDTH, y, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
+            g.draw(
+                    layer.texture, layer.x + GameHandler.CANVAS_WIDTH, y, GameHandler.CANVAS_WIDTH,
+                    GameHandler.CANVAS_HEIGHT);
         }
     }
 
@@ -49,17 +51,17 @@ public class ParallaxBackground extends Entity {
     }
 
     /**
-     * One layer of a {@link ParallaxBackground}, with an image {loaded with a {@link ImageResource} loader} and a
-     * variable speed.
+     * One layer of a {@link ParallaxBackground}, with a {@link Texture} {loaded with
+     * {@link TextureAssets#load(String)}} and a variable speed.
      */
     public static final class Layer {
         private final Texture texture;
-        private final float speed;
+        private final float   speed;
 
         private float x = 0;
 
         /**
-         * Loads the provided {@link ImageResource} and initializes the layer with the speed
+         * Loads the provided {@link Texture} and initializes the layer with the speed
          *
          * @param name  image file name (as found in the gfx folder)
          * @param speed speed of the layer (px/s)

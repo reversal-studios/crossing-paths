@@ -1,10 +1,10 @@
 package com.logandhillon.logangamelib.gfx;
 
 import com.logandhillon.logangamelib.api.render.Color;
-import com.logandhillon.logangamelib.resource.TextResource;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.api.render.Texture;
 import com.logandhillon.logangamelib.api.render.TextureAssets;
+import com.logandhillon.logangamelib.resource.TextResource;
 import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -68,28 +68,31 @@ public class TextureAtlas {
     }
 
     /**
-     * Internal method for drawing a static image to the screen
+     * Recolours this image then draws it to the screen
      *
-     * @param g     javafx graphics context from the engine's canvas
-     * @param image static image to draw
+     * @param g     lgl renderer
      * @param row   row of image in atlas
      * @param col   col of image in atlas
      * @param x     x-pos to draw at
      * @param y     y-pos to draw at
      * @param w     width of image that will be drawn
      * @param h     height of image that will be drawn
+     * @param color colour to recolour the image with
+     *
      */
-    private void append(Renderer g, int row, int col, float x, float y, float w, float h, Color color) {
+    public void draw(Renderer g, int row, int col, float x, float y, float w, float h, Color color) {
         if (row < 0 || row >= meta.rows || col < 0 || col >= meta.cols)
             throw new IllegalArgumentException("row/col must be within 0 and the number of rows/cols in this atlas");
-        g.draw(texture, new Texture.Region(row * meta.cellWidth, col * meta.cellHeight, meta.cellWidth, meta.cellHeight),
-               x, y, w, h, color == null ? Color.WHITE : color);
+        g.draw(
+                texture,
+                new Texture.Region(row * meta.cellWidth, col * meta.cellHeight, meta.cellWidth, meta.cellHeight),
+                x, y, w, h, color == null ? Color.WHITE : color);
     }
 
     /**
      * Draws this image to the screen
      *
-     * @param g   javafx graphics context from the engine's canvas
+     * @param g   lgl renderer
      * @param row row of image in atlas
      * @param col col of image in atlas
      * @param x   x-pos to draw at
@@ -98,24 +101,7 @@ public class TextureAtlas {
      * @param h   height of image that will be drawn
      */
     public void draw(Renderer g, int row, int col, float x, float y, float w, float h) {
-        append(g, row, col, x, y, w, h, Color.WHITE);
-    }
-
-    /**
-     * Recolors this image then draws it to the screen
-     *
-     * @param g     javafx graphics context from the engine's canvas
-     * @param row   row of image in atlas
-     * @param col   col of image in atlas
-     * @param x     x-pos to draw at
-     * @param y     y-pos to draw at
-     * @param w     width of image that will be drawn
-     * @param h     height of image that will be drawn
-     * @param color color to recolor the image with
-     *
-     */
-    public void draw(Renderer g, int row, int col, float x, float y, float w, float h, Color color) {
-        append(g, row, col, x, y, w, h, color);
+        draw(g, row, col, x, y, w, h, Color.WHITE);
     }
 
     /**

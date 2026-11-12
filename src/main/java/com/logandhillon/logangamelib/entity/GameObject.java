@@ -2,7 +2,6 @@ package com.logandhillon.logangamelib.entity;
 
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.engine.GameScene;
-import com.logandhillon.logangamelib.api.render.Renderer;
 
 /**
  * A GameObject is very the layer below {@link Entity}, which is an independent game object that can be added to scenes.

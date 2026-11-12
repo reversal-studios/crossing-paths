@@ -3,8 +3,6 @@ package com.logandhillon.logangamelib.engine;
 import com.logandhillon.logangamelib.engine.disk.PathManager;
 import com.logandhillon.logangamelib.entity.ui.SplashScreenEntity;
 import com.logandhillon.logangamelib.resource.base.Colors;
-import com.logandhillon.logangamelib.api.render.TextureAssets;
-import com.logandhillon.logangamelib.javafx.FXTextureLoader;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;

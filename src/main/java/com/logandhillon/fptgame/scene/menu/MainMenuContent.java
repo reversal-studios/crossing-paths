@@ -7,6 +7,7 @@ import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.networking.proto.ConfigProto;
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.fptgame.resource.Textures;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.engine.MenuController;
 import com.logandhillon.logangamelib.entity.Clickable;
@@ -14,11 +15,9 @@ import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.ui.ModalEntity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
-import com.logandhillon.logangamelib.api.render.Renderer;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 import lombok.Getter;
 
 import static com.logandhillon.fptgame.GameHandler.CANVAS_HEIGHT;
@@ -92,11 +91,15 @@ public class MainMenuContent implements MenuContent {
                     @Override
                     protected void onRender(Renderer g, float x, float y) {
                         g.line(x, y + 21, x + 58, y + 21, Colors.ACTIVE_TRANS_50, 1);
-                        g.text(new com.logandhillon.logangamelib.api.render.Font(CREDITS_FONT.getFamily(), (float) CREDITS_FONT.getSize()),
-                               "LICENSE", x, y + 18,
-                               new com.logandhillon.logangamelib.api.render.TextStyle(Colors.ACTIVE_TRANS_50,
-                                       com.logandhillon.logangamelib.api.render.TextStyle.Justification.LEFT,
-                                       com.logandhillon.logangamelib.api.render.TextStyle.VAlign.BASELINE, Float.MAX_VALUE));
+                        g.text(
+                                new com.logandhillon.logangamelib.api.render.Font(
+                                        CREDITS_FONT.getFamily(), (float)CREDITS_FONT.getSize()),
+                                "LICENSE", x, y + 18,
+                                new com.logandhillon.logangamelib.api.render.TextStyle(
+                                        Colors.ACTIVE_TRANS_50,
+                                        com.logandhillon.logangamelib.api.render.TextStyle.Justification.LEFT,
+                                        com.logandhillon.logangamelib.api.render.TextStyle.VAlign.BASELINE,
+                                        Float.MAX_VALUE));
                     }
 
                     @Override
