@@ -1,15 +1,15 @@
 package com.logandhillon.logangamelib.entity.ui;
 
+import com.logandhillon.logangamelib.api.render.Renderer;
+import com.logandhillon.logangamelib.api.render.Shape;
 import com.logandhillon.logangamelib.resource.base.Colors;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.ArcType;
 
 import java.util.function.Consumer;
 
 public class SliderEntity extends Draggable {
-    private static final int BACKBONE_DIAMETER = 6;
-    private static final int CIRCLE_DIAMETER   = 20;
+    private static final int BACKBONE_RADIUS = 3;
+    private static final int CIRCLE_RADIUS   = 10;
 
     private final Consumer<Float> updater;
 
@@ -31,18 +31,15 @@ public class SliderEntity extends Draggable {
     }
 
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
+    protected void onRender(Renderer g, float x, float y) {
         // backbone
-        g.setFill(Colors.ACTIVE_TRANS_50);
-        g.fillRoundRect(x, y, w, h, BACKBONE_DIAMETER, BACKBONE_DIAMETER);
+        g.roundRect(x, y, w, h, Colors.ACTIVE_TRANS_50, BACKBONE_RADIUS);
 
         // backbone filled part
-        g.setFill(Colors.BUTTON_HOVER);
-        g.fillRoundRect(x, y, value + 5, h, BACKBONE_DIAMETER, BACKBONE_DIAMETER);
+        g.roundRect(x, y, value + 5, h, Colors.BUTTON_HOVER, BACKBONE_RADIUS);
 
         // slider knob
-        g.setFill(active ? Colors.SLIDER_HEAD_ACTIVE : Colors.SLIDER_HEAD);
-        g.fillArc(value + x, y - BACKBONE_DIAMETER, CIRCLE_DIAMETER, CIRCLE_DIAMETER, 0, 360, ArcType.ROUND);
+        g.fill(new Shape.Circle(value + x, y, CIRCLE_RADIUS), active ? Colors.SLIDER_HEAD_ACTIVE : Colors.SLIDER_HEAD);
     }
 
     @Override

@@ -1,17 +1,16 @@
 package com.logandhillon.logangamelib.entity.ui;
 
+import com.logandhillon.logangamelib.api.render.Font;
+import com.logandhillon.logangamelib.api.render.Renderer;
+import com.logandhillon.logangamelib.api.render.TextStyle;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.entity.Clickable;
 import com.logandhillon.logangamelib.resource.base.Colors;
-import javafx.geometry.VPos;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
+
 import lombok.Setter;
 
 /**
@@ -25,12 +24,12 @@ import lombok.Setter;
  */
 public class InputBoxEntity extends Clickable {
     private static final float INPUT_FONT_SIZE  = 18.5f;
-    private static final int   INPUT_CHAR_WIDTH = 11;
-    private static final int   CORNER_DIAMETER  = 50;
-    private static final int   MARGIN_X         = 16;
+    private static final int INPUT_CHAR_WIDTH = 11;
+    private static final int CORNER_RADIUS    = 25;
+    private static final int MARGIN_X         = 16;
     private static final int   MARGIN_Y         = 12;
-    private static final Font  INPUT_FONT       = Font.font(GameMeta.get().defaultFont.load(), INPUT_FONT_SIZE);
-    private static final Font  LABEL_FONT       = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 20);
+    private static final Font  INPUT_FONT       = new Font(GameMeta.get().defaultFont.load(), INPUT_FONT_SIZE);
+    private static final Font  LABEL_FONT       = new Font(GameMeta.get().defaultFont.load(), 20, Font.FontWeight.MEDIUM);
 
     private final   float  maxWidth;
     private final   String placeholder;
@@ -70,35 +69,31 @@ public class InputBoxEntity extends Clickable {
     }
 
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
-        g.setFill(Colors.ACTIVE_TRANS_50);
-        g.fillRoundRect(x, y, w, h, CORNER_DIAMETER, CORNER_DIAMETER);
+    protected void onRender(Renderer g, float x, float y) {
+        g.roundRect(x, y, w, h, Colors.ACTIVE_TRANS_50, CORNER_RADIUS);
 
-        g.setTextAlign(TextAlignment.LEFT);
-        g.setTextBaseline(VPos.TOP);
-        g.setFont(LABEL_FONT);
-        g.setFill(Colors.ACTIVE);
-        g.fillText(label, x, y - 31);
+        g.text(
+                LABEL_FONT, label, x, y - 31,
+                new TextStyle(Colors.ACTIVE, TextStyle.Justification.LEFT, TextStyle.VAlign.TOP, w));
 
         // when active, show a blinking cursor for 500 ms every 1000 ms
         if (isActive && System.currentTimeMillis() % 1000 > 500) {
-            g.setStroke(Colors.FOREGROUND);
-            g.setLineWidth(2);
-
-            float cursorX = x + input.length() * INPUT_CHAR_WIDTH + MARGIN_X;
-            g.strokeLine(cursorX, y + MARGIN_Y, cursorX, y + h - MARGIN_Y);
+            float cx = x + input.length() * INPUT_CHAR_WIDTH + MARGIN_X;
+            g.line(cx, y + MARGIN_Y, cx, y + h - MARGIN_Y, Colors.FOREGROUND, 2);
         }
 
-        g.setFont(INPUT_FONT);
         if (input.isEmpty()) {
             // render placeholder
-            g.setTextAlign(TextAlignment.LEFT);
-            g.setFill(Colors.FOREGROUND_TRANS_40);
-            g.fillText(placeholder, x + MARGIN_X, y + MARGIN_Y, maxWidth);
+            g.text(
+                    INPUT_FONT, placeholder, x + MARGIN_X, y + MARGIN_Y,
+                    new TextStyle(
+                            Colors.FOREGROUND_TRANS_40, TextStyle.Justification.LEFT, TextStyle.VAlign.TOP,
+                            maxWidth));
         } else {
-            // render input (font is already white)
-            g.setFill(Colors.FOREGROUND);
-            g.fillText(input.toString(), x + MARGIN_X, y + MARGIN_Y, maxWidth);
+            // render input
+            g.text(
+                    INPUT_FONT, input.toString(), x + MARGIN_X, y + MARGIN_Y,
+                    new TextStyle(Colors.FOREGROUND, TextStyle.Justification.LEFT, TextStyle.VAlign.TOP, maxWidth));
         }
     }
 
@@ -109,7 +104,7 @@ public class InputBoxEntity extends Clickable {
 
     @Override
     public void onDestroy() {
-        // TODO: Blur inputs when input box is destroyed
+        this.onBlur();
     }
 
     /**

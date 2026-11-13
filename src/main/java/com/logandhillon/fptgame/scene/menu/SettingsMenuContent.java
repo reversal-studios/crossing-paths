@@ -6,17 +6,16 @@ import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.networking.proto.ConfigProto;
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.fptgame.resource.Sounds;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.Renderable;
 import com.logandhillon.logangamelib.entity.ui.SliderEntity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -123,86 +122,78 @@ public class SettingsMenuContent implements MenuContent {
                         .setColor(Colors.ACTIVE)
                         .setText("SETTINGS")
                         .setFont(HEADER_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 140)
                         .setColor(Colors.ACTIVE)
                         .setText("AUDIO")
                         .setFont(SUBHEADER_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 410)
                         .setColor(Colors.ACTIVE)
                         .setText("CONTROLS")
                         .setFont(SUBHEADER_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 187)
                         .setColor(Colors.ACTIVE)
                         .setText("MASTER VOLUME")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 256)
                         .setColor(Colors.ACTIVE)
                         .setText("MUSIC VOLUME")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 325)
                         .setColor(Colors.ACTIVE)
                         .setText("SFX VOLUME")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 464.5f)
                         .setColor(Colors.ACTIVE)
                         .setText("MOVE LEFT")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 520.5f)
                         .setColor(Colors.ACTIVE)
                         .setText("MOVE RIGHT")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 576.5f)
                         .setColor(Colors.ACTIVE)
                         .setText("JUMP")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 632.5f)
                         .setColor(Colors.ACTIVE)
                         .setText("INTERACT")
                         .setFont(CONTROLS_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build(),
 
                 // underlines
                 new Renderable(
-                        32, 168, (g, x, y) -> {
-                    g.setStroke(Colors.ACTIVE);
-                    g.setLineWidth(2);
-                    g.strokeLine(x, y, x + 70, y);
-                }),
+                        32, 168, (g, x, y) -> g.line(x, y, x + 70, y, Colors.ACTIVE, 2)),
 
                 new Renderable(
-                        32, 439, (g, x, y) -> {
-                    g.setStroke(Colors.ACTIVE);
-                    g.setLineWidth(2);
-                    g.strokeLine(x, y, x + 113, y);
-                }),
+                        32, 439, (g, x, y) -> g.line(x, y, x + 113, y, Colors.ACTIVE, 2)),
 
                 // control buttons
                 keyBindButtons.get(KeyBind.LEFT),
@@ -219,19 +210,21 @@ public class SettingsMenuContent implements MenuContent {
     }
 
     @Override
-    public void onRender(GraphicsContext g) {
+    public void onRender(Renderer g) {
         if (currentKeyBind != null) {
-            g.setFill(Colors.FOREGROUND_TRANS_40);
-            g.fillRect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
-
-            g.setFill(Colors.ACTIVE);
-            g.setFont(INSTRUCTION_FONT);
-            g.setTextAlign(TextAlignment.CENTER);
-            g.setTextBaseline(VPos.CENTER);
-            g.fillText("PRESS ANY BUTTON", GameHandler.CANVAS_WIDTH / 2f, GameHandler.CANVAS_HEIGHT / 2f);
+            g.rect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT, Colors.FOREGROUND_TRANS_40);
+            var style = new com.logandhillon.logangamelib.api.render.TextStyle(
+                    Colors.ACTIVE,
+                    com.logandhillon.logangamelib.api.render.TextStyle.Justification.CENTER,
+                    com.logandhillon.logangamelib.api.render.TextStyle.VAlign.CENTER, Float.MAX_VALUE);
+            var font = new com.logandhillon.logangamelib.api.render.Font(
+                    INSTRUCTION_FONT.getFamily(), (float)INSTRUCTION_FONT.getSize());
+            g.text(font, "PRESS ANY BUTTON", GameHandler.CANVAS_WIDTH / 2f, GameHandler.CANVAS_HEIGHT / 2f, style);
 
             if (!updateKeyBindStatus.isEmpty())
-                g.fillText(updateKeyBindStatus, GameHandler.CANVAS_WIDTH / 2f, GameHandler.CANVAS_HEIGHT / 2f + 30);
+                g.text(
+                        font, updateKeyBindStatus, GameHandler.CANVAS_WIDTH / 2f, GameHandler.CANVAS_HEIGHT / 2f + 30,
+                        style);
         }
     }
 

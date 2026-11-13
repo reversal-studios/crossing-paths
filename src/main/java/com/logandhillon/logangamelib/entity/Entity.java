@@ -1,12 +1,12 @@
 package com.logandhillon.logangamelib.entity;
 
+import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.engine.GameScene;
-import javafx.scene.canvas.GraphicsContext;
 import lombok.Getter;
 
 /**
  * An entity is the most basic paradigm that can be handled by the game engine. It provides methods for
- * {@link Entity#onUpdate(float)} and {@link Entity#onRender(GraphicsContext, float, float)}, which must be implemented
+ * {@link Entity#onUpdate(float)} and {@link Entity#onRender(Renderer, float, float)}, which must be implemented
  * by your subclass.
  *
  * @author Logan Dhillon
@@ -33,15 +33,15 @@ public abstract class Entity implements GameObject {
     /**
      * Called every tick to render the entity.
      *
-     * @param g the graphical context to render to.
+     * @param r the graphical context to render to.
      *
      * @apiNote the X and Y parameters are ignored, and are only implemented because {@link GameObject} requires them.
      * the entity will always render at its own X and Y positions.
      * @implNote do not implement this method to change how the entity is rendered.
      * @see Entity#onRender
      */
-    public void render(GraphicsContext g, float x, float y) {
-        this.render(g);
+    public void render(Renderer r, float x, float y) {
+        this.render(r);
     }
 
     /**
@@ -52,7 +52,7 @@ public abstract class Entity implements GameObject {
      * @implNote do not implement this method to change how the entity is rendered.
      * @see Entity#onRender
      */
-    public void render(GraphicsContext g) {
+    public void render(Renderer g) {
         this.onRender(g, this.x, this.y);
     }
 
@@ -65,9 +65,9 @@ public abstract class Entity implements GameObject {
      *
      * @apiNote Do not call this to render the entity.
      * @implNote implement this method to change the render behaviour of your entity.
-     * @see Entity#render(GraphicsContext)
+     * @see Entity#render(Renderer)
      */
-    protected abstract void onRender(GraphicsContext g, float x, float y);
+    protected abstract void onRender(Renderer g, float x, float y);
 
     /**
      * Runs when this object is attached to a parent.

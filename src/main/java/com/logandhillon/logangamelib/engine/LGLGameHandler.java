@@ -58,7 +58,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         this.stage = stage;
 
         // rename thread to shorten logs
-        Thread.currentThread().setName("LGL-FX");
+        Thread.currentThread().setName("LGL-main");
 
         stage.setTitle(GameMeta.get().gameName);
         stage.setOnCloseRequest(e -> {
@@ -164,7 +164,8 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         Pane overlayPane = new Pane();
         overlayPane.setPrefSize(stage.getWidth(), stage.getHeight());
 
-        Rectangle fadeRect = new Rectangle(stage.getWidth(), stage.getHeight(), Colors.GENERIC_BG);
+        Rectangle fadeRect = new Rectangle(stage.getWidth(), stage.getHeight(),
+                                           new javafx.scene.paint.Color(Colors.GENERIC_BG.red(), Colors.GENERIC_BG.green(), Colors.GENERIC_BG.blue(), Colors.GENERIC_BG.alpha()));
         fadeRect.setOpacity(0);
         overlayPane.getChildren().add(fadeRect);
 

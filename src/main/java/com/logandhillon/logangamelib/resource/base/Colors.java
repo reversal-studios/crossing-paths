@@ -1,6 +1,6 @@
 package com.logandhillon.logangamelib.resource.base;
 
-import javafx.scene.paint.Color;
+import com.logandhillon.logangamelib.api.render.Color;
 
 /**
  * Constants for built-in colours used by the engine.
@@ -9,9 +9,9 @@ import javafx.scene.paint.Color;
  */
 public class Colors {
     public static final Color ACTIVE              = Color.WHITE;
-    public static final Color ACTIVE_TRANS_50     = Color.rgb(255, 255, 255, 0.5);
+    public static final Color ACTIVE_TRANS_50     = Color.rgb(255, 255, 255, 0.5f);
     public static final Color FOREGROUND          = Color.BLACK;
-    public static final Color FOREGROUND_TRANS_40 = Color.rgb(0, 0, 0, 0.4);
+    public static final Color FOREGROUND_TRANS_40 = Color.rgb(0, 0, 0, 0.4f);
 
     public static final Color GENERIC_BG = Color.rgb(210, 209, 209);
 

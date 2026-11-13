@@ -1,12 +1,10 @@
 package com.logandhillon.logangamelib.gfx;
 
 import com.logandhillon.fptgame.GameHandler;
+import com.logandhillon.logangamelib.api.render.Renderer;
+import com.logandhillon.logangamelib.api.render.Texture;
+import com.logandhillon.logangamelib.api.render.TextureAssets;
 import com.logandhillon.logangamelib.entity.Entity;
-import com.logandhillon.logangamelib.resource.ImageResource;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-
-import java.io.IOException;
 
 /**
  * A parallax background is an infinite scrolling background where layers move at different speed creating the illusion
@@ -30,11 +28,11 @@ public class ParallaxBackground extends Entity {
     }
 
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
+    protected void onRender(Renderer g, float x, float y) {
         for (Layer layer: layers) {
-            g.drawImage(layer.image, layer.x, y, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
-            g.drawImage(
-                    layer.image, layer.x + GameHandler.CANVAS_WIDTH, y, GameHandler.CANVAS_WIDTH,
+            g.draw(layer.texture, layer.x, y, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
+            g.draw(
+                    layer.texture, layer.x + GameHandler.CANVAS_WIDTH, y, GameHandler.CANVAS_WIDTH,
                     GameHandler.CANVAS_HEIGHT);
         }
     }
@@ -53,27 +51,23 @@ public class ParallaxBackground extends Entity {
     }
 
     /**
-     * One layer of a {@link ParallaxBackground}, with an image {loaded with a {@link ImageResource} loader} and a
-     * variable speed.
+     * One layer of a {@link ParallaxBackground}, with a {@link Texture} {loaded with
+     * {@link TextureAssets#load(String)}} and a variable speed.
      */
     public static final class Layer {
-        private final Image image;
-        private final float speed;
+        private final Texture texture;
+        private final float   speed;
 
         private float x = 0;
 
         /**
-         * Loads the provided {@link ImageResource} and initializes the layer with the speed
+         * Loads the provided {@link Texture} and initializes the layer with the speed
          *
          * @param name  image file name (as found in the gfx folder)
          * @param speed speed of the layer (px/s)
          */
         public Layer(String name, float speed) {
-            try (var res = new ImageResource(name)) {
-                this.image = res.load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            this.texture = TextureAssets.load(name);
             this.speed = speed;
         }
     }

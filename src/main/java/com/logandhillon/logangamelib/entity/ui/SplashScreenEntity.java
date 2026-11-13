@@ -1,10 +1,10 @@
 package com.logandhillon.logangamelib.entity.ui;
 
+import com.logandhillon.logangamelib.api.render.Color;
+import com.logandhillon.logangamelib.api.render.Renderer;
+import com.logandhillon.logangamelib.api.render.Texture;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.resource.base.LGLAssets;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 
 /**
  * The splash screen entity displays a logo with a specified size for a certain amount of time, animating the logo to
@@ -20,7 +20,7 @@ public class SplashScreenEntity extends Entity {
     private static final double CANVAS_W       = 1280;
     private static final double CANVAS_H       = 720;
 
-    private final Image logo;
+    private final Texture logo;
 
     private float logoSize;
     private float animationTimer = 0;
@@ -33,36 +33,23 @@ public class SplashScreenEntity extends Entity {
      * @param logo your custom splash logo, if null, uses the logangamelib logo
      * @param size size of logo on splash screen
      */
-    public SplashScreenEntity(Image logo, float size) {
+    public SplashScreenEntity(Texture logo, float size) {
         super(0, 0); // doesn't use position interally, just do whatever here
         this.logoSize = size;
         this.logo = logo == null ? LGLAssets.LGL_ICON : logo;
     }
 
     @Override
-//    protected void onRender(GraphicsContext g, float x, float y) {
-//        g.setFill(Color.rgb(0, 0, 0, bgAlpha));
-//        g.fillRect(0, 0, 1280, 720);
-//
-//        g.setGlobalAlpha(logoAlpha);
-//        g.drawImage(logo, (1280f - logoSize) / 2, (720f - logoSize) / 2, logoSize, logoSize);
-//        g.setGlobalAlpha(1.0);
-//    }
-    protected void onRender(GraphicsContext g, float x, float y) {
-        g.setFill(Color.rgb(0, 0, 0, bgAlpha));
-        g.fillRect(0, 0, CANVAS_W, CANVAS_H);
+    protected void onRender(Renderer g, float x, float y) {
+        g.clear(Color.rgb(0, 0, 0, bgAlpha));
 
-        g.setGlobalAlpha(logoAlpha);
-        double aspect = logo.getWidth() / logo.getHeight();
-        double w = logoSize;
-        double h = logoSize;
-        if (aspect >= 1.0) {
-            h = logoSize / aspect;
-        } else {
-            w = logoSize * aspect;
-        }
-        g.drawImage(logo, (CANVAS_W - w) / 2, (CANVAS_H - h) / 2, w, h);
-        g.setGlobalAlpha(1.0);
+        float aspect = (float)logo.width() / logo.height();
+        float w = logoSize;
+        float h = logoSize;
+        if (aspect >= 1.0) h = logoSize / aspect;
+        else w = logoSize * aspect;
+
+        g.draw(logo, (float)((CANVAS_W - w) / 2), (float)((CANVAS_H - h) / 2), w, h, new Color(1, 1, 1, logoAlpha));
     }
 
     @Override
