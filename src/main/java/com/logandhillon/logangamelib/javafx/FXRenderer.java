@@ -114,6 +114,7 @@ public final class FXRenderer implements Renderer {
     @Override
     public void clip(Shape clip, Runnable content) {
         graphics.save();
+        graphics.beginPath();
         switch (clip) {
             case Shape.Rect s -> graphics.rect(s.x(), s.y(), s.width(), s.height());
             case Shape.Arc s -> graphics.arc(s.x(), s.y(), s.width(), s.height(), s.azimuth(), s.bearing());

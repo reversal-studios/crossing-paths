@@ -4,6 +4,7 @@ import com.logandhillon.logangamelib.api.render.Texture;
 import com.logandhillon.logangamelib.api.render.TextureLoader;
 import javafx.scene.image.Image;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -15,9 +16,12 @@ import java.io.InputStream;
 public final class FXTextureLoader implements TextureLoader {
     @Override
     public Texture load(String path) {
-        String resourcePath = path.startsWith("/") ? path : "/gfx/" + path;
-        InputStream stream = FXTextureLoader.class.getResourceAsStream(resourcePath);
-        if (stream == null) throw new IllegalArgumentException("Texture resource not found: " + resourcePath);
-        return new FXTexture(new Image(stream));
+        String classpath = path.startsWith("/") ? path : "/gfx/" + path;
+        try (InputStream stream = FXTextureLoader.class.getResourceAsStream(classpath)) {
+            if (stream == null) throw new IllegalArgumentException("Texture resource not found: " + classpath);
+            return new FXTexture(new Image(stream));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load FX texture from classpath", e);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.logandhillon.logangamelib.entity.ui;
 
 import com.logandhillon.logangamelib.api.render.Renderer;
+import com.logandhillon.logangamelib.api.render.Shape;
 import com.logandhillon.logangamelib.resource.base.Colors;
 import javafx.scene.input.MouseEvent;
 
@@ -38,10 +39,7 @@ public class SliderEntity extends Draggable {
         g.roundRect(x, y, value + 5, h, Colors.BUTTON_HOVER, BACKBONE_RADIUS);
 
         // slider knob
-        g.roundRect(
-                value + x, y - BACKBONE_RADIUS, CIRCLE_RADIUS, CIRCLE_RADIUS,
-                active ? Colors.SLIDER_HEAD_ACTIVE : Colors.SLIDER_HEAD,
-                CIRCLE_RADIUS); // TODO: idk if this "rounded rectangle" will appear as a circle or not (it should)
+        g.fill(new Shape.Circle(value + x, y, CIRCLE_RADIUS), active ? Colors.SLIDER_HEAD_ACTIVE : Colors.SLIDER_HEAD);
     }
 
     @Override

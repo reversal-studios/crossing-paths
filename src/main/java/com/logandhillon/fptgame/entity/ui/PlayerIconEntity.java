@@ -42,7 +42,7 @@ public class PlayerIconEntity extends Entity {
         // crops in circle shape
         g.clip(
                 new Shape.Circle(x + 33, y + 58, RADIUS), () -> {
-                    g.fill(new Shape.Circle(x - 16, 153, RADIUS), Colors.ACTIVE_TRANS_015); // bg of icon
+                    g.fill(new Shape.Circle(x +33, y+58, RADIUS), Colors.ACTIVE_TRANS_015); // bg of icon
                     Textures.PLAYER_IDLE.draw(g, 0, 0, x, y, 66, 132, Colors.PLAYER_SKINS.get(color));
                 });
 

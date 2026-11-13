@@ -37,7 +37,7 @@ public sealed interface Shape
      * @param width   width of arc
      * @param height  height of arc
      * @param azimuth initial angle to start arc at
-     * @param bearing terminal angle to end arc at
+     * @param bearing bearing or sweep extent to extend arc through
      */
     record Arc(float x, float y, float width, float height, float azimuth, float bearing) implements Shape {}
 
