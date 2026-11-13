@@ -3,6 +3,7 @@ package com.logandhillon.logangamelib.javafx;
 import com.logandhillon.logangamelib.api.render.*;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.shape.ArcType;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
@@ -46,11 +47,11 @@ public final class FXRenderer implements Renderer {
     @Override
     public void draw(Texture texture, Texture.Region source, float x, float y, float width, float height, Color tint) {
         FXTexture fxTexture = requireTexture(texture);
-        // JavaFX has no inexpensive per-draw image tint. Preserve alpha; GPU backends can apply full RGB tint.
+        Image image = tint == Color.WHITE ? fxTexture.image() : fxTexture.recolor(toFxColor(tint));
+
         graphics.setGlobalAlpha(tint.alpha());
         graphics.setImageSmoothing(false);
-        graphics.drawImage(
-                fxTexture.image(), source.x(), source.y(), source.width(), source.height(), x, y, width, height);
+        graphics.drawImage(image, source.x(), source.y(), source.width(), source.height(), x, y, width, height);
         graphics.setGlobalAlpha(1);
     }
 
@@ -84,7 +85,8 @@ public final class FXRenderer implements Renderer {
             case Shape.Line s -> graphics.strokeLine(s.x1(), s.y1(), s.x2(), s.y2());
             case Shape.Circle s -> graphics.strokeOval(
                     s.x() - s.radius(), s.y() - s.radius(), s.radius() * 2, s.radius() * 2);
-            case Shape.Arc s -> graphics.strokeArc(s.x(), s.y(), s.width(), s.height(), s.azimuth(), s.bearing(), ArcType.ROUND);
+            case Shape.Arc s -> graphics.strokeArc(
+                    s.x(), s.y(), s.width(), s.height(), s.azimuth(), s.bearing(), ArcType.ROUND);
             case Shape.Polygon s -> graphics.strokePolygon(toDouble(s.xPoints()), toDouble(s.yPoints()), s.nPoints());
             case null, default -> throw new IllegalArgumentException("Cannot stroke shape: " + shape);
         }
