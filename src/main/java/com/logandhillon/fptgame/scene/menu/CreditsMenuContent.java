@@ -29,8 +29,8 @@ public class CreditsMenuContent implements MenuContent {
                 .setText(CREDITS)
                 .setColor(Colors.ACTIVE)
                 .setFontSize(18)
-                .setAlign(TextAlignment.CENTER)
-                .setBaseline(VPos.TOP)
+                .setJustification(TextAlignment.CENTER)
+                .setVerticalAlignment(VPos.TOP)
                 .build();
 
         entities = new Entity[]{

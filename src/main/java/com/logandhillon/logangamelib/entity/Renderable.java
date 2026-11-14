@@ -1,6 +1,6 @@
 package com.logandhillon.logangamelib.entity;
 
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 
 /**
  * An extremely primitive {@link Entity} that only has a render loop. It can be used for more anonymous contexts, such
@@ -23,7 +23,7 @@ public class Renderable extends Entity {
     }
 
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
+    protected void onRender(Renderer g, float x, float y) {
         renderer.render(g, x, y);
     }
 
@@ -36,6 +36,6 @@ public class Renderable extends Entity {
     }
 
     public interface RenderAgent {
-        void render(GraphicsContext g, float x, float y);
+        void render(Renderer g, float x, float y);
     }
 }

@@ -26,4 +26,5 @@ module com.logandhillon {
     exports com.logandhillon.logangamelib.entity;
     exports com.logandhillon.logangamelib.entity.ui;
     exports com.logandhillon.logangamelib.resource;
+    exports com.logandhillon.logangamelib.api.render;
 }

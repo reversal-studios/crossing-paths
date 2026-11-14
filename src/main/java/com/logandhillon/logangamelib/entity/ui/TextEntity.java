@@ -1,13 +1,12 @@
 package com.logandhillon.logangamelib.entity.ui;
 
+import com.logandhillon.logangamelib.api.render.Color;
+import com.logandhillon.logangamelib.api.render.Font;
+import com.logandhillon.logangamelib.api.render.Renderer;
+import com.logandhillon.logangamelib.api.render.TextStyle;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.resource.base.Colors;
-import javafx.geometry.VPos;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 
 import java.util.function.Supplier;
 
@@ -17,13 +16,13 @@ import java.util.function.Supplier;
  * @author Logan Dhillon
  */
 public class TextEntity extends Entity {
-    private final Supplier<String> dynamicText;
-    private final boolean          isStatic;
-    private final Font             font;
-    private final float            lineHeight;
-    private final Color            color;
-    private final TextAlignment    align;
-    private final VPos             baseline;
+    private final Supplier<String>        dynamicText;
+    private final boolean                 isStatic;
+    private final Font                    font;
+    private final float                   lineHeight;
+    private final Color                   color;
+    private final TextStyle.Justification justification;
+    private final TextStyle.VAlign        baseline;
 
     private String[] lines;
     private String   lastDynamicText;
@@ -31,37 +30,39 @@ public class TextEntity extends Entity {
     /**
      * Creates a text entity.
      *
-     * @param dynamicText the content of the text to render
-     * @param staticText  static non-changing text to render if dynamic text is null
-     * @param font        the font of the text to render
-     * @param color       the color of the text
-     * @param align       the horizontal alignment
-     * @param baseline    the vertical alignment
-     * @param x           x-position (from left)
-     * @param y           y-position (from top)
+     * @param dynamicText   the content of the text to render
+     * @param staticText    static non-changing text to render if dynamic text is null
+     * @param font          the font of the text to render
+     * @param color         the color of the text
+     * @param justification the horizontal alignment
+     * @param valign        the vertical alignment
+     * @param x             x-position (from left)
+     * @param y             y-position (from top)
      */
     private TextEntity(Supplier<String> dynamicText, String staticText, Font font, float lineHeight, Color color,
-                       TextAlignment align,
-                       VPos baseline, float x, float y) {
+                       TextStyle.Justification justification, TextStyle.VAlign valign, float x, float y) {
         super(x, y);
         this.dynamicText = dynamicText;
         this.isStatic = dynamicText == null;
         this.lines = isStatic ? staticText.split("\n") : dynamicText.get().split("\n");
         this.font = font;
-        this.lineHeight = (float)font.getSize() * lineHeight;
+        this.lineHeight = font.size() * lineHeight;
         this.color = color;
-        this.align = align;
-        this.baseline = baseline;
+        this.justification = justification;
+        this.baseline = valign;
     }
 
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
-        g.setFill(color);
-        g.setFont(font);
-        g.setTextAlign(align);
-        g.setTextBaseline(baseline);
+    protected void onRender(Renderer g, float x, float y) {
         // draw every line at increasing y offset
-        for (int i = 0; i < lines.length; i++) g.fillText(lines[i], x, y + i * lineHeight);
+        for (int i = 0; i < lines.length; i++)
+            g.text(
+                    font, lines[i], x, y + i * lineHeight,
+                    new TextStyle(
+                            color,
+                            justification, baseline,
+                            Float.MAX_VALUE)); // TODO: probably shouldnt set the max width to the largest possible
+        //                                              number but ill fix it "later"
     }
 
     @Override
@@ -83,13 +84,13 @@ public class TextEntity extends Entity {
     }
 
     public static final class Builder {
-        private String           staticText;
-        private Supplier<String> dynamicText;
-        private Font             font;
-        private float            lineHeight = 1.5f;
-        private Color            color      = Colors.FOREGROUND;
-        private TextAlignment    align      = TextAlignment.LEFT;
-        private VPos             baseline   = VPos.BASELINE;
+        private String                  staticText;
+        private Supplier<String>        dynamicText;
+        private Font                    font;
+        private float                   lineHeight    = 1.5f;
+        private Color                   color         = Colors.FOREGROUND;
+        private TextStyle.Justification justification = TextStyle.Justification.LEFT;
+        private TextStyle.VAlign        valign        = TextStyle.VAlign.BASELINE;
 
         private final float x;
         private final float y;
@@ -116,8 +117,33 @@ public class TextEntity extends Entity {
             return this;
         }
 
+        /** Temporary JavaFX bridge while game UI declarations are migrated to engine fonts. */
+        @Deprecated
+        public Builder setFont(javafx.scene.text.Font font) {
+            this.font = new Font(font.getFamily(), (float)font.getSize());
+            return this;
+        }
+
+        @Deprecated
+        public Builder setJustification(javafx.scene.text.TextAlignment alignment) {
+            this.justification = switch (alignment) {
+                case LEFT -> TextStyle.Justification.LEFT; case CENTER -> TextStyle.Justification.CENTER;
+                case RIGHT, JUSTIFY -> TextStyle.Justification.RIGHT;
+            };
+            return this;
+        }
+
+        @Deprecated
+        public Builder setVerticalAlignment(javafx.geometry.VPos alignment) {
+            this.valign = switch (alignment) {
+                case TOP -> TextStyle.VAlign.TOP; case CENTER -> TextStyle.VAlign.CENTER;
+                case BASELINE -> TextStyle.VAlign.BASELINE; case BOTTOM -> TextStyle.VAlign.BOTTOM;
+            };
+            return this;
+        }
+
         public Builder setFontSize(int fontSize) {
-            this.font = Font.font(GameMeta.get().defaultFont.load(), fontSize);
+            this.font = new Font(GameMeta.get().defaultFont.load(), fontSize);
             return this;
         }
 
@@ -126,13 +152,13 @@ public class TextEntity extends Entity {
             return this;
         }
 
-        public Builder setAlign(TextAlignment align) {
-            this.align = align;
+        public Builder setJustification(TextStyle.Justification justification) {
+            this.justification = justification;
             return this;
         }
 
-        public Builder setBaseline(VPos baseline) {
-            this.baseline = baseline;
+        public Builder setVerticalAlignment(TextStyle.VAlign valign) {
+            this.valign = valign;
             return this;
         }
 
@@ -142,7 +168,7 @@ public class TextEntity extends Entity {
         }
 
         public TextEntity build() {
-            return new TextEntity(dynamicText, staticText, font, lineHeight, color, align, baseline, x, y);
+            return new TextEntity(dynamicText, staticText, font, lineHeight, color, justification, valign, x, y);
         }
     }
 }

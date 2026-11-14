@@ -2,7 +2,7 @@ package com.logandhillon.logangamelib.engine;
 
 import com.logandhillon.fptgame.entity.ui.component.MenuButton;
 import com.logandhillon.logangamelib.entity.Entity;
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -79,7 +79,7 @@ public class MenuController extends Entity {
     }
 
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
+    protected void onRender(Renderer g, float x, float y) {
 
     }
 

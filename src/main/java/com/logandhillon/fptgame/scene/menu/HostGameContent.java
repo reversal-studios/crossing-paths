@@ -46,7 +46,7 @@ public class HostGameContent implements MenuContent {
                         .setColor(Colors.ACTIVE)
                         .setText(HEADER.toUpperCase())
                         .setFont(HEADER_FONT)
-                        .setBaseline(VPos.TOP)
+                        .setVerticalAlignment(VPos.TOP)
                         .build()
         };
     }

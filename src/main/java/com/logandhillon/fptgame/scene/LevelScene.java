@@ -12,7 +12,7 @@ import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.entity.Renderable;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
+import com.logandhillon.logangamelib.api.render.Color;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -45,8 +45,7 @@ public abstract class LevelScene extends GameScene<GameHandler> {
         Renderable bg = LevelFactory.buildBgOrNull(level);
         if (bg != null) addEntity(bg);
         else addEntity(new Renderable(0, 0, (g, x, y) -> {
-            g.setFill(Color.BLACK);
-            g.fillRect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT);
+            g.rect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT, Color.BLACK);
         }));
 
         for (LevelObject obj: LevelFactory.load(level)) {

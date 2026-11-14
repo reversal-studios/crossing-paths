@@ -7,7 +7,7 @@ import com.logandhillon.logangamelib.engine.UIScene;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.gfx.ParallaxBackground;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -90,7 +90,7 @@ public class MenuHandler extends UIScene<GameHandler> {
      * @param g the graphical context to render to.
      */
     @Override
-    protected void render(GraphicsContext g) {
+    protected void render(Renderer g) {
         background.render(g);
         super.render(g);
         content.onRender(g);

@@ -4,8 +4,8 @@ import com.logandhillon.fptgame.level.LevelObject;
 import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.logangamelib.gfx.AnimationSequence;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import com.logandhillon.logangamelib.api.render.Renderer;
+import com.logandhillon.logangamelib.api.render.Color;
 import lombok.Getter;
 
 import static com.logandhillon.fptgame.resource.Textures.PORTAL_ANIM;
@@ -34,7 +34,7 @@ public class PortalEntity extends LevelObject {
     }
 
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
+    protected void onRender(Renderer g, float x, float y) {
         anim.draw(g, x - 32, y, w + 64, h, color);
     }
 

@@ -1,12 +1,11 @@
 package com.logandhillon.logangamelib.entity.ui;
 
+import com.logandhillon.logangamelib.api.render.Color;
+import com.logandhillon.logangamelib.api.render.Font;
+import com.logandhillon.logangamelib.api.render.Renderer;
+import com.logandhillon.logangamelib.api.render.TextStyle;
 import com.logandhillon.logangamelib.entity.Clickable;
-import javafx.geometry.VPos;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import lombok.Setter;
 
 /**
@@ -19,8 +18,8 @@ import lombok.Setter;
  * @see Style
  */
 public class ButtonEntity extends Clickable {
-    private static final int STROKE            = 2;
-    private static final int ROUNDING_DIAMETER = 50;
+    private static final int STROKE          = 2;
+    private static final int ROUNDING_RADIUS = 25;
 
     private String label;
 
@@ -84,34 +83,27 @@ public class ButtonEntity extends Clickable {
      * Renders the button background, then the button text on top of it, based on what was supplied when the button was
      * created.
      *
-     * @param g the graphical context to render to.
+     * @param r the graphical context to render to.
      * @param x the x position to render the entity at
      * @param y the y position to render the entity at
      */
     @Override
-    protected void onRender(GraphicsContext g, float x, float y) {
+    protected void onRender(Renderer r, float x, float y) {
         float cx = x + w / 2;
         float cy = (y + h / 2);
         // render button background
         if (style.variant == Variant.OUTLINE) {
-            g.setStroke(style.buttonColor);
-            g.setLineWidth(STROKE);
-            g.setLineDashes(0);
-
-            if (style.isRounded) g.strokeRoundRect(x, y, w, h, ROUNDING_DIAMETER, ROUNDING_DIAMETER);
-            else g.strokeRect(x, y, w, h);
+            if (style.isRounded) r.strokeRoundRect(x, y, w, h, STROKE, style.buttonColor, ROUNDING_RADIUS);
+            else r.strokeRect(x, y, w, h, STROKE, style.buttonColor);
         } else {
-            g.setFill(style.buttonColor);
-            if (style.isRounded) g.fillRoundRect(x, y, w, h, ROUNDING_DIAMETER, ROUNDING_DIAMETER);
-            else g.fillRect(x, y, w, h);
+            if (style.isRounded) r.roundRect(x, y, w, h, style.buttonColor, ROUNDING_RADIUS);
+            else r.rect(x, y, w, h, style.buttonColor);
         }
 
         // render label
-        g.setFill(style.labelColor);
-        g.setFont(style.font);
-        g.setTextAlign(TextAlignment.CENTER);
-        g.setTextBaseline(VPos.CENTER);
-        g.fillText(label, cx, cy);
+        r.text(
+                style.font, label, cx, cy,
+                new TextStyle(style.labelColor, TextStyle.Justification.CENTER, TextStyle.VAlign.CENTER, w));
     }
 
     @Override

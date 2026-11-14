@@ -1,6 +1,6 @@
 package com.logandhillon.fptgame.scene.menu;
 import com.logandhillon.logangamelib.entity.Entity;
-import javafx.scene.canvas.GraphicsContext;
+import com.logandhillon.logangamelib.api.render.Renderer;
 
 /**
  * Interface that handles each menu screen's content. Allows parent {@link MenuHandler} to use content to update
@@ -17,7 +17,7 @@ public interface MenuContent {
     Entity[] getEntities();
 
 
-    default void onRender(GraphicsContext g){}
+    default void onRender(Renderer g){}
 
     /**
      * Runs when this menu content is displayed by its parent {@link MenuHandler}

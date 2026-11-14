@@ -4,10 +4,8 @@ import com.logandhillon.logangamelib.gfx.AnimationSequence;
 import com.logandhillon.logangamelib.gfx.AtlasTile;
 import com.logandhillon.logangamelib.gfx.ParallaxBackground;
 import com.logandhillon.logangamelib.gfx.TextureAtlas;
-import com.logandhillon.logangamelib.resource.ImageResource;
-import javafx.scene.image.Image;
-
-import java.io.IOException;
+import com.logandhillon.logangamelib.api.render.Texture;
+import com.logandhillon.logangamelib.api.render.TextureAssets;
 
 /**
  * References to static textures
@@ -77,34 +75,8 @@ public class Textures {
                 new ParallaxBackground.Layer("bg/ocean8/4.png", 80f));
     }
 
-    public static final Image LEVEL_BUTTON;
-    public static final Image SETTINGS_ICON;
-    public static final Image X_ICON;
-    public static final Image REVERSAL_STUDIOS_LOGO;
-
-    static {
-        try (var res = new ImageResource("menuicons/cog.png")) {
-            SETTINGS_ICON = res.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try (var res = new ImageResource("menuicons/x.png")) {
-            X_ICON = res.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try (var res = new ImageResource("button.png")) {
-            LEVEL_BUTTON = res.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try (var res = new ImageResource("reversalstudios.png")) {
-            REVERSAL_STUDIOS_LOGO = res.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static final Texture LEVEL_BUTTON          = TextureAssets.load("button.png");
+    public static final Texture SETTINGS_ICON         = TextureAssets.load("menuicons/cog.png");
+    public static final Texture X_ICON                = TextureAssets.load("menuicons/x.png");
+    public static final Texture REVERSAL_STUDIOS_LOGO = TextureAssets.load("reversalstudios.png");
 }

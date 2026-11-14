@@ -1,6 +1,6 @@
 package com.logandhillon.fptgame.resource;
 
-import javafx.scene.paint.Color;
+import com.logandhillon.logangamelib.api.render.Color;
 
 import java.util.List;
 
@@ -12,17 +12,17 @@ import java.util.List;
  */
 public final class Colors {
     public static final Color ACTIVE              = Color.WHITE;
-    public static final Color ACTIVE_TRANS_50     = Color.rgb(255, 255, 255, 0.5);
-    public static final Color ACTIVE_TRANS_015    = Color.rgb(255, 255, 255, 0.15);
+    public static final Color ACTIVE_TRANS_50     = Color.rgb(255, 255, 255, 0.5f);
+    public static final Color ACTIVE_TRANS_015    = Color.rgb(255, 255, 255, 0.15f);
     public static final Color FOREGROUND          = Color.BLACK;
-    public static final Color FOREGROUND_TRANS_40 = Color.rgb(0, 0, 0, 0.4);
-    public static final Color FOREGROUND_TRANS_50 = Color.rgb(0, 0, 0, 0.5);
+    public static final Color FOREGROUND_TRANS_40 = Color.rgb(0, 0, 0, 0.4f);
+    public static final Color FOREGROUND_TRANS_50 = Color.rgb(0, 0, 0, 0.5f);
 
     public static final Color BUTTON_NORMAL = Color.rgb(207, 209, 235);
     public static final Color BUTTON_HOVER  = Color.rgb(75, 150, 249);
 
-    public static final Color PLAYER_RED  = Color.web("#E23B36");
-    public static final Color PLAYER_BLUE = Color.web("#4184E8");
+    public static final Color PLAYER_RED  = Color.rgb(226, 59, 54);
+    public static final Color PLAYER_BLUE = Color.rgb(65, 132, 232);
 
     /**
      * The colour of the player skin, indexed by the order they appear on the main menu.
