@@ -423,5 +423,15 @@ public enum KeyCode {
     public static KeyCode of(int code) {
         return lookup.get(code);
     }
+
+    /**
+     * Record for possible keyboard modifiers on a keypress.
+     */
+    public record Modifiers(
+            boolean shift,
+            boolean control,
+            boolean alt,
+            boolean meta
+    ) {}
 }
 
