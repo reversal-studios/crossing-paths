@@ -8,6 +8,7 @@ module com.logandhillon {
     requires javafx.controls;
     requires java.desktop;
     requires static lombok;
+    requires org.jspecify;
 
     opens com.logandhillon.fptgame to javafx.fxml;
 
