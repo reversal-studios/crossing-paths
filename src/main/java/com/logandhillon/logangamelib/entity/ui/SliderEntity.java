@@ -6,7 +6,6 @@ import com.logandhillon.logangamelib.api.render.Shape;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.entity.Clickable;
 import com.logandhillon.logangamelib.resource.base.Colors;
-import javafx.scene.input.MouseEvent;
 
 import java.util.function.Consumer;
 

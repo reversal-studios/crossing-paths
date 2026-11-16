@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  *
  * @author Logan Dhillon
  */
-final class FXInput implements InputHandler, AutoCloseable {
+public final class FXInput implements InputHandler, AutoCloseable {
     private final CompositeSubscription subscriptions = new CompositeSubscription();
 
     private final CopyOnWriteArrayList<Consumer<KeyboardEvent>> keyPressedHandlers  =
@@ -64,12 +64,12 @@ final class FXInput implements InputHandler, AutoCloseable {
     private boolean closed;
 
     /**
-     * Construct before the scene is built so game code can register input handlers early. Call attach once the JavaFX
-     * Scene and game Canvas exist.
+     * Allows you to construct before the scene is built so game code can register input handlers early. Call
+     * {@link attach} once the JavaFX Scene exist.
      */
-    FXInput() {}
+    public FXInput() {}
 
-    void attach(Scene scene, Canvas canvas) {
+    public void attach(Scene scene, Canvas canvas) {
         if (closed) throw new IllegalStateException("Input adapter is closed");
         if (this.scene != null) throw new IllegalStateException("Input adapter is already attached");
 

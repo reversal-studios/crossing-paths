@@ -4,6 +4,7 @@ import com.logandhillon.logangamelib.api.input.InputHandler;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.physics.CollisionEntity;
+import com.logandhillon.logangamelib.javafx.FXInput;
 import com.logandhillon.logangamelib.javafx.FXRenderer;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
@@ -40,7 +41,7 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
     private AnimationTimer lifecycle;
     private H              game;
     private Scene          scene;
-    private InputHandler   input;
+    private FXInput   input;
 
     /**
      * Do not instantiate this class.
@@ -80,6 +81,7 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
 
         Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
         Renderer g = new FXRenderer(canvas.getGraphicsContext2D());
+        input = new FXInput(); // construct input before creating entities to prevent NPE
 
         // use one-element array as address cannot change once anonymously passed to lifecycle
         final long[] lastTime = { 0 };
@@ -113,6 +115,9 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
         // update scaling
         scene.widthProperty().addListener((obs, oldVal, newVal) -> updateScale(scene, parent));
         scene.heightProperty().addListener((obs, oldVal, newVal) -> updateScale(scene, parent));
+
+        // bind input handler
+        input.attach(scene, canvas);
 
         onBuild(scene);
         this.game = game;
