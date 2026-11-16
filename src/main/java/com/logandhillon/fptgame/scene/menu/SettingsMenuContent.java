@@ -6,6 +6,7 @@ import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.networking.proto.ConfigProto;
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.fptgame.resource.Sounds;
+import com.logandhillon.logangamelib.api.input.KeyboardEvent;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
@@ -206,7 +207,7 @@ public class SettingsMenuContent implements MenuContent {
 
     @Override
     public void onShow() {
-        menu.bindHandler(KeyEvent.KEY_PRESSED, this::onKeyPressed);
+        menu.input().onKeyDown(this::onKeyPressed);
     }
 
     @Override
@@ -232,33 +233,33 @@ public class SettingsMenuContent implements MenuContent {
         LEFT, RIGHT, JUMP, INTERACT
     }
 
-    private void onKeyPressed(KeyEvent e) {
+    private void onKeyPressed(KeyboardEvent e) {
         if (currentKeyBind == null) return;
 
         // ignore duplicate keys
-        var code = e.getCode().name();
-        if (usedKeybinds.containsValue(code)) {
-            updateKeyBindStatus = String.format("'%s' is in-use", code);
+        String key = e.key().name();
+        if (usedKeybinds.containsValue(key)) {
+            updateKeyBindStatus = String.format("'%s' is in-use", key);
             Sounds.playSfx(Sounds.UI_FAIL);
             return;
         }
 
-        LOG.info("Setting {} to {}", currentKeyBind, code);
+        LOG.info("Setting {} to {}", currentKeyBind, key);
 
         switch (currentKeyBind) {
             case LEFT -> GameHandler.updateUserConfig(
-                    ConfigProto.UserConfig.newBuilder().setKeyMoveLeft(code).buildPartial());
+                    ConfigProto.UserConfig.newBuilder().setKeyMoveLeft(key).buildPartial());
             case RIGHT -> GameHandler.updateUserConfig(
-                    ConfigProto.UserConfig.newBuilder().setKeyMoveRight(code).buildPartial());
+                    ConfigProto.UserConfig.newBuilder().setKeyMoveRight(key).buildPartial());
             case JUMP -> GameHandler.updateUserConfig(
-                    ConfigProto.UserConfig.newBuilder().setKeyMoveJump(code).buildPartial());
+                    ConfigProto.UserConfig.newBuilder().setKeyMoveJump(key).buildPartial());
             case INTERACT -> GameHandler.updateUserConfig(
-                    ConfigProto.UserConfig.newBuilder().setKeyMoveInteract(code).buildPartial());
+                    ConfigProto.UserConfig.newBuilder().setKeyMoveInteract(key).buildPartial());
         }
 
         Sounds.playSfx(Sounds.UI_CLICK);
-        usedKeybinds.put(currentKeyBind, code); // update map to check duplicates against
-        keyBindButtons.get(currentKeyBind).setText(code); // update btn text
+        usedKeybinds.put(currentKeyBind, key); // update map to check duplicates against
+        keyBindButtons.get(currentKeyBind).setText(key); // update btn text
         currentKeyBind = null;
         updateKeyBindStatus = "";
     }

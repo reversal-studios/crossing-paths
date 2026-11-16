@@ -1,5 +1,8 @@
 package com.logandhillon.logangamelib.entity.ui;
 
+import com.logandhillon.logangamelib.api.input.KeyCode;
+import com.logandhillon.logangamelib.api.input.KeyboardEvent;
+import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.api.render.Font;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.api.render.TextStyle;
@@ -7,29 +10,27 @@ import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.entity.Clickable;
 import com.logandhillon.logangamelib.resource.base.Colors;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-
 import lombok.Setter;
 
 /**
- * This is an input field, which handles user input in a box and can be retrieved as a string.
+ * An input field handles user input in a box and can be retrieved as a string.
  * <p>
- * This entity exposes onKeyPressed and onKeyTyped events that should be registered to the parent scene.
+ * This entity exposes {@link onKeyPressed} and {@link onKeyTyped} events that should be registered to the parent
+ * scene.
  *
  * @author Logan Dhillon
- * @see InputBoxEntity#onKeyPressed(KeyEvent)
- * @see InputBoxEntity#onKeyTyped(KeyEvent)
+ * @see InputBoxEntity#onKeyPressed
+ * @see InputBoxEntity#onKeyTyped
  */
 public class InputBoxEntity extends Clickable {
     private static final float INPUT_FONT_SIZE  = 18.5f;
-    private static final int INPUT_CHAR_WIDTH = 11;
-    private static final int CORNER_RADIUS    = 25;
-    private static final int MARGIN_X         = 16;
+    private static final int   INPUT_CHAR_WIDTH = 11;
+    private static final int   CORNER_RADIUS    = 25;
+    private static final int   MARGIN_X         = 16;
     private static final int   MARGIN_Y         = 12;
     private static final Font  INPUT_FONT       = new Font(GameMeta.get().defaultFont.load(), INPUT_FONT_SIZE);
-    private static final Font  LABEL_FONT       = new Font(GameMeta.get().defaultFont.load(), 20, Font.FontWeight.MEDIUM);
+    private static final Font  LABEL_FONT       = new Font(
+            GameMeta.get().defaultFont.load(), 20, Font.FontWeight.MEDIUM);
 
     private final   float  maxWidth;
     private final   String placeholder;
@@ -110,13 +111,13 @@ public class InputBoxEntity extends Clickable {
     /**
      * Handles input by attaching to the key press event (for backspacing)
      */
-    public void onKeyPressed(KeyEvent e) {
+    public void onKeyPressed(KeyboardEvent e) {
         if (isActive) {
-            if (e.getCode() == KeyCode.BACK_SPACE && !input.isEmpty()) {
+            if (e.key() == KeyCode.BACK_SPACE && !input.isEmpty()) {
                 input.deleteCharAt(input.length() - 1);
             }
             // blur on enter or esc
-            if (e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.ESCAPE) {
+            if (e.key() == KeyCode.ENTER || e.key() == KeyCode.ESCAPE) {
                 this.onBlur();
             }
             e.consume(); // consume if active
@@ -126,10 +127,10 @@ public class InputBoxEntity extends Clickable {
     /**
      * Handles input by attaching to the key typed event (for entering input)
      */
-    public void onKeyTyped(KeyEvent e) {
+    public void onKeyTyped(KeyboardEvent e) {
         if (!isActive) return;
 
-        String c = e.getCharacter();
+        String c = e.key().getChar();
 
         // ignore blank/control characters
         if (c.isEmpty() || Character.isISOControl(c.charAt(0)) || input.length() >= charLimit) return;
@@ -141,8 +142,8 @@ public class InputBoxEntity extends Clickable {
     @Override
     public void onAttach(GameScene<?> parent) {
         super.onAttach(parent);
-        parent.addHandler(KeyEvent.KEY_PRESSED, this::onKeyPressed);
-        parent.addHandler(KeyEvent.KEY_TYPED, this::onKeyTyped);
+        parent.input().onKeyDown(this::onKeyPressed);
+        parent.input().onKeyTyped(this::onKeyTyped);
     }
 
     /**
@@ -165,7 +166,7 @@ public class InputBoxEntity extends Clickable {
     }
 
     @Override
-    public void onClick(MouseEvent e) {
+    public void onClick(MouseClickEvent e) {
         this.isActive = true;
     }
 

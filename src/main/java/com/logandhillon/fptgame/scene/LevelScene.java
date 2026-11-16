@@ -8,11 +8,10 @@ import com.logandhillon.fptgame.level.LevelObject;
 import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.fptgame.resource.Sounds;
 import com.logandhillon.fptgame.scene.menu.MenuHandler;
+import com.logandhillon.logangamelib.api.input.KeyCode;
+import com.logandhillon.logangamelib.api.render.Color;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.entity.Renderable;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import com.logandhillon.logangamelib.api.render.Color;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -44,7 +43,8 @@ public abstract class LevelScene extends GameScene<GameHandler> {
         // show the background or a black bg if no background
         Renderable bg = LevelFactory.buildBgOrNull(level);
         if (bg != null) addEntity(bg);
-        else addEntity(new Renderable(0, 0, (g, x, y) -> {
+        else addEntity(new Renderable(
+                0, 0, (g, x, y) -> {
             g.rect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT, Color.BLACK);
         }));
 
@@ -54,9 +54,10 @@ public abstract class LevelScene extends GameScene<GameHandler> {
             if (obj instanceof MovingPlatformEntity e) movingPlatforms.add(e);
         }
 
+        // TODO 09-16-26 02:45: hey isn't this a debug keybind why is this still here
         // restart on R pressed
-        addHandler(KeyEvent.KEY_PRESSED, e -> {
-            if (e.getCode() == KeyCode.R) restartLevel();
+        input().onKeyDown(e -> {
+            if (e.key() == KeyCode.R) restartLevel();
         });
     }
 

@@ -1,11 +1,12 @@
 package com.logandhillon.logangamelib.entity.ui;
 
+import com.logandhillon.logangamelib.api.event.EventHandler;
+import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.api.render.Color;
 import com.logandhillon.logangamelib.api.render.Font;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.api.render.TextStyle;
 import com.logandhillon.logangamelib.entity.Clickable;
-import javafx.scene.input.MouseEvent;
 import lombok.Setter;
 
 /**
@@ -23,18 +24,18 @@ public class ButtonEntity extends Clickable {
 
     private String label;
 
-    private final MouseEventHandler clickHandler;
+    private final EventHandler<MouseClickEvent> clickHandler;
 
     /**
      * the action that will be run when the mouse cursor ENTERS this button.
      */
     @Setter
-    private MouseEventHandler mouseEnterHandler;
+    private EventHandler<MouseClickEvent> mouseEnterHandler;
     /**
      * the action that will be run when the mouse cursor LEAVES this button.
      */
     @Setter
-    private MouseEventHandler mouseLeaveHandler;
+    private EventHandler<MouseClickEvent> mouseLeaveHandler;
 
     /**
      * the currently visible style.
@@ -51,7 +52,7 @@ public class ButtonEntity extends Clickable {
      * @param onClick the action that should happen when this button is clicked
      * @param style   how the button looks
      */
-    public ButtonEntity(String label, float x, float y, float w, float h, MouseEventHandler onClick,
+    public ButtonEntity(String label, float x, float y, float w, float h, EventHandler<MouseClickEvent> onClick,
                         Style style) {
         super(x, y, w, h);
         this.label = label;
@@ -60,17 +61,17 @@ public class ButtonEntity extends Clickable {
     }
 
     @Override
-    public void onClick(MouseEvent e) {
+    public void onClick(MouseClickEvent e) {
         clickHandler.handle(e);
     }
 
     @Override
-    public void onMouseEnter(MouseEvent e) {
+    public void onMouseEnter(MouseClickEvent e) {
         if (mouseEnterHandler != null) mouseEnterHandler.handle(e);
     }
 
     @Override
-    public void onMouseLeave(MouseEvent e) {
+    public void onMouseLeave(MouseClickEvent e) {
         if (mouseLeaveHandler != null) mouseLeaveHandler.handle(e);
     }
 
@@ -116,15 +117,6 @@ public class ButtonEntity extends Clickable {
      */
     public enum Variant {
         SOLID, OUTLINE,
-    }
-
-    /**
-     * A handler that can be (anonymously) created to handle events related to the mouse.
-     *
-     * @see MouseEvent
-     */
-    public interface MouseEventHandler {
-        void handle(MouseEvent e);
     }
 
     public void setText(String label) {

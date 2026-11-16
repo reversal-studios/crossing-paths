@@ -1,5 +1,7 @@
 package com.logandhillon.logangamelib.api.input;
 
+import lombok.ToString;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +10,7 @@ import java.util.Map;
  *
  * @author Logan Dhillon
  */
+@ToString
 public enum KeyCode {
 
     ENTER(0x0A, "Enter", Type.WHITESPACE),
@@ -433,5 +436,7 @@ public enum KeyCode {
             boolean alt,
             boolean meta
     ) {}
+
+    
 }
 

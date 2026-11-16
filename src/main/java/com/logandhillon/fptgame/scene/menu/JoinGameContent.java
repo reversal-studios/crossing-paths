@@ -6,13 +6,13 @@ import com.logandhillon.fptgame.entity.ui.ServerEntryEntity;
 import com.logandhillon.fptgame.entity.ui.component.MenuButton;
 import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.resource.Colors;
+import com.logandhillon.logangamelib.api.input.KeyCode;
+import com.logandhillon.logangamelib.api.input.KeyboardEvent;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.Renderable;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
@@ -31,12 +31,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Jack Ross, Logan Dhillon
  */
 public class JoinGameContent implements MenuContent {
-    private static final Logger LOG             = LoggerContext.getContext().getLogger(JoinGameContent.class);
-    private static final Font   HEADER_FONT     = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 32);
-    private static final String HEADER          = "Join a Game";
-    private static final Font   LABEL_FONT      = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 18);
-    private static final int ENTITY_GAP    = 16;
-    private static final int CORNER_RADIUS = 27;
+    private static final Logger LOG           = LoggerContext.getContext().getLogger(JoinGameContent.class);
+    private static final Font   HEADER_FONT   = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 32);
+    private static final String HEADER        = "Join a Game";
+    private static final Font   LABEL_FONT    = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 18);
+    private static final int    ENTITY_GAP    = 16;
+    private static final int    CORNER_RADIUS = 27;
 
     @Getter
     private final Entity[]            entities;
@@ -107,7 +107,7 @@ public class JoinGameContent implements MenuContent {
         };
 
         // create event handler that uses the event and the array of buttons
-        menu.addHandler(KeyEvent.KEY_PRESSED, e -> onKeyPressed(e, serverButtons));
+        menu.input().onKeyDown(e -> onKeyPressed(e, serverButtons));
     }
 
     @Override
@@ -118,8 +118,7 @@ public class JoinGameContent implements MenuContent {
             // populate with dummy values and hide them
             serverButtons[i] = new ServerEntryEntity(
                     48, 342 + (ENTITY_GAP * i), 427, 37,
-                    "...", "...", () -> {
-            });
+                    "...", "...", () -> {});
             serverButtons[i].hidden = true;
             LOG.debug("Creating (hidden) server button for this modal. {}/{}", i + 1, serverButtons.length);
             joinModal.addEntity(serverButtons[i]);
@@ -190,12 +189,12 @@ public class JoinGameContent implements MenuContent {
      * @param e       any key event registered by javafx
      * @param entries list of buttons on screen
      */
-    private void onKeyPressed(KeyEvent e, ServerEntryEntity[] entries) {
+    private void onKeyPressed(KeyboardEvent e, ServerEntryEntity[] entries) {
 
-        if (e.getCode() != KeyCode.UP && e.getCode() != KeyCode.DOWN) return;
+        if (e.key() != KeyCode.UP && e.key() != KeyCode.DOWN) return;
 
         // increment/decrement the 4 shown servers
-        if (e.getCode() == KeyCode.UP) {
+        if (e.key() == KeyCode.UP) {
             if (scrollServerIndex > 0) {
                 rawCurrentServerIndex++;
                 // un-highlight all buttons
@@ -225,7 +224,7 @@ public class JoinGameContent implements MenuContent {
                 scrollServerIndex--;
             }
         }
-        if (e.getCode() == KeyCode.DOWN) {
+        if (e.key() == KeyCode.DOWN) {
             if (scrollServerIndex < serverList.toArray().length - entries.length) {
                 // opposite to KeyCode.UP, the index of the current button must decrease when down arrow is pressed
                 rawCurrentServerIndex--;
