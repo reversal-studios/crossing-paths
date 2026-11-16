@@ -1,7 +1,7 @@
 package com.logandhillon.logangamelib.javafx;
 
 import com.logandhillon.logangamelib.api.event.Event;
-import com.logandhillon.logangamelib.api.event.EventSubscription;
+import com.logandhillon.logangamelib.api.event.Subscription;
 import com.logandhillon.logangamelib.api.input.InputHandler;
 import com.logandhillon.logangamelib.api.input.KeyCode;
 import com.logandhillon.logangamelib.api.input.KeyboardEvent;
@@ -11,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jspecify.annotations.Nullable;
@@ -80,49 +81,46 @@ final class FXInput implements InputHandler, AutoCloseable {
     }
 
     @Override
-    public EventSubscription onKeyDown(Consumer<KeyboardEvent> handler) {
-        return subscribe(keyPressedHandlers, handler);
+    public void onKeyDown(Consumer<KeyboardEvent> handler) {
+        subscribe(keyPressedHandlers, handler);
     }
 
     @Override
-    public EventSubscription onKeyUp(Consumer<KeyboardEvent> handler) {
-        return subscribe(keyReleasedHandlers, handler);
+    public void onKeyUp(Consumer<KeyboardEvent> handler) {
+        subscribe(keyReleasedHandlers, handler);
     }
 
     @Override
-    public EventSubscription onKeyTyped(Consumer<KeyboardEvent> handler) {
-        return subscribe(textInputHandlers, handler);
+    public void onKeyTyped(Consumer<KeyboardEvent> handler) {
+        subscribe(textInputHandlers, handler);
     }
 
     @Override
-    public EventSubscription onMouseDown(Consumer<MouseClickEvent> handler) {
-        return subscribe(pointerPressedHandlers, handler);
+    public void onMouseDown(Consumer<MouseClickEvent> handler) {
+        subscribe(pointerPressedHandlers, handler);
     }
 
     @Override
-    public EventSubscription onMouseUp(Consumer<MouseClickEvent> handler) {
-        return subscribe(pointerReleasedHandlers, handler);
+    public void onMouseUp(Consumer<MouseClickEvent> handler) {
+        subscribe(pointerReleasedHandlers, handler);
     }
 
     @Override
-    public EventSubscription onMouseClicked(Consumer<MouseClickEvent> handler) {
-        return subscribe(pointerClickedHandlers, handler);
+    public void onMouseClicked(Consumer<MouseClickEvent> handler) {
+        subscribe(pointerClickedHandlers, handler);
     }
 
     @Override
-    public EventSubscription onMouseMoved(Consumer<MouseClickEvent> handler) {
-        return subscribe(pointerMovedHandlers, handler);
+    public void onMouseMoved(Consumer<MouseClickEvent> handler) {
+        subscribe(pointerMovedHandlers, handler);
     }
 
     @Override
-    public EventSubscription onMouseDragged(Consumer<MouseClickEvent> handler) {
-        return subscribe(pointerDraggedHandlers, handler);
+    public void onMouseDragged(Consumer<MouseClickEvent> handler) {
+        subscribe(pointerDraggedHandlers, handler);
     }
 
-    private <T> EventSubscription subscribe(
-            CopyOnWriteArrayList<Consumer<T>> handlers,
-            Consumer<T> handler
-    ) {
+    private <T> Subscription subscribe(CopyOnWriteArrayList<Consumer<T>> handlers, Consumer<T> handler) {
         if (closed) throw new IllegalStateException("Input adapter is closed");
         if (handler == null) throw new NullPointerException("handler");
 
@@ -172,7 +170,7 @@ final class FXInput implements InputHandler, AutoCloseable {
         pointerDraggedHandlers.clear();
     }
 
-    private static KeyCode.Modifiers modifiers(javafx.scene.input.InputEvent event) {
+    private static KeyCode.Modifiers modifiers(InputEvent event) {
         if (event instanceof KeyEvent keyEvent) {
             return new KeyCode.Modifiers(
                     keyEvent.isShiftDown(),
@@ -248,20 +246,6 @@ final class FXInput implements InputHandler, AutoCloseable {
         @Override
         public void consume() {
             event.consume();
-        }
-    }
-
-    private static final class Subscription implements EventSubscription {
-        private final AtomicBoolean closed = new AtomicBoolean();
-        private final Runnable      unsubscribe;
-
-        private Subscription(Runnable unsubscribe) {
-            this.unsubscribe = unsubscribe;
-        }
-
-        @Override
-        public void close() {
-            if (closed.compareAndSet(false, true)) unsubscribe.run();
         }
     }
 }

@@ -331,7 +331,7 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
         return game;
     }
 
-    protected InputHandler input() {
+    public InputHandler input() {
         return input;
     }
 }
