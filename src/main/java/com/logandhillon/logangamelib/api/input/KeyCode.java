@@ -12,10 +12,9 @@ import java.util.Map;
  */
 @ToString
 public enum KeyCode {
-
     ENTER(0x0A, "Enter", Type.WHITESPACE),
 
-    BACK_SPACE(0x08, "Backspace"),
+    BACKSPACE(0x08, "Backspace"),
 
     TAB(0x09, "Tab", Type.WHITESPACE),
 
@@ -58,37 +57,37 @@ public enum KeyCode {
 
     DOWN(0x28, "Down", Type.ARROW | Type.NAVIGATION),
 
-    COMMA(0x2C, "Comma"),
+    COMMA(0x2C, ","),
 
-    MINUS(0x2D, "Minus"),
+    MINUS(0x2D, "-"),
 
-    PERIOD(0x2E, "Period"),
+    PERIOD(0x2E, "."),
 
-    SLASH(0x2F, "Slash"),
+    SLASH(0x2F, "/"),
 
-    DIGIT0(0x30, "0", Type.DIGIT),
+    NUM_0(0x30, "0", Type.DIGIT),
 
-    DIGIT1(0x31, "1", Type.DIGIT),
+    NUM_1(0x31, "1", Type.DIGIT),
 
-    DIGIT2(0x32, "2", Type.DIGIT),
+    NUM_2(0x32, "2", Type.DIGIT),
 
-    DIGIT3(0x33, "3", Type.DIGIT),
+    NUM_3(0x33, "3", Type.DIGIT),
 
-    DIGIT4(0x34, "4", Type.DIGIT),
+    NUM_4(0x34, "4", Type.DIGIT),
 
-    DIGIT5(0x35, "5", Type.DIGIT),
+    NUM_5(0x35, "5", Type.DIGIT),
 
-    DIGIT6(0x36, "6", Type.DIGIT),
+    NUM_6(0x36, "6", Type.DIGIT),
 
-    DIGIT7(0x37, "7", Type.DIGIT),
+    NUM_7(0x37, "7", Type.DIGIT),
 
-    DIGIT8(0x38, "8", Type.DIGIT),
+    NUM_8(0x38, "8", Type.DIGIT),
 
-    DIGIT9(0x39, "9", Type.DIGIT),
+    NUM_9(0x39, "9", Type.DIGIT),
 
-    SEMICOLON(0x3B, "Semicolon"),
+    SEMICOLON(0x3B, ";"),
 
-    EQUALS(0x3D, "Equals"),
+    EQUALS(0x3D, "="),
 
     A(0x41, "A", Type.LETTER),
 
@@ -142,11 +141,11 @@ public enum KeyCode {
 
     Z(0x5A, "Z", Type.LETTER),
 
-    OPEN_BRACKET(0x5B, "Open Bracket"),
+    BACK_SLASH(0x5C, "\\"),
 
-    BACK_SLASH(0x5C, "Back Slash"),
+    LEFT_BRACKET(0x5B, "["),
 
-    CLOSE_BRACKET(0x5D, "Close Bracket"),
+    RIGHT_BRACKET(0x5D, "]"),
 
     NUMPAD0(0x60, "Numpad 0", Type.DIGIT | Type.KEYPAD),
 
@@ -172,7 +171,7 @@ public enum KeyCode {
 
     ADD(0x6B, "Add"),
 
-    SEPARATOR(0x6C, "Separator"),
+    SEPARATOR(0x6C, "Seperator"),
 
     SUBTRACT(0x6D, "Subtract"),
 
@@ -234,63 +233,57 @@ public enum KeyCode {
 
     F24(0xF00B, "F24", Type.FUNCTION),
 
-    PRINTSCREEN(0x9A, "Print Screen"),
+    PRINT_SCREEN(0x9A, "Print Screen"),
 
-    INSERT(0x9B, "Insert"),
-
-    HELP(0x9C, "Help"),
+    INSERT(0x9B, "Ins"),
 
     META(0x9D, "Meta", Type.MODIFIER),
 
-    BACK_QUOTE(0xC0, "Back Quote"),
+    BACK_QUOTE(0xC0, "`"),
 
-    QUOTE(0xDE, "Quote"),
+    APOSTROPHE(0xDE, "'"),
 
-    KP_UP(0xE0, "Numpad Up", Type.ARROW | Type.NAVIGATION | Type.KEYPAD),
+    NUMPAD_UP(0xE0, "Numpad Up", Type.ARROW | Type.NAVIGATION | Type.KEYPAD),
 
-    KP_DOWN(0xE1, "Numpad Down", Type.ARROW | Type.NAVIGATION | Type.KEYPAD),
+    NUMPAD_DOWN(0xE1, "Numpad Down", Type.ARROW | Type.NAVIGATION | Type.KEYPAD),
 
-    KP_LEFT(0xE2, "Numpad Left", Type.ARROW | Type.NAVIGATION | Type.KEYPAD),
+    NUMPAD_LEFT(0xE2, "Numpad Left", Type.ARROW | Type.NAVIGATION | Type.KEYPAD),
 
-    KP_RIGHT(0xE3, "Numpad Right", Type.ARROW | Type.NAVIGATION | Type.KEYPAD),
+    NUMPAD_RIGHT(0xE3, "Numpad Right", Type.ARROW | Type.NAVIGATION | Type.KEYPAD),
 
-    AMPERSAND(0x96, "Ampersand"),
+    AMPERSAND(0x96, "&"),
 
-    ASTERISK(0x97, "Asterisk"),
+    ASTERISK(0x97, "*"),
 
-    QUOTEDBL(0x98, "Double Quote"),
+    QUOTATION_MARKS(0x98, "\""),
 
-    LESS(0x99, "Less"),
+    LESS(0x99, "<"),
 
-    GREATER(0xa0, "Greater"),
+    GREATER(0xa0, ">"),
 
-    BRACELEFT(0xa1, "Left Brace"),
+    BRACE_LEFT(0xa1, "{"),
 
-    BRACERIGHT(0xa2, "Right Brace"),
+    BRACE_RIGHT(0xa2, "}"),
 
-    AT(0x0200, "At"),
+    AT(0x0200, "@"),
 
-    COLON(0x0201, "Colon"),
+    COLON(0x0201, ":"),
 
-    CIRCUMFLEX(0x0202, "Circumflex"),
+    DOLLAR(0x0203, "$"),
 
-    DOLLAR(0x0203, "Dollar"),
+    EXCLAMATION_MARK(0x0205, "!"),
 
-    EURO_SIGN(0x0204, "Euro Sign"),
+    INVERTED_EXCLAMATION_MARK(0x0206, "¡"),
 
-    EXCLAMATION_MARK(0x0205, "Exclamation Mark"),
+    LEFT_PARENTHESIS(0x0207, "("),
 
-    INVERTED_EXCLAMATION_MARK(0x0206, "Inverted Exclamation Mark"),
+    NUMBER_SIGN(0x0208, "#"),
 
-    LEFT_PARENTHESIS(0x0207, "Left Parenthesis"),
+    PLUS(0x0209, "+"),
 
-    NUMBER_SIGN(0x0208, "Number Sign"),
+    RIGHT_PARENTHESIS(0x020A, ")"),
 
-    PLUS(0x0209, "Plus"),
-
-    RIGHT_PARENTHESIS(0x020A, "Right Parenthesis"),
-
-    UNDERSCORE(0x020B, "Underscore"),
+    UNDERSCORE(0x020B, "_"),
 
     WINDOWS(0x020C, "Windows", Type.MODIFIER),
 
@@ -436,7 +429,5 @@ public enum KeyCode {
             boolean alt,
             boolean meta
     ) {}
-
-    
 }
 
