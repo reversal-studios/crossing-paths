@@ -6,7 +6,7 @@ import com.logandhillon.logangamelib.api.input.InputHandler;
 import com.logandhillon.logangamelib.api.input.KeyCode;
 import com.logandhillon.logangamelib.api.input.KeyboardEvent;
 import com.logandhillon.logangamelib.api.input.MouseClickEvent;
-import com.logandhillon.logangamelib.math.Vector2f;
+import com.logandhillon.logangamelib.math.Vec2f;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -214,9 +214,9 @@ final class FXInput implements InputHandler, AutoCloseable {
         }
 
         @Override
-        public Vector2f pos() {
+        public Vec2f pos() {
             Point2D pos = canvas.sceneToLocal(event.getSceneX(), event.getSceneY());
-            return new Vector2f((float)pos.getX(), (float)pos.getY());
+            return new Vec2f((float)pos.getX(), (float)pos.getY());
         }
 
         @Override

@@ -1,16 +1,14 @@
 package com.logandhillon.logangamelib.engine;
 
+import com.logandhillon.logangamelib.api.input.InputHandler;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.physics.CollisionEntity;
+import com.logandhillon.logangamelib.javafx.FXRenderer;
 import javafx.animation.AnimationTimer;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import com.logandhillon.logangamelib.api.render.Renderer;
-import com.logandhillon.logangamelib.javafx.FXRenderer;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -38,13 +36,11 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
     private final List<Entity>          entities          = new ArrayList<>();
     private final Queue<Entity>         deathrow          = new LinkedList<>();
     private final List<CollisionEntity> collisionEntities = new ArrayList<>();
-    private final List<HandlerRef<?>>   handlers          = new ArrayList<>();
 
     private AnimationTimer lifecycle;
     private H              game;
     private Scene          scene;
-
-    public record HandlerRef<T extends Event>(EventType<T> type, EventHandler<? super T> handler) {}
+    private InputHandler   input;
 
     /**
      * Do not instantiate this class.
@@ -118,8 +114,6 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
         scene.widthProperty().addListener((obs, oldVal, newVal) -> updateScale(scene, parent));
         scene.heightProperty().addListener((obs, oldVal, newVal) -> updateScale(scene, parent));
 
-        // register all event handlers
-        bindAllEvents();
         onBuild(scene);
         this.game = game;
         return scene;
@@ -131,24 +125,6 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
      * @param scene JAVAFX SCENE from engine
      */
     public void onBuild(Scene scene) {
-    }
-
-    /**
-     * Without checking for safety, immediately binds all events to the scene.
-     *
-     * @apiNote You must ensure it is safe to call this method before using it!!!!
-     */
-    public void bindAllEvents() {
-        if (scene == null) throw new IllegalStateException(
-                "GameScene not bound to engine yet, thus cannot bind events");
-
-        LOG.info("Binding {} events to engine", handlers.size());
-        for (HandlerRef<?> h: handlers) {
-            @SuppressWarnings("unchecked") EventType<Event> t = (EventType<Event>)h.type();
-            @SuppressWarnings("unchecked") EventHandler<Event> eh = (EventHandler<Event>)h.handler();
-
-            scene.addEventHandler(t, eh);
-        }
     }
 
     /**
@@ -164,9 +140,6 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
         entities.clear();
 
         lifecycle.stop();
-
-        // remove all stored event handlers
-        clearAllHandlers();
     }
 
     /**
@@ -354,49 +327,11 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
         return null; // no collision found
     }
 
-    /**
-     * Registers an event handler that will be attached to the scene when it is built.
-     *
-     * @param type    the type of event to fire on
-     * @param handler the event handler itself (the method that will run)
-     */
-    public <T extends Event> void addHandler(EventType<T> type, EventHandler<? super T> handler) {
-        handlers.add(new HandlerRef<>(type, handler));
-    }
-
-    /**
-     * Binds an event handler to the scene when the scene is built
-     *
-     * @param type    the type of event to fire on
-     * @param handler the event handler itself (the method that will run)
-     */
-
-    public <T extends Event> void bindHandler(EventType<T> type, EventHandler<? super T> handler) {
-        this.addHandler(type, handler);
-        scene.addEventHandler(type, handler);
-    }
-
-    /**
-     * Safely unregister and delete all handlers
-     */
-    public void clearAllHandlers() {
-        if (scene == null) {
-            LOG.warn("Master scene not found, cannot unregister handlers.");
-            return;
-        }
-
-        LOG.info("Unregistering all registered handlers from this GameScene");
-        // remove all stored event handlers
-        for (HandlerRef<?> h: handlers) {
-            @SuppressWarnings("unchecked") EventType<Event> t = (EventType<Event>)h.type();
-            @SuppressWarnings("unchecked") EventHandler<Event> eh = (EventHandler<Event>)h.handler();
-
-            scene.removeEventHandler(t, eh);
-        }
-        handlers.clear();
-    }
-
     protected H getParent() {
         return game;
+    }
+
+    protected InputHandler input() {
+        return input;
     }
 }
