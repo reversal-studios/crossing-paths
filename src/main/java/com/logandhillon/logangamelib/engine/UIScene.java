@@ -1,9 +1,9 @@
 package com.logandhillon.logangamelib.engine;
 
+import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.entity.Clickable;
 import com.logandhillon.logangamelib.entity.Entity;
-import com.logandhillon.logangamelib.entity.ui.Draggable;
-import javafx.geometry.Point3D;
+import com.logandhillon.logangamelib.math.Vec2f;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 
 /**
  * A UI scene is a type of {@link GameScene} that listens to the cursor and registers events handlers for
- * {@link UIScene#onMouseClicked(MouseEvent)}.
+ * {@link MouseClickEvent mouse click events}.
  * <p>
  * UI scenes are used with {@link Clickable} entities. Clickables can only be used in UI scenes.
  *
@@ -39,24 +39,21 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
      * Creates a new UI scene and registers the mouse events.
      */
     public UIScene() {
-        this.addMouseEvents(false);
     }
 
     /**
-     * Attaches the UI scene's mouse events to the ref list.
-     *
-     * @param force if true, will the refs in list. This may be unsafe (duplicate events!) and cause really weird
-     *              errors. Ensure safety before calling this.
+     * Attaches the UI scene's mouse events to the game scene's
+     * {@link com.logandhillon.logangamelib.api.input.InputHandler InputHandler}
      */
-    public void addMouseEvents(boolean force) {
-        this.addHandler(MouseEvent.MOUSE_PRESSED, this::onMousePressed);
-        this.addHandler(MouseEvent.MOUSE_CLICKED, this::onMouseClicked);
-        this.addHandler(MouseEvent.MOUSE_MOVED, this::onMouseMoved);
-        this.addHandler(MouseEvent.MOUSE_RELEASED, this::onMouseRelease);
-        this.addHandler(MouseEvent.MOUSE_DRAGGED, this::onMouseDragged);
-        if (force) {
-            this.bindAllEvents();
-        }
+    public void addMouseEvents() {
+        input().onMouseDown(this::onMouseDown);
+        input().onMouseClicked(this::onMouseClicked);
+        input().onMouseMoved(this::onMouseMoved);
+    }
+
+    @Override
+    public void onBuild(Scene scene) {
+        this.input().onMouseDown(this::onMouseDown);
     }
 
     @Override
@@ -106,19 +103,16 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
      * Runs when the mouse is clicked on the JavaFX {@link Scene}.
      * <p>
      * This method goes through all attached clickables and, if it is within the clickable's hitbox, runs the
-     * {@link Clickable#onClick(MouseEvent)} event handler.
+     * {@link Clickable#onClick} event handler.
      *
      * @param e details about the mouse click event. this can be used to get the mouse button pressed, x/y position,
      *          etc.
      *
      * @see MouseEvent
-     * @see Clickable#onClick(MouseEvent)
+     * @see Clickable#onClick
      */
-    protected void onMouseClicked(MouseEvent e) {
-        float x = (float)e.getX();
-        float y = (float)e.getY();
-
-        LOG.debug("{}: Handling mouse click event at ({}, {})", this.getClass().getSimpleName(), x, y);
+    protected void onMouseClicked(MouseClickEvent e) {
+        LOG.debug("{}: Handling mouse click event at {}", this.getClass().getSimpleName(), e.pos());
 
         for (Clickable c: cachedClickables) {
             ClickableFlags flags = clickables.get(c);
@@ -143,13 +137,13 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
     /**
      * Handles mouse pressed events and passes them to the {@link Clickable}
      *
-     * @param e javafx mouse event
-     *
-     * @see MouseEvent#MOUSE_PRESSED
+     * @param e details about the mouse click event. this can be used to get the mouse button pressed, x/y position,
+     *          etc.
      */
-    protected void onMousePressed(MouseEvent e) {
+    protected void onMouseDown(MouseClickEvent e) {
         for (Clickable c: cachedClickables) {
-            if (checkHitbox(e, c)) c.onMouseDown(e);
+            if (checkHitbox(e, c))
+                c.onMouseDown(e);
         }
     }
 
@@ -157,17 +151,17 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
      * Runs when the mouse is moved within the JavaFX {@link Scene}.
      * <p>
      * This method goes through all attached clickables and, if it is within the clickable's hitbox, runs the
-     * {@link Clickable#onMouseEnter(MouseEvent)} or {@link Clickable#onMouseLeave(MouseEvent)} event handler, depending
-     * on what just happened relative to said Clickable.
+     * {@link Clickable#onMouseEnter} or {@link Clickable#onMouseLeave} event handler, depending on what just happened
+     * relative to said Clickable.
      *
      * @param e details about the mouse click event. this can be used to get the mouse button pressed, x/y position,
      *          etc.
      *
      * @see MouseEvent
-     * @see Clickable#onMouseEnter(MouseEvent)
-     * @see Clickable#onMouseLeave(MouseEvent)
+     * @see Clickable#onMouseEnter
+     * @see Clickable#onMouseLeave
      */
-    protected void onMouseMoved(MouseEvent e) {
+    protected void onMouseMoved(MouseClickEvent e) {
         for (Clickable c: cachedClickables) {
             ClickableFlags flags = clickables.get(c);
 
@@ -186,32 +180,6 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
     }
 
     /**
-     * Similar to {@link UIScene#onMouseMoved(MouseEvent)}, but for when the mouse is DOWN, instead of UP.
-     *
-     * @param e jfx mouse event
-     */
-    protected void onMouseDragged(MouseEvent e) {
-        for (Clickable c: cachedClickables) if (c instanceof Draggable o) o.onMouseDragged(e);
-    }
-
-    /**
-     * Runs when the mouse is released in a JavaFX {@link Scene}.
-     * <p>
-     * This method goes through all attached clickables and, if it is within the clickable's hitbox, runs
-     * the{@link Draggable#onMouseUp(MouseEvent)} handler
-     *
-     * @param e details about the mouse click event. this can be used to get the mouse button pressed, x/y position,
-     *          etc.
-     *
-     * @apiNote this event is only used by {@link Draggable}
-     * @see MouseEvent
-     * @see Draggable#onMouseUp(MouseEvent)
-     */
-    protected void onMouseRelease(MouseEvent e) {
-        for (Clickable c: cachedClickables) if (c instanceof Draggable o) o.onMouseUp(e);
-    }
-
-    /**
      * Checks the hitbox of the given clickable and sees if the mouse (from event) is in the hitbox of it.
      *
      * @param e the mouseevent
@@ -219,9 +187,9 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
      *
      * @return true if the cursor is inside the clickable.
      */
-    private boolean checkHitbox(MouseEvent e, Clickable c) {
-        Point3D p = e.getPickResult().getIntersectedPoint();
-        return p.getX() >= c.getX() && p.getX() <= c.getX() + c.getWidth() &&
-               p.getY() >= c.getY() && p.getY() <= c.getY() + c.getHeight();
+    private boolean checkHitbox(MouseClickEvent e, Clickable c) {
+        Vec2f p = e.pos();
+        return p.x >= c.getX() && p.x <= c.getX() + c.getWidth() &&
+               p.y >= c.getY() && p.y <= c.getY() + c.getHeight();
     }
 }

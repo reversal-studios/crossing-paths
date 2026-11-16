@@ -1,5 +1,6 @@
 package com.logandhillon.logangamelib.javafx;
 
+import com.logandhillon.logangamelib.api.event.CompositeSubscription;
 import com.logandhillon.logangamelib.api.event.Event;
 import com.logandhillon.logangamelib.api.event.Subscription;
 import com.logandhillon.logangamelib.api.input.InputHandler;
@@ -17,10 +18,16 @@ import javafx.scene.input.MouseEvent;
 import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
+/**
+ * Implementation of the LGL input API for JavaFX.
+ *
+ * @author Logan Dhillon
+ */
 final class FXInput implements InputHandler, AutoCloseable {
+    private final CompositeSubscription subscriptions = new CompositeSubscription();
+
     private final CopyOnWriteArrayList<Consumer<KeyboardEvent>> keyPressedHandlers  =
             new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<Consumer<KeyboardEvent>> keyReleasedHandlers =
@@ -120,12 +127,12 @@ final class FXInput implements InputHandler, AutoCloseable {
         subscribe(pointerDraggedHandlers, handler);
     }
 
-    private <T> Subscription subscribe(CopyOnWriteArrayList<Consumer<T>> handlers, Consumer<T> handler) {
+    private <T> void subscribe(CopyOnWriteArrayList<Consumer<T>> handlers, Consumer<T> handler) {
         if (closed) throw new IllegalStateException("Input adapter is closed");
         if (handler == null) throw new NullPointerException("handler");
 
         handlers.add(handler);
-        return new Subscription(() -> handlers.remove(handler));
+        subscriptions.add(new Subscription(() -> handlers.remove(handler)));
     }
 
     private void handleKeyEvent(KeyEvent event) {
@@ -144,6 +151,7 @@ final class FXInput implements InputHandler, AutoCloseable {
     public void close() {
         if (closed) return;
         closed = true;
+        subscriptions.close();
 
         if (scene != null) {
             scene.removeEventHandler(KeyEvent.KEY_PRESSED, keyEventHandler);
