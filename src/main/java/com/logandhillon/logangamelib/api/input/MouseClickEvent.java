@@ -1,13 +1,13 @@
 package com.logandhillon.logangamelib.api.input;
 
 import com.logandhillon.logangamelib.api.event.Event;
-import com.logandhillon.logangamelib.math.Vector2f;
+import com.logandhillon.logangamelib.math.Vec2f;
 
 /**
  * @author Logan Dhillon
  */
 public interface MouseClickEvent extends Event {
-    Vector2f pos();
+    Vec2f pos();
 
     Button button();
 

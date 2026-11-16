@@ -1,37 +1,41 @@
 package com.logandhillon.logangamelib.math;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 /**
- * A mutable 3D floating-point vector.
+ * A mutable 2D floating-point vector.
  *
  * @author Logan Dhillon
  */
-public class Vector3f {
+@ToString(includeFieldNames = false)
+@EqualsAndHashCode
+public class Vec2f {
     public float x;
     public float y;
-    public float z;
 
-    public Vector3f(float x, float y, float z) {
+    public Vec2f(float x, float y) {
         this.x = x;
         this.y = y;
-        this.z = z;
     }
 
     /**
      * Mutates this vector in-place to avoid 'new' allocations in the game loop
      *
+     * @param dx change in x
+     * @param dy change in y
+     *
      * @return modified vector
      */
-    public Vector3f add(float dx, float dy, float dz) {
+    public Vec2f add(float dx, float dy) {
         this.x += dx;
         this.y += dy;
-        this.z += dz;
         return this;
     }
 
-    public Vector3f set(float x, float y, float z) {
+    public Vec2f set(float x, float y) {
         this.x = x;
         this.y = y;
-        this.z = z;
         return this;
     }
 }
