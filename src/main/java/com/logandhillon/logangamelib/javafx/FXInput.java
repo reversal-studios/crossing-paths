@@ -136,8 +136,7 @@ public final class FXInput implements InputHandler, AutoCloseable {
     }
 
     private void handleKeyEvent(KeyEvent event) {
-        KeyCode key = KeyCode.of(event.getCode().getCode());
-        dispatch(keyPressedHandlers, new FXKeyboardEvent(event, key));
+        dispatch(keyPressedHandlers, new FXKeyboardEvent(event, KeyCode.of(event.getCode().getCode())));
     }
 
     private <T extends Event> void dispatch(CopyOnWriteArrayList<Consumer<T>> handlers, T event) {

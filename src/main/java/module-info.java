@@ -4,6 +4,8 @@ module com.logandhillon {
 
     requires org.apache.logging.log4j.core;
     requires static lombok;
+    requires com.google.protobuf;
+    requires javafx.media;
     requires org.jspecify;
 
     opens com.logandhillon.fptgame to javafx.fxml;

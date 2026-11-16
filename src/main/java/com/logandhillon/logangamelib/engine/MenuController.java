@@ -1,10 +1,10 @@
 package com.logandhillon.logangamelib.engine;
 
 import com.logandhillon.fptgame.entity.ui.component.MenuButton;
-import com.logandhillon.logangamelib.entity.Entity;
+import com.logandhillon.logangamelib.api.input.KeyCode;
+import com.logandhillon.logangamelib.api.input.KeyboardEvent;
 import com.logandhillon.logangamelib.api.render.Renderer;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import com.logandhillon.logangamelib.entity.Entity;
 
 import java.util.function.Supplier;
 
@@ -49,31 +49,31 @@ public class MenuController extends Entity {
     }
 
     /**
-     * Handles key presses from JavaFX, used to change the actively selected button or press it.
+     * Handles key presses from logangamelib, used to change the actively selected button or press it.
      *
      * @apiNote only runs if isActive returns true
      */
-    public void onKeyPressed(KeyEvent e) {
+    public void onKeyPressed(KeyboardEvent e) {
         if (!active.get()) return;
 
         // when W/UP/SHIFT+TAB pressed, go up (-1) in buttons
-        if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W ||
-            (e.isShiftDown() && e.getCode() == KeyCode.TAB)) {
+        if (e.key() == KeyCode.UP || e.key() == KeyCode.W ||
+            (e.modifiers().shift() && e.key() == KeyCode.TAB)) {
             if (activeBtnIdx >= 0)
                 buttons[activeBtnIdx].setActive(false); // deselect old active button (if any)
             activeBtnIdx = Math.max(0, activeBtnIdx - 1);   // decrement idx (no lower than 0)
             buttons[activeBtnIdx].setActive(true); // select new active button
         }
         // when S/DOWN/TAB pressed, go down (+1) in buttons
-        else if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S ||
-                 (!e.isShiftDown() && e.getCode() == KeyCode.TAB)) {
+        else if (e.key() == KeyCode.DOWN || e.key() == KeyCode.S ||
+                 (!e.modifiers().shift() && e.key() == KeyCode.TAB)) {
             if (activeBtnIdx >= 0)
                 buttons[activeBtnIdx].setActive(false); // deselect old active button (if any)
             activeBtnIdx = Math.min(buttons.length - 1, activeBtnIdx + 1); // increment idx (no higher than highest idx)
             buttons[activeBtnIdx].setActive(true);  // select new active button
         }
         // when ENTER/SPACE pressed, simulate a click on the active button
-        else if ((e.getCode() == KeyCode.ENTER || e.getCode() == KeyCode.SPACE) && activeBtnIdx >= 0) {
+        else if ((e.key() == KeyCode.ENTER || e.key() == KeyCode.SPACE) && activeBtnIdx >= 0) {
             buttons[activeBtnIdx].onPress();
         }
     }
@@ -106,6 +106,6 @@ public class MenuController extends Entity {
         for (var btn: buttons) parent.addEntity(btn);
 
         // register key press event
-        parent.addHandler(KeyEvent.KEY_PRESSED, this::onKeyPressed);
+        parent.input().onKeyDown(this::onKeyPressed);
     }
 }

@@ -113,7 +113,7 @@ public class InputBoxEntity extends Clickable {
      */
     public void onKeyPressed(KeyboardEvent e) {
         if (isActive) {
-            if (e.key() == KeyCode.BACK_SPACE && !input.isEmpty()) {
+            if (e.key() == KeyCode.BACKSPACE && !input.isEmpty()) {
                 input.deleteCharAt(input.length() - 1);
             }
             // blur on enter or esc
