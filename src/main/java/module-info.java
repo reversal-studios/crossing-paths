@@ -1,12 +1,8 @@
 module com.logandhillon {
     requires javafx.base;
-    requires javafx.media;
     requires javafx.graphics;
 
     requires org.apache.logging.log4j.core;
-    requires com.google.protobuf;
-    requires javafx.controls;
-    requires java.desktop;
     requires static lombok;
     requires org.jspecify;
 

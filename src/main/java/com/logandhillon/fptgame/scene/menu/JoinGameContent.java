@@ -55,9 +55,7 @@ public class JoinGameContent implements MenuContent {
     public JoinGameContent(MenuHandler menu, JoinGameHandler onJoin) {
         // rect in background for server list
         Renderable serverListRect = new Renderable(
-                32, 326, (g, x, y) -> {
-            g.roundRect(x, y, 459, 228, Colors.BUTTON_NORMAL, CORNER_RADIUS);
-        });
+                32, 326, (g, x, y) -> g.roundRect(x, y, 459, 228, Colors.BUTTON_NORMAL, CORNER_RADIUS));
 
         // label for server list
         TextEntity serverListLabel = new TextEntity.Builder(32, 295)
@@ -186,7 +184,7 @@ public class JoinGameContent implements MenuContent {
     public record ServerEntry(String name, String address) {}
 
     /**
-     * @param e       any key event registered by javafx
+     * @param e       any key event registered by logangamelib
      * @param entries list of buttons on screen
      */
     private void onKeyPressed(KeyboardEvent e, ServerEntryEntity[] entries) {

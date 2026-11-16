@@ -44,9 +44,7 @@ public abstract class LevelScene extends GameScene<GameHandler> {
         Renderable bg = LevelFactory.buildBgOrNull(level);
         if (bg != null) addEntity(bg);
         else addEntity(new Renderable(
-                0, 0, (g, x, y) -> {
-            g.rect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT, Color.BLACK);
-        }));
+                0, 0, (g, x, y) -> g.rect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT, Color.BLACK)));
 
         for (LevelObject obj: LevelFactory.load(level)) {
             addEntity(obj);
@@ -95,7 +93,7 @@ public abstract class LevelScene extends GameScene<GameHandler> {
     }
 
     /**
-     * Moves any {@link MovingPlatformEntity} in the level, inverts colors of any {@link PlatformEntity}, etc.; as per
+     * Moves any {@link MovingPlatformEntity} in the level, inverts colours of any {@link PlatformEntity}, etc.; as per
      * what happens when a {@link com.logandhillon.fptgame.entity.game.LevelButtonEntity} is pressed.
      */
     public void onButtonPressed() {
