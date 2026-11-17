@@ -36,7 +36,9 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
     }
 
     /**
-     * Creates a new UI scene and registers the mouse events.
+     * Creates a new UI scene without registering mouse events.
+     *
+     * @see onBuild
      */
     public UIScene() {
     }
@@ -45,15 +47,11 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
      * Attaches the UI scene's mouse events to the game scene's
      * {@link com.logandhillon.logangamelib.api.input.InputHandler InputHandler}
      */
-    public void addMouseEvents() {
-        input().onMouseDown(this::onMouseDown);
-        input().onMouseClicked(this::onMouseClicked);
-        input().onMouseMoved(this::onMouseMoved);
-    }
-
     @Override
     public void onBuild(Scene scene) {
-        this.input().onMouseDown(this::onMouseDown);
+        input().onMouseClicked(this::onMouseClicked);
+        input().onMouseDown(this::onMouseDown);
+        input().onMouseMoved(this::onMouseMoved);
     }
 
     @Override
