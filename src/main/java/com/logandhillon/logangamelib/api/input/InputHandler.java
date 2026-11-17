@@ -1,24 +1,24 @@
 package com.logandhillon.logangamelib.api.input;
 
-import java.util.function.Consumer;
+import com.logandhillon.logangamelib.api.event.EventHandler;
 
 /**
  * @author Logan Dhillon
  */
 public interface InputHandler {
-    void onKeyDown(Consumer<KeyboardEvent> e);
+    void onKeyDown(EventHandler<KeyboardEvent> e);
 
-    void onKeyUp(Consumer<KeyboardEvent> e);
+    void onKeyUp(EventHandler<KeyboardEvent> e);
 
-    void onKeyTyped(Consumer<KeyboardEvent> e);
+    void onKeyTyped(EventHandler<KeyboardEvent> e);
 
-    void onMouseDown(Consumer<MouseClickEvent> handler);
+    void onMouseDown(EventHandler<MouseClickEvent> handler);
 
-    void onMouseUp(Consumer<MouseClickEvent> handler);
+    void onMouseUp(EventHandler<MouseClickEvent> handler);
 
-    void onMouseClicked(Consumer<MouseClickEvent> handler);
+    void onMouseClicked(EventHandler<MouseClickEvent> handler);
 
-    void onMouseMoved(Consumer<MouseClickEvent> handler);
+    void onMouseMoved(EventHandler<MouseClickEvent> handler);
 
-    void onMouseDragged(Consumer<MouseClickEvent> handler);
+    void onMouseDragged(EventHandler<MouseClickEvent> handler);
 }
