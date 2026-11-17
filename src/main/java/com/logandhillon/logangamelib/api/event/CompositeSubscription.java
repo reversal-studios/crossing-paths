@@ -7,6 +7,7 @@ import java.util.List;
  * A composite subscription is an auto-closable list of subscriptions that unsubscribes from the all when closed.
  *
  * @author Logan Dhillon
+ * @see Subscription
  */
 public class CompositeSubscription implements AutoCloseable {
     private final List<Subscription> subscriptions = new ArrayList<>();

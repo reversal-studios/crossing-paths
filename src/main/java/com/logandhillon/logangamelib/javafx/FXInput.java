@@ -21,9 +21,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 
 /**
- * Implementation of the LGL input API for JavaFX.
+ * Implementation of the LGL input API for JavaFX. Contains list of logangamelib event handlers that are dispatched when
+ * the corresponding JavaFX event is fired.
+ * <p>
+ * The input API can be accessed through a game scene, typically by refering to an entity's parent.
  *
  * @author Logan Dhillon
+ * @see com.logandhillon.logangamelib.engine.GameScene#input()
  */
 public final class FXInput implements InputHandler, AutoCloseable {
     private final CompositeSubscription subscriptions = new CompositeSubscription();
@@ -56,6 +60,12 @@ public final class FXInput implements InputHandler, AutoCloseable {
      */
     public FXInput() {}
 
+    /**
+     * Called when the JavaFX {@link Scene} and {@link Canvas} are created so FX's event handlers can be bound to.
+     *
+     * @param scene  newly built FX scene from {@link com.logandhillon.logangamelib.engine.GameScene}
+     * @param canvas graphics canvas from FX scene
+     */
     public void attach(Scene scene, Canvas canvas) {
         if (closed) throw new IllegalStateException("Input adapter is closed");
         if (this.scene != null) throw new IllegalStateException("Input adapter is already attached");
@@ -90,30 +100,38 @@ public final class FXInput implements InputHandler, AutoCloseable {
     }
 
     @Override
-    public void onMouseDown(EventHandler<MouseClickEvent> handler) {
-        subscribe(mouseDown.handlers, handler);
+    public void onMouseDown(EventHandler<MouseClickEvent> e) {
+        subscribe(mouseDown.handlers, e);
     }
 
     @Override
-    public void onMouseUp(EventHandler<MouseClickEvent> handler) {
-        subscribe(mouseUp.handlers, handler);
+    public void onMouseUp(EventHandler<MouseClickEvent> e) {
+        subscribe(mouseUp.handlers, e);
     }
 
     @Override
-    public void onMouseClicked(EventHandler<MouseClickEvent> handler) {
-        subscribe(mouseClicked.handlers, handler);
+    public void onMouseClicked(EventHandler<MouseClickEvent> e) {
+        subscribe(mouseClicked.handlers, e);
     }
 
     @Override
-    public void onMouseMoved(EventHandler<MouseClickEvent> handler) {
-        subscribe(mouseMoved.handlers, handler);
+    public void onMouseMoved(EventHandler<MouseClickEvent> e) {
+        subscribe(mouseMoved.handlers, e);
     }
 
     @Override
-    public void onMouseDragged(EventHandler<MouseClickEvent> handler) {
-        subscribe(mouseDragged.handlers, handler);
+    public void onMouseDragged(EventHandler<MouseClickEvent> e) {
+        subscribe(mouseDragged.handlers, e);
     }
 
+    /**
+     * Adds an event handler to the event handler registry, and sets up an auto-unsubscribing {@link Subscription} for
+     * memory-safe event binding.
+     *
+     * @param handlers list of event handlers
+     * @param handler  new handler to bind
+     * @param <T>      type of LGL event
+     */
     private <T extends Event> void subscribe(CopyOnWriteArrayList<EventHandler<T>> handlers, EventHandler<T> handler) {
         if (closed) throw new IllegalStateException("Input adapter is closed");
         if (handler == null) throw new NullPointerException("handler");
@@ -180,6 +198,12 @@ public final class FXInput implements InputHandler, AutoCloseable {
         throw new IllegalArgumentException("JavaFX event must be of type KeyEvent or MouseEvent!");
     }
 
+    /**
+     * Translates an FX {@link KeyEvent} to an LGL {@link KeyboardEvent}.
+     *
+     * @param event FX key event details
+     * @param key   LGL key code associated with event
+     */
     private record FXKeyboardEvent(KeyEvent event, KeyCode key) implements KeyboardEvent {
         @Override
         public KeyCode.Modifiers modifiers() {
@@ -197,6 +221,9 @@ public final class FXInput implements InputHandler, AutoCloseable {
         }
     }
 
+    /**
+     * Translates an FX {@link MouseEvent} to an LGL {@link MouseClickEvent}.
+     */
     private final class FXMouseClickEvent implements MouseClickEvent {
         private final MouseEvent event;
 
