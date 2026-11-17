@@ -28,36 +28,37 @@ import java.util.function.Consumer;
 public final class FXInput implements InputHandler, AutoCloseable {
     private final CompositeSubscription subscriptions = new CompositeSubscription();
 
-    private final CopyOnWriteArrayList<Consumer<KeyboardEvent>> keyPressedHandlers  =
+    private final CopyOnWriteArrayList<Consumer<KeyboardEvent>> keyUpHandlers    =
             new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<Consumer<KeyboardEvent>> keyReleasedHandlers =
+    private final CopyOnWriteArrayList<Consumer<KeyboardEvent>> keyDownHandlers  =
             new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<Consumer<KeyboardEvent>> textInputHandlers   =
-            new CopyOnWriteArrayList<>();
-
-    private final CopyOnWriteArrayList<Consumer<MouseClickEvent>> pointerPressedHandlers  =
-            new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<Consumer<MouseClickEvent>> pointerReleasedHandlers =
-            new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<Consumer<MouseClickEvent>> pointerClickedHandlers  =
-            new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<Consumer<MouseClickEvent>> pointerMovedHandlers    =
-            new CopyOnWriteArrayList<>();
-    private final CopyOnWriteArrayList<Consumer<MouseClickEvent>> pointerDraggedHandlers  =
+    private final CopyOnWriteArrayList<Consumer<KeyboardEvent>> keyTypedHandlers =
             new CopyOnWriteArrayList<>();
 
-    private final EventHandler<KeyEvent> keyEventHandler = this::handleKeyEvent;
+    private final CopyOnWriteArrayList<Consumer<MouseClickEvent>> mouseDownHandlers    =
+            new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<Consumer<MouseClickEvent>> mouseUpHandlers      =
+            new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<Consumer<MouseClickEvent>> mouseClickedHandlers =
+            new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<Consumer<MouseClickEvent>> mouseMovedHandlers   =
+            new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<Consumer<MouseClickEvent>> mouseDraggedHandlers =
+            new CopyOnWriteArrayList<>();
+
+    private final EventHandler<KeyEvent> keyEventHandler =
+            e -> dispatch(keyUpHandlers, new FXKeyboardEvent(e, KeyCode.of(e.getCode().getCode())));
 
     private final EventHandler<MouseEvent> pointerPressedHandler  =
-            e -> dispatch(pointerPressedHandlers, new FXMouseClickEvent(e));
+            e -> dispatch(mouseDownHandlers, new FXMouseClickEvent(e));
     private final EventHandler<MouseEvent> pointerReleasedHandler =
-            e -> dispatch(pointerReleasedHandlers, new FXMouseClickEvent(e));
+            e -> dispatch(mouseUpHandlers, new FXMouseClickEvent(e));
     private final EventHandler<MouseEvent> pointerClickedHandler  =
-            e -> dispatch(pointerClickedHandlers, new FXMouseClickEvent(e));
+            e -> dispatch(mouseClickedHandlers, new FXMouseClickEvent(e));
     private final EventHandler<MouseEvent> pointerMovedHandler    =
-            e -> dispatch(pointerMovedHandlers, new FXMouseClickEvent(e));
+            e -> dispatch(mouseMovedHandlers, new FXMouseClickEvent(e));
     private final EventHandler<MouseEvent> pointerDraggedHandler  =
-            e -> dispatch(pointerDraggedHandlers, new FXMouseClickEvent(e));
+            e -> dispatch(mouseDraggedHandlers, new FXMouseClickEvent(e));
 
     private Scene   scene;
     private Canvas  canvas;
@@ -89,42 +90,42 @@ public final class FXInput implements InputHandler, AutoCloseable {
 
     @Override
     public void onKeyDown(Consumer<KeyboardEvent> handler) {
-        subscribe(keyPressedHandlers, handler);
+        subscribe(keyUpHandlers, handler);
     }
 
     @Override
     public void onKeyUp(Consumer<KeyboardEvent> handler) {
-        subscribe(keyReleasedHandlers, handler);
+        subscribe(keyDownHandlers, handler);
     }
 
     @Override
     public void onKeyTyped(Consumer<KeyboardEvent> handler) {
-        subscribe(textInputHandlers, handler);
+        subscribe(keyTypedHandlers, handler);
     }
 
     @Override
     public void onMouseDown(Consumer<MouseClickEvent> handler) {
-        subscribe(pointerPressedHandlers, handler);
+        subscribe(mouseDownHandlers, handler);
     }
 
     @Override
     public void onMouseUp(Consumer<MouseClickEvent> handler) {
-        subscribe(pointerReleasedHandlers, handler);
+        subscribe(mouseUpHandlers, handler);
     }
 
     @Override
     public void onMouseClicked(Consumer<MouseClickEvent> handler) {
-        subscribe(pointerClickedHandlers, handler);
+        subscribe(mouseClickedHandlers, handler);
     }
 
     @Override
     public void onMouseMoved(Consumer<MouseClickEvent> handler) {
-        subscribe(pointerMovedHandlers, handler);
+        subscribe(mouseMovedHandlers, handler);
     }
 
     @Override
     public void onMouseDragged(Consumer<MouseClickEvent> handler) {
-        subscribe(pointerDraggedHandlers, handler);
+        subscribe(mouseDraggedHandlers, handler);
     }
 
     private <T> void subscribe(CopyOnWriteArrayList<Consumer<T>> handlers, Consumer<T> handler) {
@@ -133,10 +134,6 @@ public final class FXInput implements InputHandler, AutoCloseable {
 
         handlers.add(handler);
         subscriptions.add(new Subscription(() -> handlers.remove(handler)));
-    }
-
-    private void handleKeyEvent(KeyEvent event) {
-        dispatch(keyPressedHandlers, new FXKeyboardEvent(event, KeyCode.of(event.getCode().getCode())));
     }
 
     private <T extends Event> void dispatch(CopyOnWriteArrayList<Consumer<T>> handlers, T event) {
@@ -167,16 +164,26 @@ public final class FXInput implements InputHandler, AutoCloseable {
         scene = null;
         canvas = null;
 
-        keyPressedHandlers.clear();
-        keyReleasedHandlers.clear();
-        textInputHandlers.clear();
-        pointerPressedHandlers.clear();
-        pointerReleasedHandlers.clear();
-        pointerClickedHandlers.clear();
-        pointerMovedHandlers.clear();
-        pointerDraggedHandlers.clear();
+        keyUpHandlers.clear();
+        keyDownHandlers.clear();
+        keyTypedHandlers.clear();
+        mouseDownHandlers.clear();
+        mouseUpHandlers.clear();
+        mouseClickedHandlers.clear();
+        mouseMovedHandlers.clear();
+        mouseDraggedHandlers.clear();
     }
 
+    /**
+     * Gets a record of {@link KeyCode.Modifiers} from a JavaFX input event, either {@link KeyEvent} or
+     * {@link MouseEvent}.
+     *
+     * @param event JavaFX input event as documented above
+     *
+     * @return record of keyboard modifiers
+     *
+     * @throws IllegalArgumentException if JavaFX input type is not a key or mouse event.
+     */
     private static KeyCode.Modifiers modifiers(InputEvent event) {
         if (event instanceof KeyEvent keyEvent) {
             return new KeyCode.Modifiers(
@@ -184,14 +191,14 @@ public final class FXInput implements InputHandler, AutoCloseable {
                     keyEvent.isControlDown(),
                     keyEvent.isAltDown(),
                     keyEvent.isMetaDown());
+        } else if (event instanceof MouseEvent mouseEvent) {
+            return new KeyCode.Modifiers(
+                    mouseEvent.isShiftDown(),
+                    mouseEvent.isControlDown(),
+                    mouseEvent.isAltDown(),
+                    mouseEvent.isMetaDown());
         }
-
-        MouseEvent mouseEvent = (MouseEvent)event;
-        return new KeyCode.Modifiers(
-                mouseEvent.isShiftDown(),
-                mouseEvent.isControlDown(),
-                mouseEvent.isAltDown(),
-                mouseEvent.isMetaDown());
+        throw new IllegalArgumentException("JavaFX event must be of type KeyEvent or MouseEvent!");
     }
 
     private record FXKeyboardEvent(KeyEvent event, KeyCode key) implements KeyboardEvent {
