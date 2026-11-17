@@ -1,8 +1,8 @@
 package com.logandhillon.fptgame.entity.ui;
 
 import com.logandhillon.fptgame.resource.Sounds;
+import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.entity.ui.InputBoxEntity;
-import javafx.scene.input.MouseEvent;
 
 /**
  * A version of the LGL {@link InputBoxEntity} that plays a click sound when focused
@@ -27,7 +27,7 @@ public class InputBox extends InputBoxEntity {
     }
 
     @Override
-    public void onClick(MouseEvent e) {
+    public void onClick(MouseClickEvent e) {
         super.onClick(e);
         Sounds.playSfx(Sounds.UI_CLICK);
     }

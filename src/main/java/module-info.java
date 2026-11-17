@@ -1,13 +1,12 @@
 module com.logandhillon {
     requires javafx.base;
-    requires javafx.media;
     requires javafx.graphics;
 
     requires org.apache.logging.log4j.core;
-    requires com.google.protobuf;
-    requires javafx.controls;
-    requires java.desktop;
     requires static lombok;
+    requires com.google.protobuf;
+    requires javafx.media;
+    requires org.jspecify;
 
     opens com.logandhillon.fptgame to javafx.fxml;
 
@@ -27,4 +26,7 @@ module com.logandhillon {
     exports com.logandhillon.logangamelib.entity.ui;
     exports com.logandhillon.logangamelib.resource;
     exports com.logandhillon.logangamelib.api.render;
+    exports com.logandhillon.logangamelib.api.input;
+    exports com.logandhillon.logangamelib.api.event;
+    exports com.logandhillon.logangamelib.math;
 }

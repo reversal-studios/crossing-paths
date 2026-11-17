@@ -2,13 +2,13 @@ package com.logandhillon.fptgame.entity.ui.component;
 
 import com.logandhillon.fptgame.resource.Sounds;
 import com.logandhillon.fptgame.scene.menu.MenuHandler;
+import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.api.render.Color;
 import com.logandhillon.logangamelib.api.render.Font;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.api.render.TextStyle;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Clickable;
-import javafx.scene.input.MouseEvent;
 
 /**
  * Button in various menu screens that returns the user to the main menu
@@ -37,7 +37,7 @@ public final class BackButtonEntity extends Clickable {
      * @param e the mouse event provided by JavaFX
      */
     @Override
-    public void onClick(MouseEvent e) {
+    public void onClick(MouseClickEvent e) {
         Sounds.playSfx(Sounds.UI_CLICK);
         // ask the handler to go to main menu, so it can shut down any threads
         menu.getGameHandler().goToMainMenu();

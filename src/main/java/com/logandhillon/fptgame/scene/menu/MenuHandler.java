@@ -3,11 +3,11 @@ package com.logandhillon.fptgame.scene.menu;
 import com.logandhillon.fptgame.GameHandler;
 import com.logandhillon.fptgame.resource.Textures;
 import com.logandhillon.fptgame.scene.component.MenuAlertScene;
+import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.engine.UIScene;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.gfx.ParallaxBackground;
 import javafx.scene.Scene;
-import com.logandhillon.logangamelib.api.render.Renderer;
 import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -76,10 +76,8 @@ public class MenuHandler extends UIScene<GameHandler> {
     public void setContent(MenuContent content) {
         this.content = content; // store ptr to content for future reference
         this.clearEntities(true, (e) -> true);
-        this.clearAllHandlers();
 
         for (Entity e: content.getEntities()) addEntity(e);
-        this.addMouseEvents(true); // re-bind the mouse events (they were just removed)
 
         content.onShow();
     }

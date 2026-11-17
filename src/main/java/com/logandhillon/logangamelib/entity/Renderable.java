@@ -23,8 +23,8 @@ public class Renderable extends Entity {
     }
 
     @Override
-    protected void onRender(Renderer g, float x, float y) {
-        renderer.render(g, x, y);
+    protected void onRender(Renderer r, float x, float y) {
+        renderer.render(r, x, y);
     }
 
     @Override
@@ -35,7 +35,8 @@ public class Renderable extends Entity {
     public void onDestroy() {
     }
 
+    @FunctionalInterface
     public interface RenderAgent {
-        void render(Renderer g, float x, float y);
+        void render(Renderer r, float x, float y);
     }
 }

@@ -1,13 +1,15 @@
 package com.logandhillon.logangamelib.entity.ui;
 
+import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.api.render.Shape;
+import com.logandhillon.logangamelib.engine.GameScene;
+import com.logandhillon.logangamelib.entity.Clickable;
 import com.logandhillon.logangamelib.resource.base.Colors;
-import javafx.scene.input.MouseEvent;
 
 import java.util.function.Consumer;
 
-public class SliderEntity extends Draggable {
+public class SliderEntity extends Clickable {
     private static final int BACKBONE_RADIUS = 3;
     private static final int CIRCLE_RADIUS   = 10;
 
@@ -49,16 +51,15 @@ public class SliderEntity extends Draggable {
     public void onDestroy() {}
 
     @Override
-    public void onClick(MouseEvent e) {}
+    public void onClick(MouseClickEvent e) {}
 
     @Override
-    public void onMouseDown(MouseEvent e) {
+    public void onMouseDown(MouseClickEvent e) {
         active = true;
-        updateValue((float)e.getX());
+        updateValue(e.pos().x);
     }
 
-    @Override
-    public void onMouseUp(MouseEvent e) {
+    public void onMouseUp(MouseClickEvent e) {
         if (active) {
             active = false;
             // officially "update" this value only when the mouse is released
@@ -66,10 +67,9 @@ public class SliderEntity extends Draggable {
         }
     }
 
-    @Override
-    public void onMouseDragged(MouseEvent e) {
+    public void onMouseDragged(MouseClickEvent e) {
         if (!this.active) return;
-        updateValue((float)e.getX());
+        updateValue(e.pos().x);
     }
 
     /**
@@ -86,5 +86,12 @@ public class SliderEntity extends Draggable {
      */
     public float getValue() {
         return value / w;
+    }
+
+    @Override
+    public void onAttach(GameScene<?> parent) {
+        super.onAttach(parent);
+        parent.input().onMouseUp(this::onMouseUp);
+        parent.input().onMouseDragged(this::onMouseDragged);
     }
 }

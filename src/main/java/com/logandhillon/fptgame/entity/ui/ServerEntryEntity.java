@@ -2,13 +2,13 @@ package com.logandhillon.fptgame.entity.ui;
 
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.fptgame.scene.menu.JoinGameContent;
+import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.api.render.Font;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.api.render.TextStyle;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.ui.ButtonEntity;
 import com.logandhillon.logangamelib.entity.ui.DynamicButtonEntity;
-import javafx.scene.input.MouseEvent;
 import lombok.Setter;
 
 public class ServerEntryEntity extends DynamicButtonEntity {
@@ -49,7 +49,7 @@ public class ServerEntryEntity extends DynamicButtonEntity {
     }
 
     @Override
-    public void onClick(MouseEvent e) {
+    public void onClick(MouseClickEvent e) {
         this.onClick.run();
     }
 

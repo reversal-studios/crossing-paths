@@ -1,6 +1,7 @@
 package com.logandhillon.logangamelib.entity.ui;
 
-import javafx.scene.input.MouseEvent;
+import com.logandhillon.logangamelib.api.event.EventHandler;
+import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -35,7 +36,7 @@ public class DynamicButtonEntity extends ButtonEntity {
      * @param defaultStyle how the button looks when it's NOT hovered
      * @param activeStyle  how the button looks when it IS hovered
      */
-    public DynamicButtonEntity(String label, float x, float y, float w, float h, MouseEventHandler onClick,
+    public DynamicButtonEntity(String label, float x, float y, float w, float h, EventHandler<MouseClickEvent> onClick,
                                Style defaultStyle, Style activeStyle) {
         super(label, x, y, w, h, onClick, defaultStyle);
         this.defaultStyle = defaultStyle;
@@ -67,13 +68,13 @@ public class DynamicButtonEntity extends ButtonEntity {
     }
 
     @Override
-    public void onMouseEnter(MouseEvent e) {
+    public void onMouseEnter(MouseClickEvent e) {
         if (!this.locked) this.setActive(true);
         super.onMouseEnter(e); // call event handler after changing style
     }
 
     @Override
-    public void onMouseLeave(MouseEvent e) {
+    public void onMouseLeave(MouseClickEvent e) {
         if (!this.locked) this.setActive(false);
         super.onMouseLeave(e); // call event handler after changing style
     }
