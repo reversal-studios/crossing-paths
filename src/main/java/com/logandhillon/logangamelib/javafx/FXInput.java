@@ -86,12 +86,12 @@ public final class FXInput implements InputHandler, AutoCloseable {
 
     @Override
     public void onKeyDown(EventHandler<KeyboardEvent> handler) {
-        subscribe(keyUp.handlers, handler);
+        subscribe(keyDown.handlers, handler);
     }
 
     @Override
     public void onKeyUp(EventHandler<KeyboardEvent> handler) {
-        subscribe(keyDown.handlers, handler);
+        subscribe(keyUp.handlers, handler);
     }
 
     @Override
