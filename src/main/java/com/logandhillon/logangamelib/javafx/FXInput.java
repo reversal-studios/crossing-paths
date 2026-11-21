@@ -124,6 +124,19 @@ public final class FXInput implements InputHandler, AutoCloseable {
         subscribe(mouseDragged.handlers, e);
     }
 
+    @Override
+    public void clear() {
+        keyUp.handlers.clear();
+        keyDown.handlers.clear();
+        keyTyped.handlers.clear();
+
+        mouseDown.handlers.clear();
+        mouseUp.handlers.clear();
+        mouseClicked.handlers.clear();
+        mouseMoved.handlers.clear();
+        mouseDragged.handlers.clear();
+    }
+
     /**
      * Adds an event handler to the event handler registry, and sets up an auto-unsubscribing {@link Subscription} for
      * memory-safe event binding.
@@ -161,14 +174,7 @@ public final class FXInput implements InputHandler, AutoCloseable {
         scene = null;
         canvas = null;
 
-        keyUp.handlers.clear();
-        keyDown.handlers.clear();
-        keyTyped.handlers.clear();
-        mouseDown.handlers.clear();
-        mouseUp.handlers.clear();
-        mouseClicked.handlers.clear();
-        mouseMoved.handlers.clear();
-        mouseDragged.handlers.clear();
+        this.clear();
     }
 
     /**

@@ -65,4 +65,9 @@ public interface InputHandler {
      * @param e details about the called event
      */
     void onMouseDragged(EventHandler<MouseClickEvent> e);
+
+    /**
+     * Unsubscribes from all input listeners, restoring this input handler to a fresh state.
+     */
+    void clear();
 }
