@@ -16,9 +16,27 @@ public class CompositeSubscription implements AutoCloseable {
         if (subscription != null) subscriptions.add(subscription);
     }
 
+    /**
+     * Attempts to close all subscriptions in the composite and unsubscribes from them all.
+     *
+     * @throws RuntimeException propagated subscription failure(s)
+     */
     @Override
     public void close() {
-        for (Subscription subscription: subscriptions) subscription.close();
-        subscriptions.clear();
+        RuntimeException failure = null;
+        try {
+            for (Subscription subscription: subscriptions) {
+                try {
+                    subscription.close();
+                } catch (RuntimeException e) {
+                    if (failure == null) failure = e;
+                    else failure.addSuppressed(e);
+                }
+            }
+        } finally {
+            subscriptions.clear();
+        }
+
+        if (failure != null) throw failure;
     }
 }
