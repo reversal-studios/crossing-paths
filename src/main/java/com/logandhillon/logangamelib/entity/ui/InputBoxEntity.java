@@ -130,7 +130,7 @@ public class InputBoxEntity extends Clickable {
     public void onKeyTyped(KeyboardEvent e) {
         if (!isActive) return;
 
-        String c = e.key().getChar();
+        String c = e.character();
 
         // ignore blank/control characters
         if (c.isEmpty() || Character.isISOControl(c.charAt(0)) || input.length() >= charLimit) return;

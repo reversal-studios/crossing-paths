@@ -33,11 +33,11 @@ public final class FXInput implements InputHandler, AutoCloseable {
     private final CompositeSubscription subscriptions = new CompositeSubscription();
 
     private final FXEventHandlers<KeyboardEvent, KeyEvent> keyUp    =
-            new FXEventHandlers<>(e -> new FXKeyboardEvent(e, KeyCode.of(e.getCode().getCode())));
+            new FXEventHandlers<>(e -> new FXKeyboardEvent(e, KeyCode.of(e.getCode().getCode()), e.getCharacter()));
     private final FXEventHandlers<KeyboardEvent, KeyEvent> keyDown  =
-            new FXEventHandlers<>(e -> new FXKeyboardEvent(e, KeyCode.of(e.getCode().getCode())));
+            new FXEventHandlers<>(e -> new FXKeyboardEvent(e, KeyCode.of(e.getCode().getCode()), e.getCharacter()));
     private final FXEventHandlers<KeyboardEvent, KeyEvent> keyTyped =
-            new FXEventHandlers<>(e -> new FXKeyboardEvent(e, KeyCode.of(e.getCode().getCode())));
+            new FXEventHandlers<>(e -> new FXKeyboardEvent(e, KeyCode.of(e.getCode().getCode()), e.getCharacter()));
 
     private final FXEventHandlers<MouseClickEvent, MouseEvent> mouseDown    =
             new FXEventHandlers<>(FXMouseClickEvent::new);
@@ -210,7 +210,7 @@ public final class FXInput implements InputHandler, AutoCloseable {
      * @param event FX key event details
      * @param key   LGL key code associated with event
      */
-    private record FXKeyboardEvent(KeyEvent event, KeyCode key) implements KeyboardEvent {
+    private record FXKeyboardEvent(KeyEvent event, KeyCode key, String character) implements KeyboardEvent {
         @Override
         public KeyCode.Modifiers modifiers() {
             return FXInput.modifiers(event);

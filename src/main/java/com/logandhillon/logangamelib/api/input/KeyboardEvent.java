@@ -13,6 +13,8 @@ public interface KeyboardEvent extends Event {
      */
     KeyCode key();
 
+    String character();
+
     /**
      * @return keycode modifiers, e.g. was shift or ctrl pressed
      */
