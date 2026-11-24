@@ -12,6 +12,7 @@ import com.logandhillon.logangamelib.api.input.KeyCode;
 import com.logandhillon.logangamelib.api.render.Color;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.entity.Renderable;
+import javafx.scene.Scene;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -51,8 +52,11 @@ public abstract class LevelScene extends GameScene<GameHandler> {
             if (obj instanceof PlatformEntity e) platforms.add(e);
             if (obj instanceof MovingPlatformEntity e) movingPlatforms.add(e);
         }
+    }
 
-        // TODO 09-16-26 02:45: hey isn't this a debug keybind why is this still here
+    @Override
+    public void onBuild(Scene scene) {
+        // TODO 2026-01-18 23:17: hey isn't this a debug keybind why is this still here
         // restart on R pressed
         input().onKeyDown(e -> {
             if (e.key() == KeyCode.R) restartLevel();

@@ -10,6 +10,7 @@ import com.logandhillon.fptgame.networking.PeerMovementPoller;
 import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.fptgame.networking.proto.PlayerProto;
 import com.logandhillon.logangamelib.engine.GameScene;
+import javafx.scene.Scene;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -44,11 +45,14 @@ public class DynamicLevelScene extends LevelScene {
                                     : new float[][]{ { level.getPlayer2SpawnX(), level.getPlayer2SpawnY() },
                                                      { level.getPlayer1SpawnX(), level.getPlayer1SpawnY() } };
 
+        self = new ControllablePlayerEntity(spawns[1][0], spawns[1][1], isServer ? 0 : 1, new PlayerInputSender());
         // other player has inverted colours compared to us
         other = new PlayerEntity(spawns[0][0], spawns[0][1], isServer ? 1 : 0, null);
-        addEntity(other);
+    }
 
-        self = new ControllablePlayerEntity(spawns[1][0], spawns[1][1], isServer ? 0 : 1, new PlayerInputSender());
+    @Override
+    public void onBuild(Scene scene) {
+        addEntity(other);
         addEntity(self); // render self on top of other, we should always be visible first.
     }
 
