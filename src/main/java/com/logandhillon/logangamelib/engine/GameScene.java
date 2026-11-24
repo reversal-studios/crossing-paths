@@ -145,6 +145,7 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
         entities.clear();
 
         lifecycle.stop();
+        input.close();
     }
 
     /**
