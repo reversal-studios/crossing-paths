@@ -7,9 +7,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * <p>
  * Used to create memory-safe subscriptions that can close themselves when done.
  *
- * @see AutoCloseable
+ * @see Subscription#close()
  */
-public final class Subscription implements AutoCloseable {
+public final class Subscription {
     private final AtomicBoolean closed = new AtomicBoolean();
     private final Runnable      unsubscribe;
 
@@ -22,7 +22,6 @@ public final class Subscription implements AutoCloseable {
         this.unsubscribe = unsubscribe;
     }
 
-    @Override
     public void close() {
         if (closed.compareAndSet(false, true)) unsubscribe.run();
     }

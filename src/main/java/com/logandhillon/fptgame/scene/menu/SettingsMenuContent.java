@@ -6,6 +6,7 @@ import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.networking.proto.ConfigProto;
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.fptgame.resource.Sounds;
+import com.logandhillon.logangamelib.api.event.Subscription;
 import com.logandhillon.logangamelib.api.input.KeyboardEvent;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.engine.GameMeta;
@@ -50,6 +51,8 @@ public class SettingsMenuContent implements MenuContent {
 
     private KeyBind currentKeyBind;
     private String  updateKeyBindStatus = "";
+
+    private Subscription keyDownSubscription;
 
     /**
      * Creates content for settings menu
@@ -206,7 +209,13 @@ public class SettingsMenuContent implements MenuContent {
 
     @Override
     public void onShow() {
-        menu.input().onKeyDown(this::onKeyPressed);
+        keyDownSubscription = menu.input().onKeyDown(this::onKeyPressed);
+
+    }
+
+    @Override
+    public void close() {
+        keyDownSubscription.close();
     }
 
     @Override

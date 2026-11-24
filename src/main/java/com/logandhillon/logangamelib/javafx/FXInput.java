@@ -85,43 +85,43 @@ public final class FXInput implements InputHandler, AutoCloseable {
     }
 
     @Override
-    public void onKeyDown(EventHandler<KeyboardEvent> handler) {
-        subscribe(keyDown.handlers, handler);
+    public Subscription onKeyDown(EventHandler<KeyboardEvent> handler) {
+        return subscribe(keyDown.handlers, handler);
     }
 
     @Override
-    public void onKeyUp(EventHandler<KeyboardEvent> handler) {
-        subscribe(keyUp.handlers, handler);
+    public Subscription onKeyUp(EventHandler<KeyboardEvent> handler) {
+        return subscribe(keyUp.handlers, handler);
     }
 
     @Override
-    public void onKeyTyped(EventHandler<KeyboardEvent> handler) {
-        subscribe(keyTyped.handlers, handler);
+    public Subscription onKeyTyped(EventHandler<KeyboardEvent> handler) {
+        return subscribe(keyTyped.handlers, handler);
     }
 
     @Override
-    public void onMouseDown(EventHandler<MouseClickEvent> e) {
-        subscribe(mouseDown.handlers, e);
+    public Subscription onMouseDown(EventHandler<MouseClickEvent> e) {
+        return subscribe(mouseDown.handlers, e);
     }
 
     @Override
-    public void onMouseUp(EventHandler<MouseClickEvent> e) {
-        subscribe(mouseUp.handlers, e);
+    public Subscription onMouseUp(EventHandler<MouseClickEvent> e) {
+        return subscribe(mouseUp.handlers, e);
     }
 
     @Override
-    public void onMouseClicked(EventHandler<MouseClickEvent> e) {
-        subscribe(mouseClicked.handlers, e);
+    public Subscription onMouseClicked(EventHandler<MouseClickEvent> e) {
+        return subscribe(mouseClicked.handlers, e);
     }
 
     @Override
-    public void onMouseMoved(EventHandler<MouseClickEvent> e) {
-        subscribe(mouseMoved.handlers, e);
+    public Subscription onMouseMoved(EventHandler<MouseClickEvent> e) {
+        return subscribe(mouseMoved.handlers, e);
     }
 
     @Override
-    public void onMouseDragged(EventHandler<MouseClickEvent> e) {
-        subscribe(mouseDragged.handlers, e);
+    public Subscription onMouseDragged(EventHandler<MouseClickEvent> e) {
+        return subscribe(mouseDragged.handlers, e);
     }
 
     @Override
@@ -144,13 +144,18 @@ public final class FXInput implements InputHandler, AutoCloseable {
      * @param handlers list of event handlers
      * @param handler  new handler to bind
      * @param <T>      type of LGL event
+     *
+     * @return reference to subscription, can be used to unsubscribe from this event
      */
-    private <T extends Event> void subscribe(CopyOnWriteArrayList<EventHandler<T>> handlers, EventHandler<T> handler) {
+    private <T extends Event> Subscription subscribe(
+            CopyOnWriteArrayList<EventHandler<T>> handlers, EventHandler<T> handler) {
         if (closed) throw new IllegalStateException("Input adapter is closed");
         if (handler == null) throw new NullPointerException("handler");
 
         handlers.add(handler);
-        subscriptions.add(new Subscription(() -> handlers.remove(handler)));
+        Subscription sub = new Subscription(() -> handlers.remove(handler));
+        subscriptions.add(sub);
+        return sub;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.logandhillon.logangamelib.api.input;
 
 import com.logandhillon.logangamelib.api.event.EventHandler;
+import com.logandhillon.logangamelib.api.event.Subscription;
 
 /**
  * An input handler is an interface with all input events that are passed from the engine to the game scene and
@@ -14,57 +15,73 @@ public interface InputHandler {
      * Called when a key is pressed.
      *
      * @param e details about the called event
+     *
+     * @return reference to subscription, can be used to unsubscribe from this event
      */
-    void onKeyDown(EventHandler<KeyboardEvent> e);
+    Subscription onKeyDown(EventHandler<KeyboardEvent> e);
 
     /**
      * Called when a key is released.
      *
      * @param e details about the called event
+     *
+     * @return reference to subscription, can be used to unsubscribe from this event
      */
-    void onKeyUp(EventHandler<KeyboardEvent> e);
+    Subscription onKeyUp(EventHandler<KeyboardEvent> e);
 
     /**
      * Called when a key is "typed," i.e. when a key combination results in a valid printable character.
      *
      * @param e details about the called event
+     *
+     * @return reference to subscription, can be used to unsubscribe from this event
      */
-    void onKeyTyped(EventHandler<KeyboardEvent> e);
+    Subscription onKeyTyped(EventHandler<KeyboardEvent> e);
 
     /**
      * Called when a mouse button is pressed anywhere on the screen.
      *
      * @param e details about the called event
+     *
+     * @return reference to subscription, can be used to unsubscribe from this event
      */
-    void onMouseDown(EventHandler<MouseClickEvent> e);
+    Subscription onMouseDown(EventHandler<MouseClickEvent> e);
 
     /**
      * Called when a mouse button is released anywhere on the screen.
      *
      * @param e details about the called event
+     *
+     * @return reference to subscription, can be used to unsubscribe from this event
      */
-    void onMouseUp(EventHandler<MouseClickEvent> e);
+    Subscription onMouseUp(EventHandler<MouseClickEvent> e);
 
     /**
      * Called when a mouse button is clicked (pressed and released) on the same entity.
      *
      * @param e details about the called event
+     *
+     * @return reference to subscription, can be used to unsubscribe from this event
      */
-    void onMouseClicked(EventHandler<MouseClickEvent> e);
+    Subscription onMouseClicked(EventHandler<MouseClickEvent> e);
 
     /**
      * Called when the mouse is moved.
      *
      * @param e details about the called event
+     *
+     * @return reference to subscription, can be used to unsubscribe from this event
      */
-    void onMouseMoved(EventHandler<MouseClickEvent> e);
+    Subscription onMouseMoved(EventHandler<MouseClickEvent> e);
 
     /**
      * Called when the mouse is moved while active, causing a "drag."
      *
      * @param e details about the called event
+     *
+     * @return reference to subscription, can be used to unsubscribe from this event
      */
-    void onMouseDragged(EventHandler<MouseClickEvent> e);
+    Subscription onMouseDragged(EventHandler<MouseClickEvent> e);
 
     /**
      * Unsubscribes from all input listeners, restoring this input handler to a fresh state.
