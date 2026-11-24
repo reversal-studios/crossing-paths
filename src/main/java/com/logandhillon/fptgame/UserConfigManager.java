@@ -14,6 +14,9 @@ import org.apache.logging.log4j.core.LoggerContext;
 public class UserConfigManager extends SaveFileManager<ConfigProto.UserConfig> {
     private static final Logger LOG = LoggerContext.getContext().getLogger(UserConfigManager.class);
 
+    /** increment this if a major change occurs and old user configs must be destroyed */
+    private static final int VERSION = 2;
+
     /**
      * Creates a new user config manager with a custom filepath for the save file: the file that is managed by this
      * instance.
@@ -35,7 +38,7 @@ public class UserConfigManager extends SaveFileManager<ConfigProto.UserConfig> {
     @Override
     protected ConfigProto.UserConfig getDefault() {
         return ConfigProto.UserConfig
-                .newBuilder()
+                .newBuilder().setVersion(VERSION)
                 .setName("Player")
                 .setKeyMoveLeft(KeyCode.A.name())
                 .setKeyMoveRight(KeyCode.D.name())
@@ -50,6 +53,11 @@ public class UserConfigManager extends SaveFileManager<ConfigProto.UserConfig> {
     @Override
     public ConfigProto.UserConfig load() {
         ConfigProto.UserConfig data = super.load();
+
+        if (data.getVersion() != VERSION) {
+            LOG.error("Save file version (v{}) mismatch! Replacing config with default.", data.getVersion());
+            data = this.save(getDefault());
+        }
 
         if (data.getName().isBlank()) {
             LOG.warn("Loaded name is blank, setting name to default (Player)");
