@@ -1,5 +1,6 @@
 package com.logandhillon.logangamelib.entity;
 
+import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.engine.UIScene;
 import javafx.scene.input.MouseEvent;
 
@@ -34,7 +35,7 @@ public abstract class Clickable extends BoundEntity<UIScene<?>> {
      *
      * @param e the mouse event provided by JavaFX
      */
-    public abstract void onClick(MouseEvent e);
+    public abstract void onClick(MouseClickEvent e);
 
     /**
      * Called when this element WAS active, but was clicked away from and thus is no longer active.
@@ -44,25 +45,25 @@ public abstract class Clickable extends BoundEntity<UIScene<?>> {
     /**
      * Called when the mouse is pressed (not clicked) on this Clickable.
      *
-     * @param e javafx mouse event
+     * @param e  mouse event
      *
      * @see MouseEvent#MOUSE_PRESSED
      */
-    public void onMouseDown(MouseEvent e) {}
+    public void onMouseDown(MouseClickEvent e) {}
 
     /**
      * Runs the mouse enter handler if it was set.
      *
      * @param e the mouse event provided by JavaFX
      */
-    public void onMouseEnter(MouseEvent e) {}
+    public void onMouseEnter(MouseClickEvent e) {}
 
     /**
      * Runs the mouse leave handler if it was set.
      *
      * @param e the mouse event provided by JavaFX
      */
-    public void onMouseLeave(MouseEvent e) {}
+    public void onMouseLeave(MouseClickEvent e) {}
 
     public float getWidth() {
         return w;

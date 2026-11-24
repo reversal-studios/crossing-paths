@@ -7,6 +7,7 @@ import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.networking.proto.ConfigProto;
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.fptgame.resource.Textures;
+import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.engine.MenuController;
@@ -15,7 +16,6 @@ import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.ui.ModalEntity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
 import javafx.geometry.VPos;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import lombok.Getter;
@@ -84,7 +84,7 @@ public class MainMenuContent implements MenuContent {
                 new Clickable(1209, 672, 59, 22) {
 
                     @Override
-                    public void onClick(MouseEvent e) {
+                    public void onClick(MouseClickEvent e) {
                         menu.setContent(new CreditsMenuContent(menu));
                     }
 

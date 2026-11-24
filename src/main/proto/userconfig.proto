@@ -4,6 +4,8 @@ option java_package = "com.logandhillon.fptgame.networking.proto";
 option java_outer_classname = "ConfigProto";
 
 message UserConfig {
+  int32 version = 9; // increment this if a major change occurs and old user configs must be destroyed
+
   string name = 1;
 
   string key_move_left = 2;
