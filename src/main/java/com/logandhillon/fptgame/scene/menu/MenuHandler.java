@@ -74,9 +74,9 @@ public class MenuHandler extends UIScene<GameHandler> {
      * @param content The content (entities) of any given menu
      */
     public void setContent(MenuContent content) {
+        this.content.close();
         this.content = content; // store ptr to content for future reference
         this.clearEntities(true, (e) -> true);
-        this.input().clear(); // remove all input listeners for new state
 
         for (Entity e: content.getEntities()) addEntity(e);
 

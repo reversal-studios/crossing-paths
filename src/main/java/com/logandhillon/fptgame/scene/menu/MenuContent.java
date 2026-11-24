@@ -8,7 +8,7 @@ import com.logandhillon.logangamelib.api.render.Renderer;
  *
  * @author Jack Ross
  */
-public interface MenuContent {
+public interface MenuContent extends AutoCloseable {
 
     /**
      * Allows {@link MenuHandler} to access and display the entities of a menu
@@ -24,6 +24,7 @@ public interface MenuContent {
      */
     default void onShow() {}
 
-    default void onDestroy(){}
+    @Override
+    default void close() {}
 }
 
