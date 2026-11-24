@@ -417,7 +417,7 @@ public enum KeyCode {
      * @return KeyCode with corresponding scancode, otherwise null
      */
     public static KeyCode of(int code) {
-        return lookup.get(code);
+        return lookup.getOrDefault(code, UNDEFINED);
     }
 
     /**
