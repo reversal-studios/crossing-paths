@@ -378,9 +378,9 @@ public enum KeyCode {
     }
 
     /**
-     * @return keycode name
+     * @return keycode name in a printable format
      */
-    public final String getName() {
+    public final String getPrintableName() {
         return name;
     }
 
