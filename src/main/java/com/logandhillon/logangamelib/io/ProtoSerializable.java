@@ -1,4 +1,4 @@
-package com.logandhillon.logangamelib.networking;
+package com.logandhillon.logangamelib.io;
 
 import com.google.protobuf.Message;
 

@@ -9,7 +9,7 @@ import com.logandhillon.fptgame.scene.LevelScene;
 import com.logandhillon.fptgame.scene.menu.LobbyGameContent;
 import com.logandhillon.fptgame.scene.menu.MenuContent;
 import com.logandhillon.fptgame.scene.menu.MenuHandler;
-import com.logandhillon.logangamelib.networking.PacketWriter;
+import com.logandhillon.logangamelib.io.PacketWriter;
 import javafx.application.Platform;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;

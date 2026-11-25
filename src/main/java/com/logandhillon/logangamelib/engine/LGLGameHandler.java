@@ -3,7 +3,7 @@ package com.logandhillon.logangamelib.engine;
 import com.logandhillon.logangamelib.api.platform.Window;
 import com.logandhillon.logangamelib.api.scene.SceneFactory;
 import com.logandhillon.logangamelib.api.scene.SceneHandle;
-import com.logandhillon.logangamelib.engine.disk.PathManager;
+import com.logandhillon.logangamelib.io.PathManager;
 import com.logandhillon.logangamelib.entity.ui.SplashScreenEntity;
 import com.logandhillon.logangamelib.javafx.FXSceneFactory;
 import com.logandhillon.logangamelib.resource.base.Colors;

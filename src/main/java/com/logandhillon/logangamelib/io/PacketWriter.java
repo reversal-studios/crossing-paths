@@ -1,4 +1,4 @@
-package com.logandhillon.logangamelib.networking;
+package com.logandhillon.logangamelib.io;
 
 import com.logandhillon.fptgame.networking.GamePacket;
 import org.apache.logging.log4j.Logger;

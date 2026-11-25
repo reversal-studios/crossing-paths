@@ -1,4 +1,4 @@
-package com.logandhillon.logangamelib.engine.disk;
+package com.logandhillon.logangamelib.io;
 
 import com.logandhillon.logangamelib.engine.LGLGameHandler;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +17,6 @@ import java.util.Optional;
  *
  * @author Logan Dhillon
  */
-@SuppressWarnings("ClassCanBeRecord")
 public class PathManager {
     private static final Logger LOG = LoggerContext.getContext().getLogger(PathManager.class);
 

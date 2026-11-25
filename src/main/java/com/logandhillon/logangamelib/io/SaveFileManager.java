@@ -1,4 +1,4 @@
-package com.logandhillon.logangamelib.engine.disk;
+package com.logandhillon.logangamelib.io;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
@@ -99,7 +99,7 @@ public abstract class SaveFileManager<M extends Message> {
     protected abstract M getDefault();
 
     /**
-     * Unsafe method to build a protobuf message to a proper message, then cast it to the generic type.
+     * Builds a working protobuf into a message.
      */
     @SuppressWarnings("unchecked")
     private M build(Message.Builder builder) {

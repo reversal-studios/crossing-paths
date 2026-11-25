@@ -2,7 +2,7 @@ package com.logandhillon.fptgame;
 
 import com.logandhillon.fptgame.networking.proto.ConfigProto;
 import com.logandhillon.logangamelib.api.input.KeyCode;
-import com.logandhillon.logangamelib.engine.disk.SaveFileManager;
+import com.logandhillon.logangamelib.io.SaveFileManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
