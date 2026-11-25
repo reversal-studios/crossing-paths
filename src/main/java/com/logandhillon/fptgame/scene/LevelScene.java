@@ -12,7 +12,6 @@ import com.logandhillon.logangamelib.api.input.KeyCode;
 import com.logandhillon.logangamelib.api.render.Color;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.entity.Renderable;
-import javafx.scene.Scene;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -55,7 +54,7 @@ public abstract class LevelScene extends GameScene<GameHandler> {
     }
 
     @Override
-    public void onBuild(Scene scene) {
+    protected void onStart() {
         // TODO 2026-01-18 23:17: hey isn't this a debug keybind why is this still here
         // restart on R pressed
         input().onKeyDown(e -> {

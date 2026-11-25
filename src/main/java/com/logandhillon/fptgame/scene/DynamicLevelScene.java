@@ -10,7 +10,6 @@ import com.logandhillon.fptgame.networking.PeerMovementPoller;
 import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.fptgame.networking.proto.PlayerProto;
 import com.logandhillon.logangamelib.engine.GameScene;
-import javafx.scene.Scene;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -51,7 +50,7 @@ public class DynamicLevelScene extends LevelScene {
     }
 
     @Override
-    public void onBuild(Scene scene) {
+    protected void onStart() {
         addEntity(other);
         addEntity(self); // render self on top of other, we should always be visible first.
     }

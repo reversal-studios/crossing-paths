@@ -5,7 +5,6 @@ import com.logandhillon.fptgame.entity.player.ControllablePlayerEntity;
 import com.logandhillon.fptgame.entity.player.PlayerEntity;
 import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
-import javafx.scene.Scene;
 
 /**
  * Basic game scene with a player that can run around and interact with physics objects; to aid development.
@@ -21,7 +20,7 @@ public class SingleplayerGameScene extends LevelScene {
     }
 
     @Override
-    public void onBuild(Scene scene) {
+    protected void onStart() {
         addEntity(self);
 
         addEntity(new TextEntity.Builder(10, 30)
