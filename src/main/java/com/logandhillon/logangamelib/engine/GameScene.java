@@ -122,9 +122,8 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
     /**
      * Called to discard this scene (i.e., stop its lifecycle, etc.)
      *
-     * @param scene the JavaFX scene that is this scene is being removed from. use this for detaching events, etc.
      */
-    public void discard(Scene scene) {
+    public void discard() {
         LOG.debug("Discarding scene {}", this);
 
         entities.clear();
@@ -203,7 +202,6 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
     public void killEntities() {
         entities.clear();
     }
-
 
     /**
      * Removes the given entity from the scene

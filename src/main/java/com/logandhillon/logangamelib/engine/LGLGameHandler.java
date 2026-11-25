@@ -184,7 +184,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         fadeOut.setToValue(1);
 
         fadeOut.setOnFinished(e -> {
-            if (oldScene != null) oldScene.discard(currentScene);
+            if (oldScene != null) oldScene.discard();
 
             // Switch scene
             Scene newFxScene = newScene.build(self());

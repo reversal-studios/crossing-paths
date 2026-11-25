@@ -10,8 +10,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.function.Predicate;
 
 /**
  * A UI scene is a type of {@link GameScene} that listens to the cursor and registers events handlers for
@@ -55,44 +53,20 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
     }
 
     @Override
-    public void discard(Scene scene) {
-        super.discard(scene);
+    protected void onEntityAdded(Entity entity) {
+        super.onEntityAdded(entity);
 
-        // clear stored clickables to avoid memory leaks / stale state
-        for (Clickable c: clickables.keySet()) c.onDestroy();
-        clickables.clear();
-        cachedClickables = new Clickable[0];
-    }
-
-    @Override
-    public void clearEntities(boolean discard, Predicate<Entity> predicate) {
-        super.clearEntities(discard, predicate);
-
-        // safe removal
-        for (Iterator<Clickable> it = clickables.keySet().iterator(); it.hasNext(); ) {
-            Entity e = it.next();
-            if (predicate.test(e)) {
-                it.remove(); // safe removal
-                if (discard) e.onDestroy();
-            }
+        if (entity instanceof Clickable clickable) {
+            clickables.put(clickable, new ClickableFlags());
+            cachedClickables = clickables.keySet().toArray(new Clickable[0]);
         }
-        LOG.debug("Safely removed all matching Clickables from this UI scene");
-
-        cachedClickables = clickables.keySet().toArray(new Clickable[0]);
-        LOG.debug("Reloaded clickable cache");
     }
 
-    /**
-     * Works the same as the regular {@link GameScene}, but also appends {@link Clickable} entities to a separate list,
-     * that will get special treatment in the scene lifecycle to trigger mouse events.
-     *
-     * @param e the entity or clickable to append.
-     */
     @Override
-    public void addEntity(Entity e) {
-        super.addEntity(e);
-        if (e instanceof Clickable) clickables.put((Clickable)e, new ClickableFlags());
-        if (e instanceof Clickable) {
+    protected void onEntityRemoved(Entity entity) {
+        super.onEntityRemoved(entity);
+
+        if (entity instanceof Clickable clickable && clickables.remove(clickable) != null) {
             cachedClickables = clickables.keySet().toArray(new Clickable[0]);
         }
     }
