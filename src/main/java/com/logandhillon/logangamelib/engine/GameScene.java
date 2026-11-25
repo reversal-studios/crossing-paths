@@ -115,7 +115,7 @@ public abstract class GameScene<H> {
     /**
      * Removes all entities from this scene.
      */
-    public void killEntities() {
+    public void clearEntities() {
         entities.clear();
     }
 

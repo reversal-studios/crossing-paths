@@ -90,13 +90,13 @@ final class EntityManager {
     }
 
     /**
-     * Marks all entities for removal.
+     * Immediately removes all entries from the active list.
      *
-     * @see kill
+     * @see remove
      */
     void clear() {
         try (var ignored = pass()) {
-            for (Entry e: entries) e.entity.kill();
+            for (Entry e: entries) remove(e);
         }
     }
 

@@ -74,7 +74,7 @@ public class MenuHandler extends UIScene<GameHandler> {
     public void setContent(MenuContent content) {
         this.content.close();
         this.content = content; // store ptr to content for future reference
-        this.killEntities();
+        this.clearEntities();
 
         for (Entity e: content.getEntities()) addEntity(e);
 
