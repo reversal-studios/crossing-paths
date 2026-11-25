@@ -1,7 +1,11 @@
 package com.logandhillon.logangamelib.engine;
 
+import com.logandhillon.logangamelib.api.platform.Window;
+import com.logandhillon.logangamelib.api.scene.SceneFactory;
+import com.logandhillon.logangamelib.api.scene.SceneHandle;
 import com.logandhillon.logangamelib.engine.disk.PathManager;
 import com.logandhillon.logangamelib.entity.ui.SplashScreenEntity;
+import com.logandhillon.logangamelib.javafx.FXSceneFactory;
 import com.logandhillon.logangamelib.resource.base.Colors;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -20,9 +24,10 @@ import java.util.Optional;
 
 /**
  * Abstract game handler for the logangamelib game engine.
+ * <p>
+ * This class will be the entrypoint of your game, handling all primary logic.
  *
  * @author Logan Dhillon
- * @implNote this class shall be the entrypoint of your game, handling all primary logic.
  */
 public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Application {
     private static final Logger LOG = LoggerContext.getContext().getLogger(LGLGameHandler.class);
@@ -33,12 +38,15 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
     private static LGLGameHandler<?> instance;
     private static boolean           isRegistered = false;
 
-    private final PathManager pathMgr;
+    private final PathManager         pathMgr;
+    private final SceneFactory<Scene> sceneFactory = new FXSceneFactory();
 
-    protected Stage        stage;
-    protected GameScene<H> activeScene;
+    protected Stage              stage;
+    protected GameScene<H>       activeScene;
+    private   SceneHandle<Scene> activeSceneHandle;
+
     @Getter
-    protected boolean      debugMode;
+    protected boolean debugMode;
 
     public LGLGameHandler() {
         if (!isRegistered) {
@@ -63,6 +71,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         stage.setTitle(GameMeta.get().gameName);
         stage.setOnCloseRequest(e -> {
             LOG.info("Received window close request");
+            if (activeSceneHandle != null) activeSceneHandle.close();
             onShutdown();
             Platform.exit();
         });
@@ -106,6 +115,13 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
     protected abstract GameScene<H> onStart(Stage stage);
 
     /**
+     * @return the logical canvas configuration used by the active scene.
+     */
+    protected Window getWindow() {
+        return Window.DEFAULT;
+    }
+
+    /**
      * Runs when this game is shutdown or otherwise closed.
      * <p>
      * Use this method to close/terminate any threads, handle last-minute clean up, etc.
@@ -144,7 +160,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
      * @param scene the GameScene to switch
      */
     public void setScene(GameScene<H> scene) {
-        activeScene = transitionScene(stage, activeScene, scene);
+        activeScene = transitionScene(stage, scene);
     }
 
     /**
@@ -152,26 +168,31 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
      * {@link Stage}
      *
      * @param stage    the javafx application stage
-     * @param oldScene the previously active scene that will be discarded
      * @param newScene the new scene that will be built and displayed
      *
      * @return a pointer to the {@link GameScene} that is now displayed
      */
-    private GameScene<H> transitionScene(Stage stage, GameScene<H> oldScene, GameScene<H> newScene) {
+    private GameScene<H> transitionScene(Stage stage, GameScene<H> newScene) {
         LOG.info("Switching scene to {}", newScene);
 
         Scene currentScene = stage.getScene();
+        SceneHandle<Scene> oldHandle = activeSceneHandle;
         Pane overlayPane = new Pane();
         overlayPane.setPrefSize(stage.getWidth(), stage.getHeight());
 
-        Rectangle fadeRect = new Rectangle(stage.getWidth(), stage.getHeight(),
-                                           new javafx.scene.paint.Color(Colors.GENERIC_BG.red(), Colors.GENERIC_BG.green(), Colors.GENERIC_BG.blue(), Colors.GENERIC_BG.alpha()));
+        Rectangle fadeRect = new Rectangle(
+                stage.getWidth(), stage.getHeight(),
+                new javafx.scene.paint.Color(
+                        Colors.GENERIC_BG.red(), Colors.GENERIC_BG.green(), Colors.GENERIC_BG.blue(),
+                        Colors.GENERIC_BG.alpha()));
         fadeRect.setOpacity(0);
         overlayPane.getChildren().add(fadeRect);
 
         if (currentScene == null) {
             // no previous scene, just immediately show the new one
-            stage.setScene(newScene.build(self()));
+            SceneHandle<Scene> newHandle = buildScene(newScene);
+            activeSceneHandle = newHandle;
+            stage.setScene(newHandle.surface());
             return newScene;
         }
 
@@ -184,10 +205,12 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         fadeOut.setToValue(1);
 
         fadeOut.setOnFinished(e -> {
-            if (oldScene != null) oldScene.discard();
+            if (oldHandle != null) oldHandle.close();
 
             // Switch scene
-            Scene newFxScene = newScene.build(self());
+            SceneHandle<Scene> newHandle = buildScene(newScene);
+            activeSceneHandle = newHandle;
+            Scene newFxScene = newHandle.surface();
             stage.setScene(newFxScene);
 
             // put the rect on the new scene too...
@@ -207,6 +230,11 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         fadeOut.play();
 
         return newScene;
+    }
+
+    private SceneHandle<Scene> buildScene(GameScene<H> scene) {
+        scene.initialize(self());
+        return sceneFactory.build(scene, getWindow());
     }
 
     @SuppressWarnings("unchecked")
