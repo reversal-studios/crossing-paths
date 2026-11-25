@@ -110,7 +110,7 @@ public class LobbyGameContent implements MenuContent {
     public void clearPlayers() {
         LOG.debug("Clearing player list");
         playerCount = 0;
-        menu.clearEntities(true, PlayerIconEntity.class::isInstance);
+        menu.killEntities(PlayerIconEntity.class::isInstance);
         startButton.setFlags(false, true);
         isStartingAllowed = false;
         if (isHosting) {

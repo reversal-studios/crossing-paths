@@ -16,7 +16,6 @@ import javafx.scene.paint.Color;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
-import java.util.*;
 import java.util.function.Predicate;
 
 import static com.logandhillon.fptgame.GameHandler.*;
@@ -25,7 +24,7 @@ import static com.logandhillon.fptgame.GameHandler.*;
  * A GameScene is the lowest-level of the engine; controlling the game's lifecycle, rendering, and creating a game loop.
  * It represents a "scene" of the game, that being a section of the game that is related (e.g. a game level, the main
  * menu, etc.) GameScenes are rendered with {@link GameScene#build(LGLGameHandler)}, which prepares the engine code for
- * JavaFX, allowing it to be executed and ran.
+ * the backend, allowing it to be executed and ran.
  *
  * @param <H> expected type of {@link LGLGameHandler} that this game scene shall work with.
  *
@@ -34,14 +33,12 @@ import static com.logandhillon.fptgame.GameHandler.*;
 public abstract class GameScene<H extends LGLGameHandler<H>> {
     private static final Logger LOG = LoggerContext.getContext().getLogger(GameScene.class);
 
-    private final List<Entity>          entities          = new ArrayList<>();
-    private final Queue<Entity>         deathrow          = new LinkedList<>();
-    private final List<CollisionEntity> collisionEntities = new ArrayList<>();
+    private final EntityManager entities = new EntityManager(this);
 
     private AnimationTimer lifecycle;
     private H              game;
     private Scene          scene;
-    private FXInput   input;
+    private FXInput        input;
 
     /**
      * Do not instantiate this class.
@@ -55,19 +52,16 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
      * entities.
      */
     protected void onUpdate(float dt) {
-        for (Entity e: entities)
-            e.onUpdate(dt);
+        entities.update(dt);
     }
 
     /**
      * Called every tick to render the scene. This implementation renders all entities.
      *
-     * @param g the graphical context to render to.
+     * @param renderer the graphical context to render to.
      */
-    protected void render(Renderer g) {
-        for (Entity e: entities) {
-            e.render(g);
-        }
+    protected void render(Renderer renderer) {
+        entities.render(renderer);
     }
 
     /**
@@ -95,14 +89,7 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
 
                 onUpdate(dt);
                 render(g);
-
-                // kill entities on deathrow AFTER all updates have finished
-                while (!deathrow.isEmpty()) {
-                    Entity e = deathrow.poll();
-                    if (!entities.remove(e)) continue;
-                    if (e instanceof CollisionEntity ce) collisionEntities.remove(ce);
-                    e.onDestroy();
-                }
+                entities.flush();
             }
         };
         lifecycle.start();
@@ -140,10 +127,7 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
     public void discard(Scene scene) {
         LOG.debug("Discarding scene {}", this);
 
-        // schedule all entities for destruction
-        for (Entity e: entities) e.onDestroy();
         entities.clear();
-
         lifecycle.stop();
         input.close();
     }
@@ -202,47 +186,30 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
      */
     public void addEntity(Entity e) {
         entities.add(e);
-        if (e instanceof CollisionEntity) collisionEntities.add((CollisionEntity)e);
-        e.onAttach(this);
     }
 
     /**
-     * Removes all entities from this modal that match the predicate
+     * Removes all entities from this scene that match the filter
      *
-     * @param discard   if the entities should also be discarded (and trigger {@link Entity#onDestroy()}
-     * @param predicate the predicate to only remove entities that match it.
+     * @param filter remove entities that match this filter
      */
-    public void clearEntities(boolean discard, Predicate<Entity> predicate) {
-        for (Iterator<Entity> it = entities.iterator(); it.hasNext(); ) {
-            var e = it.next();
-            if (predicate.test(e)) {
-                it.remove(); // safe removal
-                if (discard) e.onDestroy();
-            }
-        }
-        LOG.debug("Successfully removed all matching entities from this scene");
-
-        for (Iterator<CollisionEntity> it = collisionEntities.iterator(); it.hasNext(); ) {
-            var e = it.next();
-            if (predicate.test(e)) {
-                it.remove(); // safe removal
-                if (discard) e.onDestroy();
-            }
-        }
-        LOG.debug("Successfully removed all matching collision entities from this scene");
+    public void killEntities(Predicate<Entity> filter) {
+        entities.killIf(filter);
     }
+
+    /**
+     * Removes all entities from this scene.
+     */
+    public void killEntities() {
+        entities.clear();
+    }
+
 
     /**
      * Removes the given entity from the scene
      */
     public void killEntity(Entity entity) {
-        if (entity == null) throw new NullPointerException("Cannot kill null entity");
-        if (deathrow.contains(entity)) {
-            LOG.warn("{} already on deathrow", entity);
-            return;
-        }
-
-        deathrow.add(entity);
+        entities.kill(entity);
     }
 
     /**
@@ -279,21 +246,17 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
     }
 
     /**
-     * Checks if an entity is colliding with ANY other entity, given a predicate
+     * Checks if an entity is colliding with ANY other entity, given a filter
      *
-     * @param caller    entity to check collisions for
-     * @param predicate when to consider a collision valid
+     * @param caller entity to check collisions for
+     * @param filter when to consider a collision valid
      *
      * @return entity that caller is colliding with, or null
      *
      * @see GameScene#checkCollision(CollisionEntity, CollisionEntity)
      */
-    public CollisionEntity getEntityCollision(CollisionEntity caller, Predicate<CollisionEntity> predicate) {
-        for (CollisionEntity e: collisionEntities) {
-            if (e == caller) continue; // skip the caller
-            if (predicate.test(e) && checkCollision(caller, e)) return e; // return if collision is found
-        }
-        return null; // no collision found
+    public CollisionEntity getEntityCollision(CollisionEntity caller, Predicate<CollisionEntity> filter) {
+        return entities.findCollision(e -> e != caller && filter.test(e) && checkCollision(caller, e));
     }
 
     /**
@@ -306,31 +269,23 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
      * @see GameScene#checkCollision(CollisionEntity, CollisionEntity)
      */
     public CollisionEntity getCollisionAt(float x, float y, float w, float h, CollisionEntity caller) {
-        for (CollisionEntity e: collisionEntities) {
-            if (e == caller) continue; // skip the caller
-            if (checkCollision(x, y, w, h, e)) return e;
-        }
-        return null; // no collision found
+        return entities.findCollision(e -> e != caller && checkCollision(x, y, w, h, e));
     }
 
     /**
      * Checks a given (x,y) and size for collisions and returns the entity if there is one that also matches the
      * predicate
      *
-     * @param caller          the entity that is checking for collisions (can be null)
-     * @param entityPredicate only check for collisions against entities that match this predicate
+     * @param caller the entity that is checking for collisions (can be null)
+     * @param filter only check for collisions against entities that match this predicate
      *
      * @return entity that target is colliding with, or null
      *
      * @see GameScene#checkCollision(CollisionEntity, CollisionEntity)
      */
-    public CollisionEntity getCollisionIf(float x, float y, float w, float h, CollisionEntity caller,
-                                          Predicate<CollisionEntity> entityPredicate) {
-        for (CollisionEntity e: collisionEntities) {
-            if (e == caller) continue; // skip the caller
-            if (entityPredicate.test(e) && checkCollision(x, y, w, h, e)) return e;
-        }
-        return null; // no collision found
+    public CollisionEntity getCollisionIf(float x, float y, float w, float h,
+                                          CollisionEntity caller, Predicate<CollisionEntity> filter) {
+        return entities.findCollision(e -> e != caller && filter.test(e) && checkCollision(x, y, w, h, e));
     }
 
     protected H getParent() {
@@ -340,4 +295,18 @@ public abstract class GameScene<H extends LGLGameHandler<H>> {
     public InputHandler input() {
         return input;
     }
+
+    /**
+     * Called when an entity is added to the scene.
+     *
+     * @param e entity that was added
+     */
+    protected void onEntityAdded(Entity e) {}
+
+    /**
+     * Called when an entity is removed from the scene.
+     *
+     * @param e entity that was removed
+     */
+    protected void onEntityRemoved(Entity e) {}
 }
