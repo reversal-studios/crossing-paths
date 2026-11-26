@@ -32,6 +32,7 @@ final class EntityManager implements AutoCloseable {
     private final GameScene<?> owner;
 
     private int     passDepth;
+    private Thread  passOwner;
     private boolean needsCompaction;
     private boolean open = true;
 
@@ -241,17 +242,55 @@ final class EntityManager implements AutoCloseable {
     }
 
     /**
-     * A pass is a safe way to interact with  {@link #entries}, ensuring the list is {@link #compact compacted} after a pass finishes.
+     * A pass is a safe way to interact with  {@link #entries}, ensuring the list is {@link #compact compacted} after a
+     * pass finishes.
+     * <p>
+     * Passes are synchronous and must occur on one thread at a time. If another pass is requested from another thread,
+     * it will have to wait for the pass on the first thread to finish.
      *
      * @return deferable method to compact entries if needed
      *
+     * @throws IllegalStateException thrown if thread is interrupted while waiting for another thread to finish their
+     *                               pass
      * @apiNote Should be run in a try-with-resources every time {@link #entries} is accessed.
      */
     public synchronized Deferrable pass() {
+        Thread current = Thread.currentThread();
+        while (passDepth > 0 && passOwner != current) {
+            try {
+                wait();
+            } catch (InterruptedException ex) {
+                current.interrupt();
+                throw new IllegalStateException("Interrupted while waiting for entity manager pass", ex);
+            }
+        }
+
+        if (passDepth == 0)
+            passOwner = current;
         passDepth++;
-        return () -> {
-            if (--passDepth == 0 && needsCompaction)
-                compact();
+
+        return new Deferrable() {
+            private boolean closed;
+
+            @Override
+            public void close() {
+                synchronized (EntityManager.this) {
+                    if (closed) return;
+
+                    if (passOwner != current)
+                        throw new IllegalStateException("Entity manager pass must be closed by its owning thread");
+
+                    closed = true;
+                    if (--passDepth == 0) {
+                        try {
+                            if (needsCompaction) compact();
+                        } finally {
+                            passOwner = null;
+                            EntityManager.this.notifyAll();
+                        }
+                    }
+                }
+            }
         };
     }
 
