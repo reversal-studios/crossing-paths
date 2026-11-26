@@ -3,8 +3,8 @@ package com.logandhillon.logangamelib.engine;
 import com.logandhillon.logangamelib.api.platform.Window;
 import com.logandhillon.logangamelib.api.scene.SceneFactory;
 import com.logandhillon.logangamelib.api.scene.SceneHandle;
-import com.logandhillon.logangamelib.io.PathManager;
 import com.logandhillon.logangamelib.entity.ui.SplashScreenEntity;
+import com.logandhillon.logangamelib.io.PathManager;
 import com.logandhillon.logangamelib.javafx.FXSceneFactory;
 import com.logandhillon.logangamelib.resource.base.Colors;
 import javafx.animation.FadeTransition;
@@ -18,6 +18,7 @@ import javafx.util.Duration;
 import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
+import org.jspecify.annotations.NonNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
@@ -182,7 +183,6 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         LOG.info("Switching scene to {}", newScene);
 
         Scene currentScene = stage.getScene();
-        SceneHandle<Scene> oldHandle = activeSceneHandle;
         Pane overlayPane = new Pane();
         overlayPane.setPrefSize(stage.getWidth(), stage.getHeight());
 
@@ -206,12 +206,28 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         ((Pane)currentScene.getRoot()).getChildren().add(overlayPane);
 
         // fade the rect to black
+        FadeTransition fadeOut = fadeOut(stage, newScene, fadeRect);
+        fadeOut.play();
+
+        return newScene;
+    }
+
+    /**
+     * Builds a fade out transition to switch to a new game scene.
+     *
+     * @param stage    stage where transition will take place
+     * @param newScene new scene to transition to
+     * @param fadeRect FX rect object to fade
+     *
+     * @return FX transition that switches scenes
+     */
+    private @NonNull FadeTransition fadeOut(Stage stage, GameScene<H> newScene, Rectangle fadeRect) {
         FadeTransition fadeOut = new FadeTransition(Duration.millis(FADE_TIME), fadeRect);
         fadeOut.setFromValue(0);
         fadeOut.setToValue(1);
 
         fadeOut.setOnFinished(e -> {
-            if (oldHandle != null) oldHandle.close();
+            if (activeSceneHandle != null) activeSceneHandle.close();
 
             // Switch scene
             SceneHandle<Scene> newHandle = buildScene(newScene);
@@ -232,10 +248,7 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
             });
             fadeIn.play();
         });
-
-        fadeOut.play();
-
-        return newScene;
+        return fadeOut;
     }
 
     private SceneHandle<Scene> buildScene(GameScene<H> scene) {
