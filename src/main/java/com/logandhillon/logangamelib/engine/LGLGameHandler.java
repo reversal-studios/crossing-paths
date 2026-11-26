@@ -71,9 +71,15 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         stage.setTitle(GameMeta.get().gameName);
         stage.setOnCloseRequest(e -> {
             LOG.info("Received window close request");
-            if (activeSceneHandle != null) activeSceneHandle.close();
-            onShutdown();
-            Platform.exit();
+            try {
+                if (activeSceneHandle != null) activeSceneHandle.close();
+            } finally {
+                try {
+                    onShutdown();
+                } finally {
+                    Platform.exit();
+                }
+            }
         });
 
         String flag = System.getenv("LGL_DEBUG_MODE");
