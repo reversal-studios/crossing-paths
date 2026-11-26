@@ -15,7 +15,7 @@ public record Window(int width, int height, float scalingTolerance) {
     public Window {
         if (width <= 0) throw new IllegalArgumentException("Scene width must be positive");
         if (height <= 0) throw new IllegalArgumentException("Scene height must be positive");
-        if (scalingTolerance < 0 || scalingTolerance >= 1)
+        if (scalingTolerance < 0 || scalingTolerance >= 1 || Float.isNaN(scalingTolerance))
             throw new IllegalArgumentException("Scaling tolerance must be in [0, 1)");
     }
 
