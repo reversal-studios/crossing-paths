@@ -74,6 +74,8 @@ final class EntityManager implements AutoCloseable {
                     ex.addSuppressed(cleanupFailure);
                 }
             }
+            if (passDepth == 0 && needsCompaction)
+                compact();
             throw ex;
         }
     }
@@ -208,7 +210,17 @@ final class EntityManager implements AutoCloseable {
             return;
 
         removeMembership(entity);
-        owner.onEntityRemoved(entity);
+        try {
+            owner.onEntityRemoved(entity);
+        } catch (RuntimeException removalFailure) {
+            try {
+                entity.onDestroy();
+            } catch (RuntimeException destroyFailure) {
+                if (destroyFailure != removalFailure)
+                    removalFailure.addSuppressed(destroyFailure);
+            }
+            throw removalFailure;
+        }
 
         entity.onDestroy();
     }
@@ -229,7 +241,7 @@ final class EntityManager implements AutoCloseable {
     }
 
     /**
-     * A pass is a safe way to interact with  {@link #entries}, ensuring the list is compacted after a pass finishes.
+     * A pass is a safe way to interact with  {@link #entries}, ensuring the list is {@link #compact compacted} after a pass finishes.
      *
      * @return deferable method to compact entries if needed
      *
@@ -238,19 +250,24 @@ final class EntityManager implements AutoCloseable {
     public Deferrable pass() {
         passDepth++;
         return () -> {
-            if (--passDepth == 0 && needsCompaction) {
-                // removes stale entries in-place
-                int write = 0;
-
-                for (int read = 0; read < entries.size(); read++) {
-                    Entry entry = entries.get(read);
-                    if (active.get(entry.entity) == entry)
-                        entries.set(write++, entry);
-                }
-
-                entries.subList(write, entries.size()).clear();
-                needsCompaction = false;
-            }
+            if (--passDepth == 0 && needsCompaction)
+                compact();
         };
+    }
+
+    /**
+     * Compacts the entry list, removing stale and retired entries from the list in-place.
+     */
+    private void compact() {
+        int write = 0;
+
+        for (int read = 0; read < entries.size(); read++) {
+            Entry entry = entries.get(read);
+            if (active.get(entry.entity) == entry)
+                entries.set(write++, entry);
+        }
+
+        entries.subList(write, entries.size()).clear();
+        needsCompaction = false;
     }
 }
