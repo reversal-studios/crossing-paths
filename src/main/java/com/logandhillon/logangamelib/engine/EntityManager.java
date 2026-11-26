@@ -56,11 +56,14 @@ final class EntityManager {
             owner.onEntityAdded(entity);
             entity.onAttach(owner);
         } catch (RuntimeException ex) {
-            removeMembership(entity);
-            try {
-                owner.onEntityRemoved(entity);
-            } catch (RuntimeException cleanupFailure) {
-                ex.addSuppressed(cleanupFailure);
+            // remove entity if entity is active
+            if (active.get(entity) == entry) {
+                removeMembership(entity);
+                try {
+                    owner.onEntityRemoved(entity);
+                } catch (RuntimeException cleanupFailure) {
+                    ex.addSuppressed(cleanupFailure);
+                }
             }
             throw ex;
         }
@@ -85,7 +88,15 @@ final class EntityManager {
      */
     void killIf(@NonNull Predicate<Entity> filter) {
         try (var ignored = pass()) {
-            for (Entry e: entries) if (filter.test(e.entity)) e.entity.kill();
+            for (Entry e: entries) {
+                // skip retired entries
+                if (active.get(e.entity) != e)
+                    continue;
+
+                // check if entry is still active after testing filter (i.e. side effects)
+                if (filter.test(e.entity) && active.get(e.entity) == e)
+                    kill(e.entity);
+            }
         }
     }
 
