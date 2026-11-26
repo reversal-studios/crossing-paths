@@ -50,7 +50,7 @@ final class EntityManager implements AutoCloseable {
      * @throws IllegalStateException    attempted to add entity while manager wasn't accepting additions; i.e., scene
      *                                  wasn't running
      */
-    void add(@NonNull Entity entity) {
+    synchronized void add(@NonNull Entity entity) {
         if (!open)
             throw new IllegalStateException("Attempted to add entity to closed manager; is the scene running?");
 
@@ -85,7 +85,7 @@ final class EntityManager implements AutoCloseable {
      *
      * @param entity entity to kill/mark for removal
      */
-    void kill(@NonNull Entity entity) {
+    synchronized void kill(@NonNull Entity entity) {
         if (active.containsKey(entity) && queuedForKill.add(entity))
             pendingKills.add(entity);
     }
@@ -97,7 +97,7 @@ final class EntityManager implements AutoCloseable {
      *
      * @see kill
      */
-    void killIf(@NonNull Predicate<Entity> filter) {
+    synchronized void killIf(@NonNull Predicate<Entity> filter) {
         try (var ignored = pass()) {
             for (Entry e: entries) {
                 // skip retired entries
@@ -116,7 +116,7 @@ final class EntityManager implements AutoCloseable {
      *
      * @see remove
      */
-    void clear() {
+    synchronized void clear() {
         try (var ignored = pass()) {
             for (Entry e: List.copyOf(entries)) remove(e);
         }
@@ -129,7 +129,7 @@ final class EntityManager implements AutoCloseable {
      * @see clear clearing the manager without closing
      */
     @Override
-    public void close() {
+    public synchronized void close() {
         open = false;
         clear();
     }
@@ -139,7 +139,7 @@ final class EntityManager implements AutoCloseable {
      *
      * @param dt delta time between game ticks
      */
-    void update(float dt) {
+    synchronized void update(float dt) {
         try (var ignored = pass()) {
             for (Entry entry: entries) {
                 if (active.get(entry.entity) == entry)
@@ -153,7 +153,7 @@ final class EntityManager implements AutoCloseable {
      *
      * @param renderer logangamelib render API
      */
-    void render(Renderer renderer) {
+    synchronized void render(Renderer renderer) {
         try (var ignored = pass()) {
             for (Entry entry: entries) {
                 if (active.get(entry.entity) == entry)
@@ -165,7 +165,7 @@ final class EntityManager implements AutoCloseable {
     /**
      * Flushes the removal queue, removing all entities queued for removal from this manager.
      */
-    void flush() {
+    synchronized void flush() {
         try (var ignored = pass()) {
             Entity entity;
             while ((entity = pendingKills.poll()) != null) {
@@ -186,7 +186,7 @@ final class EntityManager implements AutoCloseable {
      *
      * @return matching collision entities
      */
-    CollisionEntity findCollision(@NonNull Predicate<CollisionEntity> filter) {
+    synchronized CollisionEntity findCollision(@NonNull Predicate<CollisionEntity> filter) {
         try (var ignored = pass()) {
             for (Entry entry: entries) {
                 if (active.get(entry.entity) != entry || !(entry.entity instanceof CollisionEntity collision)) continue;
@@ -247,7 +247,7 @@ final class EntityManager implements AutoCloseable {
      *
      * @apiNote Should be run in a try-with-resources every time {@link #entries} is accessed.
      */
-    public Deferrable pass() {
+    public synchronized Deferrable pass() {
         passDepth++;
         return () -> {
             if (--passDepth == 0 && needsCompaction)
