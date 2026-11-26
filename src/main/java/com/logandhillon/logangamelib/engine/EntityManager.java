@@ -12,10 +12,13 @@ import java.util.function.Predicate;
 /**
  * Manages a group of entities and acts as a single source of truth for entity interaction. Entities should not be
  * managed without using this class, as this class handles safe/optimized entity management.
+ * <p>
+ * An entity manager can be closed to stop accepting new entities using the {@link #close()} method. This operation is
+ * irreversible.
  *
  * @author Logan Dhillon
  */
-final class EntityManager {
+final class EntityManager implements AutoCloseable {
     /**
      * Holds an instance of an entity, used to compare entities to their identity.
      */
@@ -30,6 +33,7 @@ final class EntityManager {
 
     private int     passDepth;
     private boolean needsCompaction;
+    private boolean open = true;
 
     EntityManager(@NonNull GameScene<?> owner) {
         this.owner = owner;
@@ -43,8 +47,13 @@ final class EntityManager {
      *
      * @throws IllegalArgumentException attempted to add already attached entity
      * @throws RuntimeException         exception thrown during entity attachment.
+     * @throws IllegalStateException    attempted to add entity while manager wasn't accepting additions; i.e., scene
+     *                                  wasn't running
      */
     void add(@NonNull Entity entity) {
+        if (!open)
+            throw new IllegalStateException("Attempted to add entity to closed manager; is the scene running?");
+
         if (active.containsKey(entity))
             throw new IllegalArgumentException("Entity is already attached to this scene");
 
@@ -107,8 +116,20 @@ final class EntityManager {
      */
     void clear() {
         try (var ignored = pass()) {
-            for (Entry e: entries) remove(e);
+            for (Entry e: List.copyOf(entries)) remove(e);
         }
+    }
+
+    /**
+     * Closes this entity manager: stops accepting new entities and clears the entity list. This operation is
+     * irreversible.
+     *
+     * @see clear clearing the manager without closing
+     */
+    @Override
+    public void close() {
+        open = false;
+        clear();
     }
 
     /**

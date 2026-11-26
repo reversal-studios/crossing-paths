@@ -56,7 +56,7 @@ public abstract class GameScene<H> {
         if (stopped) return;
         stopped = true;
         try {
-            entities.clear();
+            entities.close();
             entities.flush();
         } finally {
             try {
