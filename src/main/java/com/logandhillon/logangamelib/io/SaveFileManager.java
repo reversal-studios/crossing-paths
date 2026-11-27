@@ -2,7 +2,7 @@ package com.logandhillon.logangamelib.io;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
-import com.logandhillon.logangamelib.engine.LGLGameHandler;
+import com.logandhillon.logangamelib.engine.LGLContext;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -31,7 +31,7 @@ public abstract class SaveFileManager<M extends Message> {
      * @param prefix prefix of the save file (i.e.: [prefix].logangamelib.dat
      */
     public SaveFileManager(String prefix, Parser<M> parser) {
-        this.file = LGLGameHandler.getInstance().getPathManager().getFile(prefix + ".logangamelib.dat");
+        this.file = LGLContext.getInstance().getPathManager().getFile(prefix + ".logangamelib.dat");
         LOG.debug("Set managed file for \"{}\" save file to {}", prefix, file.getAbsolutePath());
         this.prefix = prefix;
         this.defaultConfig = getDefault();

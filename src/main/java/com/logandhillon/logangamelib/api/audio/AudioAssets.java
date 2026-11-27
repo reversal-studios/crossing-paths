@@ -1,5 +1,6 @@
 package com.logandhillon.logangamelib.api.audio;
 
+import com.logandhillon.logangamelib.resource.ResourceLoader;
 import lombok.NonNull;
 
 import java.util.Map;
@@ -9,14 +10,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * Backend-neutral audio cache used by engine and game asset declarations.
  *
  * @author Logan Dhillon
+ * @see Audio
  */
 public final class AudioAssets {
-    private static final Map<String, Audio> CACHE = new ConcurrentHashMap<>();
-    private static       AudioLoader        loader;
+    private static final Map<String, Audio>    CACHE = new ConcurrentHashMap<>();
+    private static       ResourceLoader<Audio> loader;
 
     private AudioAssets() {}
 
-    public static synchronized void configure(@NonNull AudioLoader loader) {
+    public static synchronized void configure(@NonNull ResourceLoader<Audio> loader) {
         CACHE.clear();
         AudioAssets.loader = loader;
     }

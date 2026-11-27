@@ -9,19 +9,19 @@ import java.util.Arrays;
 /**
  * @author Logan Dhillon
  */
-public class FontResource implements IResource<String> {
+public class FXFontResource implements IResource<String> {
     // root path of all font resources
     private static final String ROOT = "/font/";
 
     private final String fontFamily;
 
     /**
-     * Creates a font loader that returns the family name when calling {@link FontResource#load()}
+     * Creates a font loader that returns the family name when calling {@link FXFontResource#load()}
      *
      * @param parent the name of the parent folder containing all the font files
      * @param files  the file names of the fonts to load. these fonts should be of the same family.
      */
-    public FontResource(String parent, String... files) {
+    public FXFontResource(String parent, String... files) {
 
         // LOAD FONT
         String folder = ROOT + parent + "/";
@@ -30,7 +30,7 @@ public class FontResource implements IResource<String> {
         for (String file: files) {
             String path = folder + file;
 
-            try (InputStream font = FontResource.class.getResourceAsStream(path)) {
+            try (InputStream font = FXFontResource.class.getResourceAsStream(path)) {
                 if (font == null) throw new FontNotFoundException(path); // font didn't load? throw error
                 if (family == null) family = Font.loadFont(font, 0).getFamily(); // no family yet? define it
             } catch (IOException e) {

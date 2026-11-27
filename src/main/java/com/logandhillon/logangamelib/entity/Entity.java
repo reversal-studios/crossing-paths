@@ -1,7 +1,7 @@
 package com.logandhillon.logangamelib.entity;
 
 import com.logandhillon.logangamelib.api.render.Renderer;
-import com.logandhillon.logangamelib.engine.GameScene;
+import com.logandhillon.logangamelib.scene.GameScene;
 import lombok.Getter;
 
 /**

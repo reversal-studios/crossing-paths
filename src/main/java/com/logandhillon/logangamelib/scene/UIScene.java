@@ -1,4 +1,4 @@
-package com.logandhillon.logangamelib.engine;
+package com.logandhillon.logangamelib.scene;
 
 import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.entity.Clickable;

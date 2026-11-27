@@ -1,4 +1,4 @@
-package com.logandhillon.logangamelib.engine;
+package com.logandhillon.logangamelib.scene;
 
 import com.logandhillon.logangamelib.api.input.InputHandler;
 import com.logandhillon.logangamelib.api.render.Renderer;
@@ -9,9 +9,8 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
- * A GameScene is the lowest-level of the engine; controlling entities, collision checks, updates, and rendering. It
- * represents a "scene" of the game, that being a section of the game that is related (e.g. a game level, the main menu,
- * etc.). A platform backend runs this scene.
+ * A GameScene is responsible for controlling entities, collision checks, frame updates, and rendering. It represents a
+ * section of the game that is related (e.g. a game level, the main menu, etc.). A platform backend runs this scene.
  *
  * @param <H> game-specific handler type associated with this scene.
  *
@@ -30,7 +29,7 @@ public abstract class GameScene<H> {
      */
     protected GameScene() {}
 
-    final void initialize(H game) {
+    public final void initialize(H game) {
         this.game = game;
     }
 

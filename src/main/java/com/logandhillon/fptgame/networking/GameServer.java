@@ -9,8 +9,9 @@ import com.logandhillon.fptgame.scene.LevelScene;
 import com.logandhillon.fptgame.scene.menu.LobbyGameContent;
 import com.logandhillon.fptgame.scene.menu.MenuContent;
 import com.logandhillon.fptgame.scene.menu.MenuHandler;
+import com.logandhillon.logangamelib.api.platform.Dispatcher;
 import com.logandhillon.logangamelib.io.PacketWriter;
-import javafx.application.Platform;
+import com.logandhillon.logangamelib.scene.GameScene;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -18,6 +19,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * A game server handles all outgoing communications to {@link GameClient}s via a valid network connection.
@@ -35,7 +37,8 @@ public class GameServer implements Runnable {
 
     private volatile boolean                running; // if the server is running
     private final    GameHandler            game;
-    public final     Queue<GamePacket.Type> queuedPeerMovements = new LinkedList<>();
+    private final    Dispatcher             uiDispatcher;
+    public final     Queue<GamePacket.Type> queuedPeerMovements = new ConcurrentLinkedQueue<>();
 
     private ServerSocket      socket;
     private Thread            advertiser;
@@ -46,8 +49,9 @@ public class GameServer implements Runnable {
 
     private record ConnectionDetails(Socket socket, String name, PacketWriter out) {}
 
-    public GameServer(GameHandler game) {
+    public GameServer(GameHandler game, Dispatcher uiDispatcher) {
         this.game = game;
+        this.uiDispatcher = uiDispatcher;
     }
 
     /**
@@ -113,47 +117,50 @@ public class GameServer implements Runnable {
      * @param client the incoming client socket
      */
     private void handleClient(Socket client) {
-        new Thread(() -> {
-            LOG.info("Incoming client connection at {}", client.getInetAddress().getHostAddress());
-            clients.add(client);
+        new Thread(
+                () -> {
+                    LOG.info("Incoming client connection at {}", client.getInetAddress().getHostAddress());
+                    clients.add(client);
 
-            try (client;
-                 var out = new PacketWriter(client.getOutputStream());
-                 DataInputStream dataInputStream = new DataInputStream(client.getInputStream())
-            ) {
-                while (true) {
-                    int length;
-                    try {
-                        length = dataInputStream.readInt();
-                    } catch (IOException e) {
-                        LOG.info("Client {} disconnected", client.getInetAddress());
-                        if (guest.socket == client) guest = null;
-                        clients.remove(client);
+                    try (client;
+                         var out = new PacketWriter(client.getOutputStream());
+                         DataInputStream dataInputStream = new DataInputStream(client.getInputStream())
+                    ) {
+                        while (true) {
+                            int length;
+                            try {
+                                length = dataInputStream.readInt();
+                            } catch (IOException e) {
+                                LOG.info("Client {} disconnected", client.getInetAddress());
+                                if (guest.socket == client) guest = null;
+                                clients.remove(client);
 
-                        Optional<MenuHandler> menu = game.getActiveScene(MenuHandler.class);
-                        if (menu.isPresent()) {
-                            MenuContent content = menu.get().getContent();
-                            if (content instanceof LobbyGameContent lobby) {
-                                propagateLobbyUpdate(lobby);
+                                uiDispatcher.execute(() -> {
+                                    Optional<MenuHandler> menu = game.getActiveScene(MenuHandler.class);
+                                    if (menu.isPresent()) {
+                                        MenuContent content = menu.get().getContent();
+                                        if (content instanceof LobbyGameContent lobby) {
+                                            propagateLobbyUpdate(lobby);
+                                        }
+                                    }
+                                });
+
+                                break; // client disconnected or stream closed
                             }
+                            if (length <= 0) {
+                                LOG.warn("Received invalid packet length {} from {}", length, client.getInetAddress());
+                                break;
+                            }
+                            byte[] data = new byte[length];
+                            dataInputStream.readFully(data);
+                            parseRequest(client, GamePacket.deserialize(data), out);
                         }
-
-                        break; // client disconnected or stream closed
+                    } catch (IOException e) {
+                        LOG.error(e);
+                    } finally {
+                        clients.remove(client);
                     }
-                    if (length <= 0) {
-                        LOG.warn("Received invalid packet length {} from {}", length, client.getInetAddress());
-                        break;
-                    }
-                    byte[] data = new byte[length];
-                    dataInputStream.readFully(data);
-                    parseRequest(client, GamePacket.deserialize(data), out);
-                }
-            } catch (IOException e) {
-                LOG.error(e);
-            } finally {
-                clients.remove(client);
-            }
-        }, "ClientHandler-" + client.getInetAddress()).start();
+                }, "ClientHandler-" + client.getInetAddress()).start();
     }
 
     /**
@@ -188,25 +195,31 @@ public class GameServer implements Runnable {
                     if (packet.type() == GamePacket.Type.COM_JUMP) return;
 
                     // sync other's movement
-                    Optional<DynamicLevelScene> level = game.getActiveScene(DynamicLevelScene.class);
-                    if (level.isEmpty()) {
-                        LOG.warn("Tried to sync movement, but was not in DynamicLevelScene; skipping message");
-                        return;
-                    }
-                    level.get().syncMovement(PlayerProto.PlayerMovementData.parseFrom(packet.payload()));
+                    var movement = PlayerProto.PlayerMovementData.parseFrom(packet.payload());
+                    uiDispatcher.execute(() -> {
+                        Optional<DynamicLevelScene> level = game.getActiveScene(DynamicLevelScene.class);
+                        if (level.isEmpty()) {
+                            LOG.warn("Tried to sync movement, but was not in DynamicLevelScene; skipping message");
+                            return;
+                        }
+                        level.get().syncMovement(movement);
+                    });
                 }
                 case COM_PRESS_BUTTON -> {
-                    Optional<LevelScene> level = game.getActiveScene(LevelScene.class);
-                    if (level.isEmpty()) {
-                        LOG.warn("Tried to handle COM_PRESS_BUTTON, but was not in LevelScene; skipping");
-                        return;
-                    }
-                    level.get().onButtonPressed();
+                    uiDispatcher.execute(() -> {
+                        Optional<LevelScene> level = game.getActiveScene(LevelScene.class);
+                        if (level.isEmpty()) {
+                            LOG.warn("Tried to handle COM_PRESS_BUTTON, but was not in LevelScene; skipping");
+                            return;
+                        }
+                        level.get().onButtonPressed();
+                    });
                 }
                 case CLT_DISCONNECT -> {
                     // going to the main menu will shut down the server
                     LOG.info("Client disconnected, returning to main menu");
-                    Platform.runLater(() -> game.showAlert("PARTNER DISCONNECTED", "Your partner has left the game."));
+                    uiDispatcher.execute(() -> game.showAlert(
+                            "PARTNER DISCONNECTED", "Your partner has left the game."));
                 }
             }
         } catch (IOException e) {
@@ -292,14 +305,14 @@ public class GameServer implements Runnable {
 
     /**
      * Starts the game for the server: broadcasts the level to connected client(s) and sets the
-     * {@link com.logandhillon.logangamelib.engine.GameScene}.
+     * {@link GameScene}.
      */
     public void startGame() {
         LevelProto.LevelData level = Levels.LEVEL_1; // XXX: hardcode level for server
         broadcast(new GamePacket(GamePacket.Type.SRV_GAME_STARTING, level));
         game.setInMenu(false);
 
-        Platform.runLater(() -> game.setScene(new DynamicLevelScene(level)));
+        uiDispatcher.execute(() -> game.setScene(new DynamicLevelScene(level)));
     }
 
     /**
@@ -310,41 +323,43 @@ public class GameServer implements Runnable {
 
         LOG.info("Starting UDP advertiser on port {}", ADVERTISE_PORT);
 
-        advertiser = new Thread(() -> {
-            try (DatagramSocket socket = new DatagramSocket()) {
-                socket.setBroadcast(true);
-                while (running) {
-                    // only listen in lobby
-                    if (game.isInGame()) continue;
-                    Optional<MenuHandler> menu = game.getActiveScene(MenuHandler.class);
-                    if (menu.isEmpty() || !(menu.get().getContent() instanceof LobbyGameContent lobby)) {
-                        LOG.warn("Supposed to be in lobby, but lobby was null. Will not advertise this frame.");
-                        return;
+        advertiser = new Thread(
+                () -> {
+                    try (DatagramSocket socket = new DatagramSocket()) {
+                        socket.setBroadcast(true);
+                        while (running) {
+                            // only listen in lobby
+                            if (game.isInGame()) continue;
+                            Optional<MenuHandler> menu = game.getActiveScene(MenuHandler.class);
+                            if (menu.isEmpty() || !(menu.get().getContent() instanceof LobbyGameContent lobby)) {
+                                LOG.warn("Supposed to be in lobby, but lobby was null. Will not advertise this frame.");
+                                return;
+                            }
+
+                            LOG.debug("Broadcasting server advertisement for port");
+
+                            String msg =
+                                    "MainServer:" + lobby.getRoomName() + ":" +
+                                    DEFAULT_PORT; // incl. lobby name and port
+                            byte[] buffer = msg.getBytes();
+                            DatagramPacket packet = new DatagramPacket(
+                                    buffer,
+                                    buffer.length,
+                                    InetAddress.getByName("255.255.255.255"),
+                                    ADVERTISE_PORT
+                            );
+
+                            socket.send(packet);
+                            //noinspection BusyWait
+                            Thread.sleep(2000); // broadcast every 2 seconds
+                        }
+                    } catch (IOException e) {
+                        LOG.error("IO exception in server advertiser", e);
+                    } catch (InterruptedException e) {
+                        LOG.info("Advertiser interrupted, stopping");
+                        stopAdvertising();
                     }
-
-                    LOG.debug("Broadcasting server advertisement for port");
-
-                    String msg =
-                            "MainServer:" + lobby.getRoomName() + ":" + DEFAULT_PORT; // incl. lobby name and port
-                    byte[] buffer = msg.getBytes();
-                    DatagramPacket packet = new DatagramPacket(
-                            buffer,
-                            buffer.length,
-                            InetAddress.getByName("255.255.255.255"),
-                            ADVERTISE_PORT
-                    );
-
-                    socket.send(packet);
-                    //noinspection BusyWait
-                    Thread.sleep(2000); // broadcast every 2 seconds
-                }
-            } catch (IOException e) {
-                LOG.error("IO exception in server advertiser", e);
-            } catch (InterruptedException e) {
-                LOG.info("Advertiser interrupted, stopping");
-                stopAdvertising();
-            }
-        }, "ServerAdvertiser");
+                }, "ServerAdvertiser");
 
         advertiser.start();
     }

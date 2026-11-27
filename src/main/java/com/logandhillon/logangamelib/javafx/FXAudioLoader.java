@@ -1,7 +1,7 @@
 package com.logandhillon.logangamelib.javafx;
 
 import com.logandhillon.logangamelib.api.audio.Audio;
-import com.logandhillon.logangamelib.api.audio.AudioLoader;
+import com.logandhillon.logangamelib.resource.ResourceLoader;
 import javafx.scene.media.AudioClip;
 
 /**
@@ -9,7 +9,7 @@ import javafx.scene.media.AudioClip;
  *
  * @author Logan Dhillon
  */
-public final class FXAudioLoader implements AudioLoader {
+public final class FXAudioLoader implements ResourceLoader<Audio> {
     @Override
     public Audio load(String path) {
         String classpath = path.startsWith("/") ? path : "/sound/" + path;

@@ -9,6 +9,7 @@ import com.logandhillon.logangamelib.api.input.KeyCode;
 import com.logandhillon.logangamelib.api.input.KeyboardEvent;
 import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.math.Vec2f;
+import com.logandhillon.logangamelib.scene.GameScene;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -27,7 +28,7 @@ import java.util.function.Function;
  * The input API can be accessed through a game scene, typically by refering to an entity's parent.
  *
  * @author Logan Dhillon
- * @see com.logandhillon.logangamelib.engine.GameScene#input()
+ * @see GameScene#input()
  */
 public final class FXInput implements InputHandler, AutoCloseable {
     private final CompositeSubscription subscriptions = new CompositeSubscription();
@@ -63,7 +64,7 @@ public final class FXInput implements InputHandler, AutoCloseable {
     /**
      * Called when the JavaFX {@link Scene} and {@link Canvas} are created so FX's event handlers can be bound to.
      *
-     * @param scene  newly built FX scene from {@link com.logandhillon.logangamelib.engine.GameScene}
+     * @param scene  newly built FX scene from {@link GameScene}
      * @param canvas graphics canvas from FX scene
      */
     public void attach(Scene scene, Canvas canvas) {

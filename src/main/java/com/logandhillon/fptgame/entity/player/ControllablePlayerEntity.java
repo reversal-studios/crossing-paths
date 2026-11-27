@@ -4,7 +4,7 @@ import com.logandhillon.fptgame.GameHandler;
 import com.logandhillon.fptgame.entity.game.LevelButtonEntity;
 import com.logandhillon.fptgame.scene.LevelScene;
 import com.logandhillon.logangamelib.api.input.KeyboardEvent;
-import com.logandhillon.logangamelib.engine.GameScene;
+import com.logandhillon.logangamelib.scene.GameScene;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 

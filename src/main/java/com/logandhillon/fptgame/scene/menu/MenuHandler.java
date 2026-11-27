@@ -4,7 +4,7 @@ import com.logandhillon.fptgame.GameHandler;
 import com.logandhillon.fptgame.resource.Textures;
 import com.logandhillon.fptgame.scene.component.MenuAlertScene;
 import com.logandhillon.logangamelib.api.render.Renderer;
-import com.logandhillon.logangamelib.engine.UIScene;
+import com.logandhillon.logangamelib.scene.UIScene;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.gfx.ParallaxBackground;
 import lombok.Getter;

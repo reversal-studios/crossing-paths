@@ -9,7 +9,7 @@ import com.logandhillon.fptgame.networking.GamePacket;
 import com.logandhillon.fptgame.networking.PeerMovementPoller;
 import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.fptgame.networking.proto.PlayerProto;
-import com.logandhillon.logangamelib.engine.GameScene;
+import com.logandhillon.logangamelib.scene.GameScene;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 

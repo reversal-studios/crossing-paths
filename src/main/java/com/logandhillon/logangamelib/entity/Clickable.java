@@ -1,7 +1,7 @@
 package com.logandhillon.logangamelib.entity;
 
 import com.logandhillon.logangamelib.api.input.MouseClickEvent;
-import com.logandhillon.logangamelib.engine.UIScene;
+import com.logandhillon.logangamelib.scene.UIScene;
 
 /**
  * A Clickable is a special type of {@link Entity} that can be clicked by the mouse. It can only be used within a

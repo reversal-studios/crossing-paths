@@ -1,6 +1,6 @@
 package com.logandhillon.logangamelib.entity;
 
-import com.logandhillon.logangamelib.engine.GameScene;
+import com.logandhillon.logangamelib.scene.GameScene;
 
 /**
  * A BoundEntity is a type of {@link Entity} that can only be attached to a specified type of {@link GameScene}.

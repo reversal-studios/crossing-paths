@@ -1,5 +1,8 @@
 package com.logandhillon.logangamelib.api.render;
 
+import com.logandhillon.logangamelib.resource.ResourceLoader;
+import lombok.NonNull;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -7,19 +10,17 @@ import java.util.concurrent.ConcurrentHashMap;
  * Backend-neutral texture cache used by engine and game asset declarations.
  *
  * @author Logan Dhillon
- * @see TextureLoader#load(String)
  * @see Texture
  */
 public final class TextureAssets {
-    private static final Map<String, Texture> CACHE = new ConcurrentHashMap<>();
-    private static       TextureLoader        loader;
+    private static final Map<String, Texture>    CACHE = new ConcurrentHashMap<>();
+    private static       ResourceLoader<Texture> loader;
 
     private TextureAssets() {}
 
-    public static synchronized void configure(TextureLoader textureLoader) {
-        if (textureLoader == null) throw new NullPointerException("textureLoader");
+    public static synchronized void configure(@NonNull ResourceLoader<Texture> loader) {
         CACHE.clear();
-        loader = textureLoader;
+        TextureAssets.loader = loader;
     }
 
     public static Texture load(String path) {

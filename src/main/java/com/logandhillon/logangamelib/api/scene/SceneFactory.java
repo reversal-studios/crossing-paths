@@ -1,7 +1,7 @@
 package com.logandhillon.logangamelib.api.scene;
 
 import com.logandhillon.logangamelib.api.platform.Window;
-import com.logandhillon.logangamelib.engine.GameScene;
+import com.logandhillon.logangamelib.scene.GameScene;
 
 /**
  * Creates and runs scenes using a particular platform backend.

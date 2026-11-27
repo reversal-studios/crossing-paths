@@ -7,7 +7,7 @@ import com.logandhillon.logangamelib.api.render.Font;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.api.render.TextStyle;
 import com.logandhillon.logangamelib.engine.GameMeta;
-import com.logandhillon.logangamelib.engine.GameScene;
+import com.logandhillon.logangamelib.scene.GameScene;
 import com.logandhillon.logangamelib.entity.Clickable;
 import com.logandhillon.logangamelib.resource.base.Colors;
 import lombok.Setter;
