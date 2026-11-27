@@ -7,7 +7,7 @@ import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.fptgame.resource.Sounds;
 import com.logandhillon.fptgame.resource.Textures;
-import com.logandhillon.logangamelib.engine.GameScene;
+import com.logandhillon.logangamelib.scene.GameScene;
 import com.logandhillon.logangamelib.entity.physics.CollisionEntity;
 import com.logandhillon.logangamelib.entity.physics.PhysicsEntity;
 import com.logandhillon.logangamelib.gfx.AnimationSequence;

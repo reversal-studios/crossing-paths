@@ -10,7 +10,7 @@ import com.logandhillon.fptgame.resource.Textures;
 import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.engine.GameMeta;
-import com.logandhillon.logangamelib.engine.MenuController;
+import com.logandhillon.logangamelib.scene.MenuController;
 import com.logandhillon.logangamelib.entity.Clickable;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.ui.ModalEntity;

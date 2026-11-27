@@ -1,4 +1,4 @@
-package com.logandhillon.logangamelib.engine;
+package com.logandhillon.logangamelib.scene;
 
 import com.logandhillon.fptgame.entity.ui.component.MenuButton;
 import com.logandhillon.logangamelib.api.input.KeyCode;

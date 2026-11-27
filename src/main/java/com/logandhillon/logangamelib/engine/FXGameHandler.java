@@ -12,6 +12,7 @@ import com.logandhillon.logangamelib.javafx.FXAudioLoader;
 import com.logandhillon.logangamelib.javafx.FXSceneFactory;
 import com.logandhillon.logangamelib.javafx.FXTextureLoader;
 import com.logandhillon.logangamelib.resource.base.Colors;
+import com.logandhillon.logangamelib.scene.GameScene;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;

@@ -2,13 +2,14 @@ package com.logandhillon.logangamelib.api.input;
 
 import com.logandhillon.logangamelib.api.event.EventHandler;
 import com.logandhillon.logangamelib.api.event.Subscription;
+import com.logandhillon.logangamelib.scene.GameScene;
 
 /**
  * An input handler is an interface with all input events that are passed from the engine to the game scene and
  * entities.
  *
  * @author Logan Dhillon
- * @see com.logandhillon.logangamelib.engine.GameScene#input()
+ * @see GameScene#input()
  */
 public interface InputHandler {
     /**

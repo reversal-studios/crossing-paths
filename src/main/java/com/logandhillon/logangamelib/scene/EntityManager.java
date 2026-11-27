@@ -1,4 +1,4 @@
-package com.logandhillon.logangamelib.engine;
+package com.logandhillon.logangamelib.scene;
 
 import com.logandhillon.logangamelib.api.Deferrable;
 import com.logandhillon.logangamelib.api.render.Renderer;

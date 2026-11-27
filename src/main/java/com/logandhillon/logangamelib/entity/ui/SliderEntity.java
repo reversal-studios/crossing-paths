@@ -3,7 +3,7 @@ package com.logandhillon.logangamelib.entity.ui;
 import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.api.render.Shape;
-import com.logandhillon.logangamelib.engine.GameScene;
+import com.logandhillon.logangamelib.scene.GameScene;
 import com.logandhillon.logangamelib.entity.Clickable;
 import com.logandhillon.logangamelib.resource.base.Colors;
 

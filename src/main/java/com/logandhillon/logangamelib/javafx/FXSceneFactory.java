@@ -4,7 +4,7 @@ import com.logandhillon.logangamelib.api.platform.Window;
 import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.api.scene.SceneFactory;
 import com.logandhillon.logangamelib.api.scene.SceneHandle;
-import com.logandhillon.logangamelib.engine.GameScene;
+import com.logandhillon.logangamelib.scene.GameScene;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.Scene;

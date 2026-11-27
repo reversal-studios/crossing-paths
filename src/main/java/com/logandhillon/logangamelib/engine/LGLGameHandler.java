@@ -3,6 +3,7 @@ package com.logandhillon.logangamelib.engine;
 import com.logandhillon.logangamelib.api.platform.Dispatcher;
 import com.logandhillon.logangamelib.api.platform.Window;
 import com.logandhillon.logangamelib.io.PathManager;
+import com.logandhillon.logangamelib.scene.GameScene;
 import javafx.stage.Stage;
 
 import java.util.Optional;

@@ -14,7 +14,7 @@ import com.logandhillon.fptgame.scene.menu.MenuHandler;
 import com.logandhillon.logangamelib.api.platform.Window;
 import com.logandhillon.logangamelib.engine.FXGameHandler;
 import com.logandhillon.logangamelib.engine.GameMeta;
-import com.logandhillon.logangamelib.engine.GameScene;
+import com.logandhillon.logangamelib.scene.GameScene;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.Logger;

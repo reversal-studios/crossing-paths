@@ -11,6 +11,7 @@ import com.logandhillon.fptgame.scene.menu.MenuContent;
 import com.logandhillon.fptgame.scene.menu.MenuHandler;
 import com.logandhillon.logangamelib.api.platform.Dispatcher;
 import com.logandhillon.logangamelib.io.PacketWriter;
+import com.logandhillon.logangamelib.scene.GameScene;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -304,7 +305,7 @@ public class GameServer implements Runnable {
 
     /**
      * Starts the game for the server: broadcasts the level to connected client(s) and sets the
-     * {@link com.logandhillon.logangamelib.engine.GameScene}.
+     * {@link GameScene}.
      */
     public void startGame() {
         LevelProto.LevelData level = Levels.LEVEL_1; // XXX: hardcode level for server

@@ -10,7 +10,7 @@ import com.logandhillon.fptgame.resource.Sounds;
 import com.logandhillon.fptgame.scene.menu.MenuHandler;
 import com.logandhillon.logangamelib.api.input.KeyCode;
 import com.logandhillon.logangamelib.api.render.Color;
-import com.logandhillon.logangamelib.engine.GameScene;
+import com.logandhillon.logangamelib.scene.GameScene;
 import com.logandhillon.logangamelib.entity.Renderable;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
