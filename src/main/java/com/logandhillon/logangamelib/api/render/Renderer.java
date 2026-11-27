@@ -88,40 +88,6 @@ public interface Renderer {
      */
     void clip(Shape clip, Runnable content);
 
-    // methods for JavaFX backwards compatability
-
-    /** @deprecated Use {@link #fill(Shape, Color)} or a convenience method that takes a colour. */
-    @Deprecated
-    void setFill(Color color);
-
-    /** @deprecated Use {@link #stroke(Shape, Color, float)}. */
-    @Deprecated
-    void setStroke(Color color);
-
-    /** @deprecated Pass the width to {@link #stroke(Shape, Color, float)}. */
-    @Deprecated
-    void setLineWidth(float width);
-
-    /** @deprecated Use {@link #text(Font, String, float, float, TextStyle)}. */
-    @Deprecated
-    void setFont(Font font);
-
-    /** @deprecated Use {@link #text(Font, String, float, float, TextStyle)}. */
-    @Deprecated
-    void setTextStyle(TextStyle style);
-
-    /** @deprecated Use {@link #roundRect(float, float, float, float, Color, int)}. */
-    @Deprecated
-    void fillRoundRect(float x, float y, float width, float height, float arcWidth, float arcHeight);
-
-    /** @deprecated Use {@link #line(float, float, float, float, Color, float)}. */
-    @Deprecated
-    void strokeLine(float x1, float y1, float x2, float y2);
-
-    /** @deprecated Use {@link #text(Font, String, float, float, TextStyle)}. */
-    @Deprecated
-    void fillText(String text, float x, float y);
-
     // default methods for common shapes
 
     /**

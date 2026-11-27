@@ -8,16 +8,15 @@ import com.logandhillon.fptgame.networking.proto.ConfigProto;
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.fptgame.resource.Textures;
 import com.logandhillon.logangamelib.api.input.MouseClickEvent;
+import com.logandhillon.logangamelib.api.render.Font;
 import com.logandhillon.logangamelib.api.render.Renderer;
+import com.logandhillon.logangamelib.api.render.TextStyle;
 import com.logandhillon.logangamelib.engine.GameMeta;
-import com.logandhillon.logangamelib.scene.MenuController;
 import com.logandhillon.logangamelib.entity.Clickable;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.ui.ModalEntity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
-import javafx.geometry.VPos;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import com.logandhillon.logangamelib.scene.MenuController;
 import lombok.Getter;
 
 import static com.logandhillon.fptgame.GameHandler.CANVAS_HEIGHT;
@@ -28,11 +27,13 @@ import static com.logandhillon.fptgame.GameHandler.CANVAS_HEIGHT;
  * @author Logan Dhillon, Jack Ross
  */
 public class MainMenuContent implements MenuContent {
-    @Getter
-    private final        Entity[] entities;
-    private static final Font     HEADER_FONT  = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 40);
-    private static final Font     CREDITS_FONT = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 14);
+    private static final Font HEADER_FONT  = new Font(
+            GameMeta.get().defaultFont.load(), 40, Font.FontWeight.MEDIUM);
+    private static final Font CREDITS_FONT = new Font(
+            GameMeta.get().defaultFont.load(), 14, Font.FontWeight.MEDIUM);
 
+    @Getter
+    private final Entity[] entities;
     private final InputBox userInput;
 
     /**
@@ -79,7 +80,7 @@ public class MainMenuContent implements MenuContent {
                         .setColor(Colors.ACTIVE)
                         .setText(GameMeta.get().gameName.toUpperCase())
                         .setFont(HEADER_FONT)
-                        .setVerticalAlignment(VPos.TOP).build(),
+                        .setVerticalAlignment(TextStyle.VAlign.TOP).build(),
 
                 new Clickable(1209, 672, 59, 22) {
 
@@ -92,13 +93,11 @@ public class MainMenuContent implements MenuContent {
                     protected void onRender(Renderer g, float x, float y) {
                         g.line(x, y + 21, x + 58, y + 21, Colors.ACTIVE_TRANS_50, 1);
                         g.text(
-                                new com.logandhillon.logangamelib.api.render.Font(
-                                        CREDITS_FONT.getFamily(), (float)CREDITS_FONT.getSize()),
-                                "LICENSE", x, y + 18,
-                                new com.logandhillon.logangamelib.api.render.TextStyle(
+                                CREDITS_FONT, "LICENSE", x, y + 18,
+                                new TextStyle(
                                         Colors.ACTIVE_TRANS_50,
-                                        com.logandhillon.logangamelib.api.render.TextStyle.Justification.LEFT,
-                                        com.logandhillon.logangamelib.api.render.TextStyle.VAlign.BASELINE,
+                                        TextStyle.Justification.LEFT,
+                                        TextStyle.VAlign.BASELINE,
                                         Float.MAX_VALUE));
                     }
 
