@@ -3,7 +3,7 @@ package com.logandhillon.logangamelib.gfx;
 import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.logangamelib.api.render.Color;
 import com.logandhillon.logangamelib.api.render.Renderer;
-import com.logandhillon.logangamelib.networking.ProtoSerializable;
+import com.logandhillon.logangamelib.io.ProtoSerializable;
 
 /**
  * A {@link ProtoSerializable} representation of a tile in a {@link TextureAtlas}. Should be used to represent

@@ -4,14 +4,10 @@ import com.logandhillon.logangamelib.api.input.MouseClickEvent;
 import com.logandhillon.logangamelib.entity.Clickable;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.math.Vec2f;
-import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.function.Predicate;
 
 /**
  * A UI scene is a type of {@link GameScene} that listens to the cursor and registers events handlers for
@@ -19,12 +15,12 @@ import java.util.function.Predicate;
  * <p>
  * UI scenes are used with {@link Clickable} entities. Clickables can only be used in UI scenes.
  *
- * @param <H> expected type of {@link LGLGameHandler} that this game scene shall work with.
+ * @param <H> game-specific handler type associated with this scene.
  *
  * @author Logan Dhillon
  * @see Clickable
  */
-public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> {
+public abstract class UIScene<H> extends GameScene<H> {
     private static final Logger LOG = LoggerContext.getContext().getLogger(UIScene.class);
 
     private final HashMap<Clickable, ClickableFlags> clickables       = new HashMap<>();
@@ -38,7 +34,7 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
     /**
      * Creates a new UI scene without registering mouse events.
      *
-     * @see onBuild
+     * @see #onStart()
      */
     public UIScene() {
     }
@@ -48,57 +44,34 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
      * {@link com.logandhillon.logangamelib.api.input.InputHandler InputHandler}
      */
     @Override
-    public void onBuild(Scene scene) {
+    protected void onStart() {
+        super.onStart();
         input().onMouseClicked(this::onMouseClicked);
         input().onMouseDown(this::onMouseDown);
         input().onMouseMoved(this::onMouseMoved);
     }
 
     @Override
-    public void discard(Scene scene) {
-        super.discard(scene);
+    protected void onEntityAdded(Entity entity) {
+        super.onEntityAdded(entity);
 
-        // clear stored clickables to avoid memory leaks / stale state
-        for (Clickable c: clickables.keySet()) c.onDestroy();
-        clickables.clear();
-        cachedClickables = new Clickable[0];
-    }
-
-    @Override
-    public void clearEntities(boolean discard, Predicate<Entity> predicate) {
-        super.clearEntities(discard, predicate);
-
-        // safe removal
-        for (Iterator<Clickable> it = clickables.keySet().iterator(); it.hasNext(); ) {
-            Entity e = it.next();
-            if (predicate.test(e)) {
-                it.remove(); // safe removal
-                if (discard) e.onDestroy();
-            }
+        if (entity instanceof Clickable clickable) {
+            clickables.put(clickable, new ClickableFlags());
+            cachedClickables = clickables.keySet().toArray(new Clickable[0]);
         }
-        LOG.debug("Safely removed all matching Clickables from this UI scene");
-
-        cachedClickables = clickables.keySet().toArray(new Clickable[0]);
-        LOG.debug("Reloaded clickable cache");
     }
 
-    /**
-     * Works the same as the regular {@link GameScene}, but also appends {@link Clickable} entities to a separate list,
-     * that will get special treatment in the scene lifecycle to trigger mouse events.
-     *
-     * @param e the entity or clickable to append.
-     */
     @Override
-    public void addEntity(Entity e) {
-        super.addEntity(e);
-        if (e instanceof Clickable) clickables.put((Clickable)e, new ClickableFlags());
-        if (e instanceof Clickable) {
+    protected void onEntityRemoved(Entity entity) {
+        super.onEntityRemoved(entity);
+
+        if (entity instanceof Clickable clickable && clickables.remove(clickable) != null) {
             cachedClickables = clickables.keySet().toArray(new Clickable[0]);
         }
     }
 
     /**
-     * Runs when the mouse is clicked on the JavaFX {@link Scene}.
+     * Runs when a pointer click is delivered to the scene.
      * <p>
      * This method goes through all attached clickables and, if it is within the clickable's hitbox, runs the
      * {@link Clickable#onClick} event handler.
@@ -106,7 +79,6 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
      * @param e details about the mouse click event. this can be used to get the mouse button pressed, x/y position,
      *          etc.
      *
-     * @see MouseEvent
      * @see Clickable#onClick
      */
     protected void onMouseClicked(MouseClickEvent e) {
@@ -146,7 +118,7 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
     }
 
     /**
-     * Runs when the mouse is moved within the JavaFX {@link Scene}.
+     * Runs when the pointer is moved within the scene.
      * <p>
      * This method goes through all attached clickables and, if it is within the clickable's hitbox, runs the
      * {@link Clickable#onMouseEnter} or {@link Clickable#onMouseLeave} event handler, depending on what just happened
@@ -155,7 +127,6 @@ public abstract class UIScene<H extends LGLGameHandler<H>> extends GameScene<H> 
      * @param e details about the mouse click event. this can be used to get the mouse button pressed, x/y position,
      *          etc.
      *
-     * @see MouseEvent
      * @see Clickable#onMouseEnter
      * @see Clickable#onMouseLeave
      */

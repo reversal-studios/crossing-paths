@@ -15,6 +15,7 @@ import com.logandhillon.logangamelib.api.render.TextureAssets;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.engine.LGLGameHandler;
+import com.logandhillon.logangamelib.api.platform.Window;
 import com.logandhillon.logangamelib.javafx.FXTextureLoader;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -31,7 +32,6 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
     private static final Logger LOG               = LoggerContext.getContext().getLogger(GameHandler.class);
     public static final  int    CANVAS_WIDTH      = 1280; // the width of the rendered canvas
     public static final  int    CANVAS_HEIGHT     = 720; // the height of the rendered canvas
-    public static final  float  ASPECT_RATIO      = (float)CANVAS_WIDTH / CANVAS_HEIGHT;
     public static final  float  SCALING_TOLERANCE = 0.05f; // % to prefer maximizing size over aspect ratio
 
     // game state management
@@ -68,6 +68,11 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
         Textures.init();
 
         return this.isDebugMode() ? new SingleplayerGameScene(Levels.LEVEL_1) : new MenuHandler();
+    }
+
+    @Override
+    protected Window getWindow() {
+        return new Window(CANVAS_WIDTH, CANVAS_HEIGHT, SCALING_TOLERANCE);
     }
 
     /**

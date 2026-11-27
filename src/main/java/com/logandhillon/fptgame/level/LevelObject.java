@@ -3,7 +3,7 @@ package com.logandhillon.fptgame.level;
 import com.logandhillon.fptgame.networking.proto.LevelProto;
 import com.logandhillon.logangamelib.entity.GameObject;
 import com.logandhillon.logangamelib.entity.physics.CollisionEntity;
-import com.logandhillon.logangamelib.networking.ProtoSerializable;
+import com.logandhillon.logangamelib.io.ProtoSerializable;
 
 /**
  * A {@link GameObject} that may be serialized via {@link ProtoSerializable} to a {@link LevelProto.LevelObject}.

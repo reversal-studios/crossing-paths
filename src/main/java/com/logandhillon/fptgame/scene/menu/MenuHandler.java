@@ -7,7 +7,6 @@ import com.logandhillon.logangamelib.api.render.Renderer;
 import com.logandhillon.logangamelib.engine.UIScene;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.gfx.ParallaxBackground;
-import javafx.scene.Scene;
 import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -60,11 +59,10 @@ public class MenuHandler extends UIScene<GameHandler> {
     /**
      * Runs when a new scene is initialized
      *
-     * @param scene JAVAFX SCENE from engine
      */
     @Override
-    public void onBuild(Scene scene) {
-        super.onBuild(scene);
+    protected void onStart() {
+        super.onStart();
         setContent(content); // set the content to the default content
     }
 
@@ -76,7 +74,7 @@ public class MenuHandler extends UIScene<GameHandler> {
     public void setContent(MenuContent content) {
         this.content.close();
         this.content = content; // store ptr to content for future reference
-        this.clearEntities(true, (e) -> true);
+        this.clearEntities();
 
         for (Entity e: content.getEntities()) addEntity(e);
 
@@ -89,9 +87,9 @@ public class MenuHandler extends UIScene<GameHandler> {
      * @param g the graphical context to render to.
      */
     @Override
-    protected void render(Renderer g) {
+    protected void onRender(Renderer g) {
         background.render(g);
-        super.render(g);
+        super.onRender(g);
         content.onRender(g);
     }
 

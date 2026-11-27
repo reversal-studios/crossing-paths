@@ -20,13 +20,16 @@ module com.logandhillon {
     exports com.logandhillon.fptgame.scene.component;
 
     exports com.logandhillon.logangamelib.engine;
-    exports com.logandhillon.logangamelib.engine.disk;
+    exports com.logandhillon.logangamelib.io;
     exports com.logandhillon.logangamelib.entity.physics;
     exports com.logandhillon.logangamelib.entity;
     exports com.logandhillon.logangamelib.entity.ui;
     exports com.logandhillon.logangamelib.resource;
+    exports com.logandhillon.logangamelib.api;
     exports com.logandhillon.logangamelib.api.render;
     exports com.logandhillon.logangamelib.api.input;
     exports com.logandhillon.logangamelib.api.event;
+    exports com.logandhillon.logangamelib.api.scene;
     exports com.logandhillon.logangamelib.math;
+    exports com.logandhillon.logangamelib.api.platform;
 }
