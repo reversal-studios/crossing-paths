@@ -1,11 +1,16 @@
 package com.logandhillon.logangamelib.engine;
 
 import com.logandhillon.logangamelib.api.platform.Window;
+import com.logandhillon.logangamelib.api.platform.Dispatcher;
+import com.logandhillon.logangamelib.api.audio.AudioAssets;
+import com.logandhillon.logangamelib.api.render.TextureAssets;
 import com.logandhillon.logangamelib.api.scene.SceneFactory;
 import com.logandhillon.logangamelib.api.scene.SceneHandle;
 import com.logandhillon.logangamelib.entity.ui.SplashScreenEntity;
 import com.logandhillon.logangamelib.io.PathManager;
+import com.logandhillon.logangamelib.javafx.FXAudioLoader;
 import com.logandhillon.logangamelib.javafx.FXSceneFactory;
+import com.logandhillon.logangamelib.javafx.FXTextureLoader;
 import com.logandhillon.logangamelib.resource.base.Colors;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -89,7 +94,13 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
         // register shutdown hook (handles SIGTERM/crashes)
         Runtime.getRuntime().addShutdownHook(new Thread(LGLContext.getInstance()::onShutdown, "LGL-ShutdownHook"));
 
-        setScene(onStart(stage));
+        Window window = getWindow();
+        stage.setWidth(window.width());
+        stage.setHeight(window.height());
+        if (window.minWidth() > 0) stage.setMinWidth(window.minWidth());
+        if (window.minHeight() > 0) stage.setMinHeight(window.minHeight());
+
+        setScene(onStart());
         activeScene.addEntity(new SplashScreenEntity(GameMeta.get().splashIcon, 256));
 
         stage.show();
@@ -98,6 +109,8 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
     protected static void launchGame(
             Class<? extends LGLGameHandler<?>> handler, GameMeta meta, Runnable bootstrap
     ) {
+        AudioAssets.configure(new FXAudioLoader());
+        TextureAssets.configure(new FXTextureLoader());
         meta.register();
 
         try {
@@ -119,7 +132,14 @@ public abstract class LGLGameHandler<H extends LGLGameHandler<H>> extends Applic
      * <p>
      * Use this method to initialize the {@link Stage} and set up your game.
      */
-    protected abstract GameScene<H> onStart(Stage stage);
+    protected abstract GameScene<H> onStart();
+
+    /**
+     * @return the task dispatcher for work that must run on the game UI thread.
+     */
+    public final Dispatcher uiDispatcher() {
+        return Platform::runLater;
+    }
 
     /**
      * @return the logical canvas configuration used by the active scene.

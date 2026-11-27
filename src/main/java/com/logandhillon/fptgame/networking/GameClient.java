@@ -8,16 +8,16 @@ import com.logandhillon.fptgame.scene.LevelScene;
 import com.logandhillon.fptgame.scene.menu.LobbyGameContent;
 import com.logandhillon.fptgame.scene.menu.MenuHandler;
 import com.logandhillon.logangamelib.io.PacketWriter;
-import javafx.application.Platform;
+import com.logandhillon.logangamelib.api.platform.Dispatcher;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * A game client handles all outgoing communications to the {@link GameServer} via a valid network connection.
@@ -30,11 +30,12 @@ import java.util.Queue;
 public class GameClient {
     private static final Logger LOG = LoggerContext.getContext().getLogger(GameClient.class);
 
-    public final Queue<GamePacket.Type> queuedPeerMovements = new LinkedList<>();
+    public final Queue<GamePacket.Type> queuedPeerMovements = new ConcurrentLinkedQueue<>();
 
     private final String      serverAddr;
     private final int         port;
     private final GameHandler game;
+    private final Dispatcher  uiDispatcher;
 
     private Socket          socket;
     private DataInputStream in;
@@ -51,10 +52,11 @@ public class GameClient {
      *
      * @see GameClient#connect()
      */
-    public GameClient(String serverAddr, int port, GameHandler game) {
+    public GameClient(String serverAddr, int port, GameHandler game, Dispatcher uiDispatcher) {
         this.serverAddr = serverAddr;
         this.port = port;
         this.game = game;
+        this.uiDispatcher = uiDispatcher;
 
         isRegistered = false;
     }
@@ -129,27 +131,23 @@ public class GameClient {
 
                 var data = PlayerProto.Lobby.parseFrom(packet.payload());
 
-                Optional<MenuHandler> menu = game.getActiveScene(MenuHandler.class);
-                if (menu.isEmpty()) {
-                    LOG.error("Illegal operation: attempted to update player list; not in MenuHandler");
-                    return;
-                }
-                var lobby = new LobbyGameContent(menu.get(), data.getName(), false);
-                lobby.clearPlayers();
-
-                game.setInMenu(true);
-
-                // run setContent on the FX thread
-                Platform.runLater(() -> {
+                uiDispatcher.execute(() -> {
+                    Optional<MenuHandler> menu = game.getActiveScene(MenuHandler.class);
+                    if (menu.isEmpty()) {
+                        LOG.error("Illegal operation: attempted to update player list; not in MenuHandler");
+                        return;
+                    }
+                    var lobby = new LobbyGameContent(menu.get(), data.getName(), false);
+                    lobby.clearPlayers();
+                    game.setInMenu(true);
                     menu.get().setContent(lobby);
-                    // set lobby players on FX thread, since the content must exist before setting players
                     lobby.addPlayer(data.getHost().getName(), true);
                     lobby.addPlayer(data.getGuest().getName(), false);
                 });
             }
             case SRV_DENY_CONN__USERNAME_TAKEN, SRV_DENY_CONN__FULL -> {
                 LOG.error("Failed to join: {}", packet.type());
-                Platform.runLater(() -> game.showAlert(
+                uiDispatcher.execute(() -> game.showAlert(
                         "Failed to join server",
                         "Could not " + serverAddr + ": " + packet.type().name()));
                 this.close();
@@ -161,7 +159,7 @@ public class GameClient {
             case SRV_SHUTDOWN -> {
                 // going to the main menu will shut down the client
                 LOG.info("Server is shutting down, returning to main menu");
-                Platform.runLater(() -> game.showAlert("SERVER CLOSED", "The server has shut down."));
+                uiDispatcher.execute(() -> game.showAlert("SERVER CLOSED", "The server has shut down."));
             }
             // if peer is trying to move, add instruction to queue
             case COM_JUMP, COM_MOVE_L, COM_MOVE_R, COM_STOP_MOVING -> {
@@ -171,20 +169,25 @@ public class GameClient {
                 if (packet.type() == GamePacket.Type.COM_JUMP) return;
 
                 // sync other's movement
-                Optional<DynamicLevelScene> level = game.getActiveScene(DynamicLevelScene.class);
-                if (level.isEmpty()) {
-                    LOG.warn("Tried to sync movement, but was not in DynamicLevelScene; skipping message");
-                    return;
-                }
-                level.get().syncMovement(PlayerProto.PlayerMovementData.parseFrom(packet.payload()));
+                var movement = PlayerProto.PlayerMovementData.parseFrom(packet.payload());
+                uiDispatcher.execute(() -> {
+                    Optional<DynamicLevelScene> level = game.getActiveScene(DynamicLevelScene.class);
+                    if (level.isEmpty()) {
+                        LOG.warn("Tried to sync movement, but was not in DynamicLevelScene; skipping message");
+                        return;
+                    }
+                    level.get().syncMovement(movement);
+                });
             }
             case COM_PRESS_BUTTON -> {
-                Optional<LevelScene> level = game.getActiveScene(LevelScene.class);
-                if (level.isEmpty()) {
-                    LOG.warn("Tried to handle COM_PRESS_BUTTON, but was not in LevelScene; skipping");
-                    return;
-                }
-                level.get().onButtonPressed();
+                uiDispatcher.execute(() -> {
+                    Optional<LevelScene> level = game.getActiveScene(LevelScene.class);
+                    if (level.isEmpty()) {
+                        LOG.warn("Tried to handle COM_PRESS_BUTTON, but was not in LevelScene; skipping");
+                        return;
+                    }
+                    level.get().onButtonPressed();
+                });
             }
         }
     }
@@ -208,8 +211,10 @@ public class GameClient {
      * @param level provided level data from server
      */
     public void startGame(LevelProto.LevelData level) {
-        game.setInMenu(false);
-        Platform.runLater(() -> game.setScene(new DynamicLevelScene(level)));
+        uiDispatcher.execute(() -> {
+            game.setInMenu(false);
+            game.setScene(new DynamicLevelScene(level));
+        });
     }
 
     /**

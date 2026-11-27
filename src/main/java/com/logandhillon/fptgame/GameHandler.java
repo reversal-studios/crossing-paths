@@ -11,15 +11,10 @@ import com.logandhillon.fptgame.scene.menu.JoinGameContent;
 import com.logandhillon.fptgame.scene.menu.LobbyGameContent;
 import com.logandhillon.fptgame.scene.menu.MainMenuContent;
 import com.logandhillon.fptgame.scene.menu.MenuHandler;
-import com.logandhillon.logangamelib.api.audio.AudioAssets;
-import com.logandhillon.logangamelib.api.render.TextureAssets;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.engine.LGLGameHandler;
 import com.logandhillon.logangamelib.api.platform.Window;
-import com.logandhillon.logangamelib.javafx.FXAudioLoader;
-import com.logandhillon.logangamelib.javafx.FXTextureLoader;
-import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.Logger;
@@ -49,19 +44,10 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
     private static UserConfigManager      ucm;
     private static ConfigProto.UserConfig userConfig;
 
-    /**
-     * Handles communication with JavaFX when this program is signalled to start.
-     *
-     * @param stage the primary stage for this application, provided by the JavaFX framework.
-     */
+    /** Initializes game resources and selects the initial scene. */
     @Override
-    protected GameScene<GameHandler> onStart(Stage stage) {
+    protected GameScene<GameHandler> onStart() {
         isInMenu = true;
-
-        stage.setWidth(CANVAS_WIDTH);
-        stage.setHeight(CANVAS_HEIGHT);
-        stage.setMinWidth(CANVAS_WIDTH / 2f);
-        stage.setMinHeight(CANVAS_HEIGHT / 2f);
 
         // initialize resources so they are loaded in memory
         Colors.init();
@@ -74,7 +60,8 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
 
     @Override
     protected Window getWindow() {
-        return new Window(CANVAS_WIDTH, CANVAS_HEIGHT, SCALING_TOLERANCE);
+        return new Window(
+                CANVAS_WIDTH, CANVAS_HEIGHT, SCALING_TOLERANCE, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
     }
 
     /**
@@ -82,12 +69,10 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
      *
      * @param args command-line arguments to the Java program.
      *
-     * @see GameHandler#start(Stage)
+     * @see LGLGameHandler#start
      */
     @SuppressWarnings("unused") // for some reason, intellij thinks main isn't used
     public static void main(String[] args) {
-        AudioAssets.configure(new FXAudioLoader());
-        TextureAssets.configure(new FXTextureLoader());
         LGLGameHandler.launchGame(
                 GameHandler.class,
                 GameMeta.builder()
@@ -151,7 +136,7 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
 
         if (server != null) throw new IllegalStateException("Server already exists, cannot establish connection");
 
-        server = new GameServer(this);
+        server = new GameServer(this, uiDispatcher());
         isInMenu = true;
         try {
             server.start();
@@ -198,7 +183,7 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
 
         setInMenu(false);
         try {
-            client = new GameClient(host, port, this);
+            client = new GameClient(host, port, this, uiDispatcher());
             client.connect();
         } catch (ConnectException e) {
             terminateClient();
