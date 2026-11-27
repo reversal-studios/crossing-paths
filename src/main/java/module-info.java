@@ -30,6 +30,7 @@ module com.logandhillon {
     exports com.logandhillon.logangamelib.api.input;
     exports com.logandhillon.logangamelib.api.event;
     exports com.logandhillon.logangamelib.api.scene;
+    exports com.logandhillon.logangamelib.api.audio;
     exports com.logandhillon.logangamelib.math;
     exports com.logandhillon.logangamelib.api.platform;
 }
