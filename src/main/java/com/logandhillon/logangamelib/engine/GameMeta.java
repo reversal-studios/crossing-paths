@@ -1,6 +1,6 @@
 package com.logandhillon.logangamelib.engine;
 
-import com.logandhillon.logangamelib.resource.FontResource;
+import com.logandhillon.logangamelib.resource.FXFontResource;
 import com.logandhillon.logangamelib.api.render.Texture;
 import lombok.Builder;
 import org.apache.logging.log4j.Logger;
@@ -15,9 +15,9 @@ public class GameMeta {
     private static GameMeta instance;
 
     @Builder.Default
-    public final String       gameName = DEFAULT_GAME_NAME;
-    public final FontResource defaultFont;
-    public final Texture      splashIcon;
+    public final String         gameName = DEFAULT_GAME_NAME;
+    public final FXFontResource defaultFont;
+    public final Texture        splashIcon;
 
     public static GameMeta get() {
         if (instance == null) throw new IllegalStateException("GameMeta not registered");

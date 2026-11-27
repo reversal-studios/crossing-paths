@@ -1,6 +1,6 @@
 package com.logandhillon.fptgame.resource;
 
-import com.logandhillon.logangamelib.resource.FontResource;
+import com.logandhillon.logangamelib.resource.FXFontResource;
 import javafx.scene.text.Font;
 
 /**
@@ -10,7 +10,7 @@ import javafx.scene.text.Font;
  * @author Logan Dhillon
  */
 public class Fonts {
-    public static final FontResource TREMOLO = new FontResource("tremolo", "tremolo-mono.ttf");
+    public static final FXFontResource TREMOLO = new FXFontResource("tremolo", "tremolo-mono.ttf");
 
     /**
      * no-op to force the class to load
