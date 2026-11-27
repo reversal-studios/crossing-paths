@@ -11,10 +11,10 @@ import com.logandhillon.fptgame.scene.menu.JoinGameContent;
 import com.logandhillon.fptgame.scene.menu.LobbyGameContent;
 import com.logandhillon.fptgame.scene.menu.MainMenuContent;
 import com.logandhillon.fptgame.scene.menu.MenuHandler;
+import com.logandhillon.logangamelib.api.platform.Window;
+import com.logandhillon.logangamelib.engine.FXGameHandler;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.engine.GameScene;
-import com.logandhillon.logangamelib.engine.LGLGameHandler;
-import com.logandhillon.logangamelib.api.platform.Window;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.Logger;
@@ -25,20 +25,21 @@ import java.net.ConnectException;
 import java.util.Optional;
 
 @Setter
-public class GameHandler extends LGLGameHandler<GameHandler> {
-    private static final Logger LOG               = LoggerContext.getContext().getLogger(GameHandler.class);
-    public static final  int    CANVAS_WIDTH      = 1280; // the width of the rendered canvas
-    public static final  int    CANVAS_HEIGHT     = 720; // the height of the rendered canvas
-    public static final  float  SCALING_TOLERANCE = 0.05f; // % to prefer maximizing size over aspect ratio
+public class GameHandler extends FXGameHandler<GameHandler> {
+    private static final Logger LOG           = LoggerContext.getContext().getLogger(GameHandler.class);
+    public static final  int    CANVAS_WIDTH  = 1280; // the width of the rendered canvas
+    public static final  int    CANVAS_HEIGHT = 720; // the height of the rendered canvas
+    private static final Window WINDOW        = new Window(
+            CANVAS_WIDTH, CANVAS_HEIGHT, 0.05f, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
 
     // game state management
     private volatile boolean isInMenu;
 
     // networking
     @Getter
-    private static GameServer server;
+    private static GameServer       server;
     @Getter
-    private static GameClient client;
+    private static GameClient       client;
     private static ServerDiscoverer discoverer;
 
     private static UserConfigManager      ucm;
@@ -46,7 +47,7 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
 
     /** Initializes game resources and selects the initial scene. */
     @Override
-    protected GameScene<GameHandler> onStart() {
+    public GameScene<GameHandler> onStart() {
         isInMenu = true;
 
         // initialize resources so they are loaded in memory
@@ -59,23 +60,19 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
     }
 
     @Override
-    protected Window getWindow() {
-        return new Window(
-                CANVAS_WIDTH, CANVAS_HEIGHT, SCALING_TOLERANCE, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
+    public Window getWindow() {
+        return WINDOW;
     }
 
     /**
      * Handles bootstrap and launching the framework + engine.
      *
      * @param args command-line arguments to the Java program.
-     *
-     * @see LGLGameHandler#start
      */
-    @SuppressWarnings("unused") // for some reason, intellij thinks main isn't used
     public static void main(String[] args) {
-        LGLGameHandler.launchGame(
+        FXGameHandler.launchGame(
                 GameHandler.class,
-                GameMeta.builder()
+                () -> GameMeta.builder()
                         .gameName("Crossing Paths")
                         .defaultFont(Fonts.TREMOLO)
                         .splashIcon(Textures.REVERSAL_STUDIOS_LOGO)
@@ -93,7 +90,7 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
     }
 
     @Override
-    protected void onShutdown() {
+    public void onShutdown() {
         LOG.info("Program terminated, exiting cleanly");
         try {
             if (server != null) server.stop();
