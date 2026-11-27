@@ -17,12 +17,6 @@ import javafx.scene.text.TextAlignment;
  */
 public final class FXRenderer implements Renderer {
     private final GraphicsContext graphics;
-    private       Color           fill      = Color.BLACK;
-    private       Color           stroke    = Color.BLACK;
-    private       float           lineWidth = 1;
-    private       Font            font      = new Font("System", 12);
-    private       TextStyle       textStyle = new TextStyle(
-            Color.BLACK, TextStyle.Justification.LEFT, TextStyle.VAlign.BASELINE, Float.MAX_VALUE);
 
     public FXRenderer(GraphicsContext graphics) {
         this.graphics = graphics;
@@ -61,14 +55,19 @@ public final class FXRenderer implements Renderer {
 
         switch (shape) {
             case Shape.Rect s -> graphics.fillRect(s.x(), s.y(), s.width(), s.height());
+
             case Shape.RoundRect s -> graphics.fillRoundRect(
                     s.x(), s.y(), s.width(), s.height(), s.radius() * 2, s.radius() * 2);
+
             case Shape.Circle s -> graphics.fillOval(
                     s.x() - s.radius(), s.y() - s.radius(), s.radius() * 2, s.radius() * 2);
+
             case Shape.Arc s -> graphics.fillArc(
                     s.x(), s.y(), s.width(), s.height(), s.azimuth(), s.bearing(), ArcType.ROUND);
+
             case Shape.Polygon s -> graphics.fillPolygon(
                     toDouble(s.xPoints()), toDouble(s.yPoints()), s.nPoints());
+
             case null, default -> throw new IllegalArgumentException("Cannot fill shape: " + shape);
         }
     }
@@ -80,14 +79,20 @@ public final class FXRenderer implements Renderer {
 
         switch (shape) {
             case Shape.Rect s -> graphics.strokeRect(s.x(), s.y(), s.width(), s.height());
+
             case Shape.RoundRect s -> graphics.strokeRoundRect(
                     s.x(), s.y(), s.width(), s.height(), s.radius() * 2, s.radius() * 2);
+
             case Shape.Line s -> graphics.strokeLine(s.x1(), s.y1(), s.x2(), s.y2());
+
             case Shape.Circle s -> graphics.strokeOval(
                     s.x() - s.radius(), s.y() - s.radius(), s.radius() * 2, s.radius() * 2);
+
             case Shape.Arc s -> graphics.strokeArc(
                     s.x(), s.y(), s.width(), s.height(), s.azimuth(), s.bearing(), ArcType.ROUND);
+
             case Shape.Polygon s -> graphics.strokePolygon(toDouble(s.xPoints()), toDouble(s.yPoints()), s.nPoints());
+
             case null, default -> throw new IllegalArgumentException("Cannot stroke shape: " + shape);
         }
     }
@@ -144,49 +149,6 @@ public final class FXRenderer implements Renderer {
             case MEDIUM -> FontWeight.MEDIUM;
             case BOLD -> FontWeight.BOLD;
         };
-    }
-
-    @Override
-    public void setFill(Color color) {
-        fill = color;
-    }
-
-    @Override
-    public void setStroke(Color color) {
-        stroke = color;
-    }
-
-    @Override
-    public void setLineWidth(float width) {
-        lineWidth = width;
-    }
-
-    @Override
-    public void setFont(Font value) {
-        font = value;
-    }
-
-    @Override
-    public void setTextStyle(TextStyle value) {
-        textStyle = value;
-    }
-
-    @Override
-    public void fillRoundRect(float x, float y, float width, float height, float arcWidth, float arcHeight) {
-        graphics.setFill(toFxColor(fill));
-        graphics.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
-    }
-
-    @Override
-    public void strokeLine(float x1, float y1, float x2, float y2) {
-        graphics.setStroke(toFxColor(stroke));
-        graphics.setLineWidth(lineWidth);
-        graphics.strokeLine(x1, y1, x2, y2);
-    }
-
-    @Override
-    public void fillText(String value, float x, float y) {
-        text(font, value, x, y, textStyle);
     }
 
     private static double[] toDouble(float[] values) {
