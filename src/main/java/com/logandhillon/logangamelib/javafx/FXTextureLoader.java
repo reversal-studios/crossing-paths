@@ -1,7 +1,7 @@
 package com.logandhillon.logangamelib.javafx;
 
 import com.logandhillon.logangamelib.api.render.Texture;
-import com.logandhillon.logangamelib.api.render.TextureLoader;
+import com.logandhillon.logangamelib.resource.ResourceLoader;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.io.InputStream;
  * @author Logan Dhillon
  * @see FXRenderer
  */
-public final class FXTextureLoader implements TextureLoader {
+public final class FXTextureLoader implements ResourceLoader<Texture> {
     @Override
     public Texture load(String path) {
         String classpath = path.startsWith("/") ? path : "/gfx/" + path;
