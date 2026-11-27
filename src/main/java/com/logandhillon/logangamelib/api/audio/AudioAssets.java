@@ -1,5 +1,7 @@
 package com.logandhillon.logangamelib.api.audio;
 
+import lombok.NonNull;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,14 +16,13 @@ public final class AudioAssets {
 
     private AudioAssets() {}
 
-    public static synchronized void configure(AudioLoader loader) {
-        if (loader == null) throw new NullPointerException("textureLoader");
+    public static synchronized void configure(@NonNull AudioLoader loader) {
         CACHE.clear();
         AudioAssets.loader = loader;
     }
 
     public static Audio load(String path) {
-        if (loader == null) throw new IllegalStateException("TextureAssets has not been configured");
+        if (loader == null) throw new IllegalStateException("AudioAssets has not been configured");
         return CACHE.computeIfAbsent(path, loader::load);
     }
 }
