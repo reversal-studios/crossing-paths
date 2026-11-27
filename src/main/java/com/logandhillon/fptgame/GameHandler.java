@@ -11,11 +11,13 @@ import com.logandhillon.fptgame.scene.menu.JoinGameContent;
 import com.logandhillon.fptgame.scene.menu.LobbyGameContent;
 import com.logandhillon.fptgame.scene.menu.MainMenuContent;
 import com.logandhillon.fptgame.scene.menu.MenuHandler;
+import com.logandhillon.logangamelib.api.audio.AudioAssets;
 import com.logandhillon.logangamelib.api.render.TextureAssets;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.engine.GameScene;
 import com.logandhillon.logangamelib.engine.LGLGameHandler;
 import com.logandhillon.logangamelib.api.platform.Window;
+import com.logandhillon.logangamelib.javafx.FXAudioLoader;
 import com.logandhillon.logangamelib.javafx.FXTextureLoader;
 import javafx.stage.Stage;
 import lombok.Getter;
@@ -84,6 +86,7 @@ public class GameHandler extends LGLGameHandler<GameHandler> {
      */
     @SuppressWarnings("unused") // for some reason, intellij thinks main isn't used
     public static void main(String[] args) {
+        AudioAssets.configure(new FXAudioLoader());
         TextureAssets.configure(new FXTextureLoader());
         LGLGameHandler.launchGame(
                 GameHandler.class,
