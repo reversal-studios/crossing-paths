@@ -5,12 +5,11 @@ import com.logandhillon.fptgame.entity.ui.PlayerIconEntity;
 import com.logandhillon.fptgame.entity.ui.component.MenuButton;
 import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.resource.Colors;
+import com.logandhillon.logangamelib.api.render.Font;
+import com.logandhillon.logangamelib.api.render.TextStyle;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
-import javafx.geometry.VPos;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -23,24 +22,24 @@ import org.apache.logging.log4j.core.LoggerContext;
  */
 public class LobbyGameContent implements MenuContent {
     private static final Logger LOG         = LoggerContext.getContext().getLogger(LobbyGameContent.class);
-    private static final Font   HEADER_FONT = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 40);
+    private static final Font   HEADER_FONT = new Font(GameMeta.get().defaultFont.load(), 40, Font.FontWeight.MEDIUM);
 
     private static final int[][] PLAYER_ICON_ARGS = new int[][]{
-            // iconX, iconY, colorIdx, textX, textY
+            // x, y, colorIdx
             { 48, 143, 0 },
             { 215, 143, 1 } };
 
     @Getter
     private final Entity[]        entities;
     private final MenuModalEntity lobbyModal;
-    @Getter
-    private final String          roomName;
-    private final MenuHandler     menu;
-    private final boolean         isHosting;
-    private final MenuButton      startButton;
 
-    private boolean isStartingAllowed;
-    private int     playerCount = 0;
+    @Getter
+    private final String      roomName;
+    private final MenuHandler menu;
+    private final boolean     isHosting;
+    private final MenuButton  startButton;
+    private       boolean     isStartingAllowed;
+    private       int         playerCount = 0;
 
     /**
      * @param menu      the game manager responsible for switching active scenes.
@@ -68,11 +67,12 @@ public class LobbyGameContent implements MenuContent {
         lobbyModal = new MenuModalEntity(
                 0, 0, 442, GameHandler.CANVAS_HEIGHT, true, menu,
                 startButton,
-                new TextEntity.Builder(32, 66).setColor(Colors.ACTIVE)
-                                              .setText(roomName.toUpperCase())
-                                              .setFont(HEADER_FONT)
-                                              .setVerticalAlignment(VPos.TOP)
-                                              .build());
+                new TextEntity.Builder(32, 66)
+                        .setColor(Colors.ACTIVE)
+                        .setText(roomName.toUpperCase())
+                        .setFont(HEADER_FONT)
+                        .setVerticalAlignment(TextStyle.VAlign.TOP)
+                        .build());
 
         // creates list of entities to be used by menu handler
         entities = new Entity[]{ lobbyModal };

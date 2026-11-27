@@ -1,11 +1,9 @@
 package com.logandhillon.fptgame.resource;
 
 import com.logandhillon.logangamelib.resource.FXFontResource;
-import javafx.scene.text.Font;
 
 /**
- * Loads and manages all font families. The constants in this class are font families, which can be used with JavaFX's
- * {@link Font#font}.
+ * Loads and manages all font families. The constants in this class are font families.
  *
  * @author Logan Dhillon
  */

@@ -8,14 +8,12 @@ import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.logangamelib.api.input.KeyCode;
 import com.logandhillon.logangamelib.api.input.KeyboardEvent;
+import com.logandhillon.logangamelib.api.render.Font;
+import com.logandhillon.logangamelib.api.render.TextStyle;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.Renderable;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
-import javafx.geometry.VPos;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -32,9 +30,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class JoinGameContent implements MenuContent {
     private static final Logger LOG           = LoggerContext.getContext().getLogger(JoinGameContent.class);
-    private static final Font   HEADER_FONT   = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 32);
     private static final String HEADER        = "Join a Game";
-    private static final Font   LABEL_FONT    = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 18);
+    private static final Font   HEADER_FONT   = new Font(GameMeta.get().defaultFont.load(), 32, Font.FontWeight.MEDIUM);
+    private static final Font   LABEL_FONT    = new Font(GameMeta.get().defaultFont.load(), 18, Font.FontWeight.MEDIUM);
     private static final int    ENTITY_GAP    = 16;
     private static final int    CORNER_RADIUS = 27;
 
@@ -60,8 +58,8 @@ public class JoinGameContent implements MenuContent {
         // label for server list
         TextEntity serverListLabel = new TextEntity.Builder(32, 295)
                 .setText("OR, JOIN A DISCOVERED SERVER")
-                .setJustification(TextAlignment.LEFT)
-                .setVerticalAlignment(VPos.TOP)
+                .setJustification(TextStyle.Justification.LEFT)
+                .setVerticalAlignment(TextStyle.VAlign.TOP)
                 .setFont(LABEL_FONT)
                 .setColor(Colors.ACTIVE)
                 .build();
@@ -101,7 +99,7 @@ public class JoinGameContent implements MenuContent {
                         .setColor(Colors.ACTIVE)
                         .setText(HEADER.toUpperCase())
                         .setFont(HEADER_FONT)
-                        .setVerticalAlignment(VPos.TOP).build()
+                        .setVerticalAlignment(TextStyle.VAlign.TOP).build()
         };
 
         // create event handler that uses the event and the array of buttons

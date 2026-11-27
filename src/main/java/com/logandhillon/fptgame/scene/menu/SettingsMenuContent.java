@@ -8,15 +8,14 @@ import com.logandhillon.fptgame.resource.Colors;
 import com.logandhillon.fptgame.resource.Sounds;
 import com.logandhillon.logangamelib.api.event.Subscription;
 import com.logandhillon.logangamelib.api.input.KeyboardEvent;
+import com.logandhillon.logangamelib.api.render.Font;
 import com.logandhillon.logangamelib.api.render.Renderer;
+import com.logandhillon.logangamelib.api.render.TextStyle;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.Renderable;
 import com.logandhillon.logangamelib.entity.ui.SliderEntity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
-import javafx.geometry.VPos;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -31,14 +30,18 @@ import java.util.HashMap;
 public class SettingsMenuContent implements MenuContent {
     private static final Logger LOG = LoggerContext.getContext().getLogger(SettingsMenuContent.class);
 
-    private static final Font HEADER_FONT      = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 32);
-    private static final Font SUBHEADER_FONT   = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 24);
-    private static final Font CONTROLS_FONT    = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 19);
-    private static final Font INSTRUCTION_FONT = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 20);
+    private static final Font HEADER_FONT      = new Font(
+            GameMeta.get().defaultFont.load(), 32, Font.FontWeight.MEDIUM);
+    private static final Font SUBHEADER_FONT   = new Font(
+            GameMeta.get().defaultFont.load(), 24, Font.FontWeight.MEDIUM);
+    private static final Font CONTROLS_FONT    = new Font(
+            GameMeta.get().defaultFont.load(), 19, Font.FontWeight.MEDIUM);
+    private static final Font INSTRUCTION_FONT = new Font(
+            GameMeta.get().defaultFont.load(), 20, Font.FontWeight.MEDIUM);
 
-    private final MenuHandler menu;
     @Getter
     private final Entity[]    entities;
+    private final MenuHandler menu;
 
     /**
      * Map of key bind {@link MenuButton} to their corresponding {@link KeyBind} enum value.
@@ -74,24 +77,21 @@ public class SettingsMenuContent implements MenuContent {
                 32, 227, 327, 6,
                 config.getMasterVolume(),
                 v -> {
-                    GameHandler.updateUserConfig(
-                            ConfigProto.UserConfig.newBuilder().setMasterVolume(v).buildPartial());
+                    GameHandler.updateUserConfig(ConfigProto.UserConfig.newBuilder().setMasterVolume(v).buildPartial());
                     Sounds.calcVolume();
                 });
         SliderEntity music = new SliderEntity(
                 32, 296, 327, 6,
                 config.getMusicVolume(),
                 v -> {
-                    GameHandler.updateUserConfig(
-                            ConfigProto.UserConfig.newBuilder().setMusicVolume(v).buildPartial());
+                    GameHandler.updateUserConfig(ConfigProto.UserConfig.newBuilder().setMusicVolume(v).buildPartial());
                     Sounds.calcVolume();
                 });
         SliderEntity sfx = new SliderEntity(
                 32, 365, 327, 6,
                 config.getSfxVolume(),
                 v -> {
-                    GameHandler.updateUserConfig(
-                            ConfigProto.UserConfig.newBuilder().setSfxVolume(v).buildPartial());
+                    GameHandler.updateUserConfig(ConfigProto.UserConfig.newBuilder().setSfxVolume(v).buildPartial());
                     Sounds.calcVolume();
                 });
 
@@ -125,70 +125,70 @@ public class SettingsMenuContent implements MenuContent {
                         .setColor(Colors.ACTIVE)
                         .setText("SETTINGS")
                         .setFont(HEADER_FONT)
-                        .setVerticalAlignment(VPos.TOP)
+                        .setVerticalAlignment(TextStyle.VAlign.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 140)
                         .setColor(Colors.ACTIVE)
                         .setText("AUDIO")
                         .setFont(SUBHEADER_FONT)
-                        .setVerticalAlignment(VPos.TOP)
+                        .setVerticalAlignment(TextStyle.VAlign.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 410)
                         .setColor(Colors.ACTIVE)
                         .setText("CONTROLS")
                         .setFont(SUBHEADER_FONT)
-                        .setVerticalAlignment(VPos.TOP)
+                        .setVerticalAlignment(TextStyle.VAlign.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 187)
                         .setColor(Colors.ACTIVE)
                         .setText("MASTER VOLUME")
                         .setFont(CONTROLS_FONT)
-                        .setVerticalAlignment(VPos.TOP)
+                        .setVerticalAlignment(TextStyle.VAlign.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 256)
                         .setColor(Colors.ACTIVE)
                         .setText("MUSIC VOLUME")
                         .setFont(CONTROLS_FONT)
-                        .setVerticalAlignment(VPos.TOP)
+                        .setVerticalAlignment(TextStyle.VAlign.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 325)
                         .setColor(Colors.ACTIVE)
                         .setText("SFX VOLUME")
                         .setFont(CONTROLS_FONT)
-                        .setVerticalAlignment(VPos.TOP)
+                        .setVerticalAlignment(TextStyle.VAlign.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 464.5f)
                         .setColor(Colors.ACTIVE)
                         .setText("MOVE LEFT")
                         .setFont(CONTROLS_FONT)
-                        .setVerticalAlignment(VPos.TOP)
+                        .setVerticalAlignment(TextStyle.VAlign.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 520.5f)
                         .setColor(Colors.ACTIVE)
                         .setText("MOVE RIGHT")
                         .setFont(CONTROLS_FONT)
-                        .setVerticalAlignment(VPos.TOP)
+                        .setVerticalAlignment(TextStyle.VAlign.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 576.5f)
                         .setColor(Colors.ACTIVE)
                         .setText("JUMP")
                         .setFont(CONTROLS_FONT)
-                        .setVerticalAlignment(VPos.TOP)
+                        .setVerticalAlignment(TextStyle.VAlign.TOP)
                         .build(),
 
                 new TextEntity.Builder(32, 632.5f)
                         .setColor(Colors.ACTIVE)
                         .setText("INTERACT")
                         .setFont(CONTROLS_FONT)
-                        .setVerticalAlignment(VPos.TOP)
+                        .setVerticalAlignment(TextStyle.VAlign.TOP)
                         .build(),
 
                 // underlines
@@ -210,7 +210,6 @@ public class SettingsMenuContent implements MenuContent {
     @Override
     public void onShow() {
         keyDownSubscription = menu.input().onKeyDown(this::onKeyPressed);
-
     }
 
     @Override
@@ -222,18 +221,18 @@ public class SettingsMenuContent implements MenuContent {
     public void onRender(Renderer g) {
         if (currentKeyBind != null) {
             g.rect(0, 0, GameHandler.CANVAS_WIDTH, GameHandler.CANVAS_HEIGHT, Colors.FOREGROUND_TRANS_40);
-            var style = new com.logandhillon.logangamelib.api.render.TextStyle(
+            var style = new TextStyle(
                     Colors.ACTIVE,
-                    com.logandhillon.logangamelib.api.render.TextStyle.Justification.CENTER,
-                    com.logandhillon.logangamelib.api.render.TextStyle.VAlign.CENTER, Float.MAX_VALUE);
-            var font = new com.logandhillon.logangamelib.api.render.Font(
-                    INSTRUCTION_FONT.getFamily(), (float)INSTRUCTION_FONT.getSize());
-            g.text(font, "PRESS ANY BUTTON", GameHandler.CANVAS_WIDTH / 2f, GameHandler.CANVAS_HEIGHT / 2f, style);
+                    TextStyle.Justification.CENTER,
+                    TextStyle.VAlign.CENTER, Float.MAX_VALUE);
+            g.text(
+                    INSTRUCTION_FONT, "PRESS ANY BUTTON", GameHandler.CANVAS_WIDTH / 2f, GameHandler.CANVAS_HEIGHT / 2f,
+                    style);
 
             if (!updateKeyBindStatus.isEmpty())
                 g.text(
-                        font, updateKeyBindStatus, GameHandler.CANVAS_WIDTH / 2f, GameHandler.CANVAS_HEIGHT / 2f + 30,
-                        style);
+                        INSTRUCTION_FONT, updateKeyBindStatus, GameHandler.CANVAS_WIDTH / 2f,
+                        GameHandler.CANVAS_HEIGHT / 2f + 30, style);
         }
     }
 

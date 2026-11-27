@@ -5,12 +5,11 @@ import com.logandhillon.fptgame.entity.ui.InputBox;
 import com.logandhillon.fptgame.entity.ui.component.MenuButton;
 import com.logandhillon.fptgame.entity.ui.component.MenuModalEntity;
 import com.logandhillon.fptgame.resource.Colors;
+import com.logandhillon.logangamelib.api.render.Font;
+import com.logandhillon.logangamelib.api.render.TextStyle;
 import com.logandhillon.logangamelib.engine.GameMeta;
 import com.logandhillon.logangamelib.entity.Entity;
 import com.logandhillon.logangamelib.entity.ui.TextEntity;
-import javafx.geometry.VPos;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import lombok.Getter;
 
 /**
@@ -21,7 +20,8 @@ import lombok.Getter;
 public class HostGameContent implements MenuContent {
     private static final String DEFAULT_ROOM_NAME = "My new room";
     private static final String HEADER            = "Host a New Game";
-    private static final Font   HEADER_FONT       = Font.font(GameMeta.get().defaultFont.load(), FontWeight.MEDIUM, 32);
+    private static final Font   HEADER_FONT       = new Font(
+            GameMeta.get().defaultFont.load(), 32, Font.FontWeight.MEDIUM);
 
     @Getter
     private final Entity[] entities;
@@ -46,7 +46,7 @@ public class HostGameContent implements MenuContent {
                         .setColor(Colors.ACTIVE)
                         .setText(HEADER.toUpperCase())
                         .setFont(HEADER_FONT)
-                        .setVerticalAlignment(VPos.TOP)
+                        .setVerticalAlignment(TextStyle.VAlign.TOP)
                         .build()
         };
     }
